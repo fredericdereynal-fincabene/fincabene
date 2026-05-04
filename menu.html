@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fincabene · Delia y Fiera</title>
+
+<!-- PWA : icône installable sur écran d'accueil -->
+<meta name="theme-color" content="#E65100">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fincabene">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f5f7f5;
+  color: #1a1a1a;
+  min-height: 100vh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 14px 40px;
+}
+
+/* ===================== HEADER ===================== */
+#header {
+  text-align: center;
+  padding: 14px 0 18px;
+  border-bottom: 1px solid #e3d4c4;
+  margin-bottom: 18px;
+}
+#header .logo {
+  width: 84px; height: 84px;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(230,81,0,0.18);
+}
+#header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 6px 0 2px;
+  color: #E65100;
+  letter-spacing: 0.5px;
+}
+#header .sub {
+  font-size: 13px;
+  color: #777;
+  margin: 0;
+}
+#header .sub i { color: #0277BD; font-style: normal; font-weight: 600; }
+#header .sub b { color: #2B8A3E; }
+#header .updated {
+  font-size: 11px;
+  color: #999;
+  margin-top: 8px;
+}
+#header .updated strong { color: #E65100; font-weight: 600; }
+
+/* ===================== HEADER COLONNES (Delia | Fiera) ===================== */
+.cols-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.col-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 6px 0;
+  border-radius: 8px;
+}
+.col-title.delia {
+  color: #0277BD;
+  background: #E3F2FD;
+}
+.col-title.fiera {
+  color: #2B8A3E;
+  background: #E8F5E9;
+}
+
+/* ===================== GRILLE 2 COLONNES (par ligne = fonction) ===================== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e8e5;
+  padding: 14px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s;
+  display: block;
+}
+.card:active { transform: scale(0.97); }
+.card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.card .icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  margin: 0 auto 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.card .title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Cartes Delia (bleu) */
+.card-delia .icon { background: #E3F2FD; }
+.card-delia .title { color: #0277BD; }
+
+/* Cartes Fiera (vert) */
+.card-fiera .icon { background: #E8F5E9; }
+.card-fiera .title { color: #2B8A3E; }
+
+/* Cartes KMZ Earth (jaune doré) */
+.card-earth .icon { background: #FFF8E1; }
+.card-earth .title { color: #F57F17; }
+
+/* Case vide (placeholder pour aligner Delia/Fiera quand l'un manque) */
+.card-empty {
+  background: transparent;
+  border: 1px dashed #d6dad6;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+}
+.card-empty:active { transform: none; }
+.card-empty:hover { box-shadow: none; }
+.card-empty .placeholder {
+  color: #bbb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===================== FOOTER ===================== */
+#footer {
+  margin-top: 24px;
+  padding: 14px 8px;
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* Bouton install PWA */
+#install-prompt {
+  background: #E65100;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-size: 13px;
+  display: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(230,81,0,0.3);
+}
+#install-prompt b { display: block; font-size: 14px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+
+  <div id="header">
+    <img class="logo" src="icon-192.png" alt="Fincabene">
+    <h1>Fincabene</h1>
+    <p class="sub"><i>Delia</i> &middot; <b>Fiera</b> &middot; Ecuador</p>
+    <p class="updated">Última actualización: <strong id="last-update">—</strong></p>
+  </div>
+
+  <!-- En-têtes de colonnes -->
+  <div class="cols-header">
+    <div class="col-title delia">💧 Delia</div>
+    <div class="col-title fiera">🌴 Fiera</div>
+  </div>
+
+  <!-- Grille 2 colonnes : Delia (gauche) | Fiera (droite) -->
+  <div class="cards-grid">
+
+    <!-- ===== Ligne 1 : STOCK ===== -->
+    <a class="card card-delia" href="Analisis_Stock_tiempo_Delia_Francia_es.html">
+      <div class="icon">📦</div>
+      <p class="title">Stock</p>
+    </a>
+    <a class="card card-fiera" href="Analisis_Stock_tiempo_La_Fiera_es.html">
+      <div class="icon">📦</div>
+      <p class="title">Stock</p>
+    </a>
+
+    <!-- ===== Ligne 2 : COSECHA ===== -->
+    <a class="card card-delia" href="Analisis_Cosecha_tiempo_Delia_Francia_es.html">
+      <div class="icon">🍌</div>
+      <p class="title">Cosecha</p>
+    </a>
+    <a class="card card-fiera" href="Analisis_Cosecha_tiempo_La_Fiera_es.html">
+      <div class="icon">🍌</div>
+      <p class="title">Cosecha</p>
+    </a>
+
+    <!-- ===== Ligne 3 : ENFUNDE ===== -->
+    <a class="card card-delia" href="Analisis_Enfunde_tiempo_Delia_Francia_es.html">
+      <div class="icon">🎀</div>
+      <p class="title">Enfunde</p>
+    </a>
+    <a class="card card-fiera" href="Analisis_Enfunde_tiempo_La_Fiera_es.html">
+      <div class="icon">🎀</div>
+      <p class="title">Enfunde</p>
+    </a>
+
+    <!-- ===== Ligne 4 : ANÁLISIS ===== -->
+    <a class="card card-delia" href="ANALISIS_tiempo_Delia_Francia_es.html">
+      <div class="icon">📊</div>
+      <p class="title">Análisis</p>
+    </a>
+    <a class="card card-fiera" href="ANALISIS_tiempo_La_Fiera_es.html">
+      <div class="icon">📊</div>
+      <p class="title">Análisis</p>
+    </a>
+
+    <!-- ===== Ligne 5 : MOKO (Fiera seulement) ===== -->
+    <div class="card card-empty">
+      <span class="placeholder">— sin datos —</span>
+    </div>
+    <a class="card card-fiera" href="Analisis_Moko_tiempo_La_Fiera_es.html">
+      <div class="icon">🦠</div>
+      <p class="title">MOKO</p>
+    </a>
+
+    <!-- ===== Ligne 6 : MOKO 3D (KMZ Google Earth, Fiera seulement) ===== -->
+    <div class="card card-empty">
+      <span class="placeholder">— sin datos —</span>
+    </div>
+    <a class="card card-earth" href="Fiera_MOKO_timeline.kmz">
+      <div class="icon">🌍</div>
+      <p class="title">MOKO 3D</p>
+    </a>
+
+  </div>
+
+  <!-- Bouton install (orange = commun) -->
+  <div id="install-prompt">
+    <b>📲 Instalar en pantalla de inicio</b>
+    Para acceso rápido, agrega Fincabene a la pantalla principal de tu teléfono.
+  </div>
+
+  <div id="footer">
+    Para volver al menú, vuelve a tocar el icono Fincabene<br>
+    en la pantalla principal.
+  </div>
+
+</div>
+
+<script>
+// Date dernière mise à jour (basée sur le HTML Stock Fiera)
+fetch('Analisis_Stock_tiempo_La_Fiera_es.html', { method: 'HEAD' })
+  .then(resp => {
+    const lastModified = resp.headers.get('last-modified');
+    if (lastModified) {
+      const d = new Date(lastModified);
+      const days = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const txt = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      document.getElementById('last-update').textContent = txt;
+    } else {
+      document.getElementById('last-update').textContent = 'desconocida';
+    }
+  })
+  .catch(() => {
+    document.getElementById('last-update').textContent = '—';
+  });
+
+// Invitation à installer la PWA si pas déjà en mode standalone
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                  || window.navigator.standalone === true;
+if (!isStandalone) {
+  setTimeout(() => {
+    document.getElementById('install-prompt').style.display = 'block';
+  }, 2000);
+}
+
+// Désactiver le cache (forcer rechargement)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+}
+</script>
+
+</body>
+</html>
