@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cajas La Fiera — Reportadas</title>
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f5f7f5; color: #1a1a1a;
+  min-height: 100vh;
+}
+#wrap { max-width: 480px; margin: 0 auto; padding: 14px; }
+
+#header {
+  text-align: center; padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0; margin-bottom: 14px;
+}
+#header h1 {
+  font-size: 18px; font-weight: 600; margin: 0;
+  color: #2B8A3E;
+}
+#header .sub { font-size: 12px; color: #888; margin-top: 4px; }
+
+#period-nav {
+  display: flex; align-items: stretch; gap: 6px; margin-bottom: 14px;
+}
+.period-arrow {
+  background: white; border: 2px solid #2B8A3E;
+  color: #2B8A3E; border-radius: 8px; padding: 0 12px;
+  font-size: 18px; font-weight: bold; cursor: pointer;
+  user-select: none;
+}
+.period-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+#weekbig {
+  flex: 1; background: white; border: 2px solid #2B8A3E;
+  border-radius: 8px; padding: 4px 12px; text-align: center;
+}
+#weekbig .lab { font-size: 10px; color: #888; text-transform: uppercase; }
+#weekbig #weekval {
+  font-size: 20px; font-weight: 600; color: #2B8A3E;
+}
+#weekbig .dates { font-size: 10px; color: #888; }
+
+.section-card {
+  background: white; border: 1px solid #e5e8e5;
+  border-radius: 12px; padding: 12px; margin-bottom: 10px;
+}
+.section-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.section-title { font-size: 13px; font-weight: 600; }
+.section-sub { font-size: 10px; color: #888; }
+
+.tbl { width: 100%; }
+.tbl-row {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 4px; padding: 3px 0; font-size: 11px;
+}
+.tbl-row.head {
+  color: #555; border-bottom: 1px solid #eee;
+  padding-bottom: 4px; margin-bottom: 4px;
+}
+.tbl-row.total {
+  font-size: 12px; font-weight: 600; color: #2B8A3E;
+  border-top: 1px solid #ccc; margin-top: 2px; padding: 5px 0;
+}
+.tbl-row > span:nth-child(n+2) { text-align: right; }
+.cinta-dot { display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+.indicators {
+  background: white; border: 1px solid #e5e8e5;
+  border-radius: 12px; padding: 10px 12px; margin-bottom: 12px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+}
+.ind-cell { text-align: center; }
+.ind-cell + .ind-cell { border-left: 1px solid #eee; }
+.ind-label { font-size: 9px; color: #888; text-transform: uppercase; }
+.ind-value { font-size: 16px; font-weight: 500; margin-top: 2px; }
+.ind-value.accent { color: #2B8A3E; }
+
+.btn-detail {
+  width: 100%; background: #2B8A3E; color: white;
+  border: none; border-radius: 8px; padding: 12px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  margin-bottom: 12px;
+}
+.btn-back {
+  background: transparent; border: none; color: #2B8A3E;
+  font-size: 13px; font-weight: 500; padding: 4px 0;
+  margin-bottom: 8px; cursor: pointer;
+}
+
+#day-tabs {
+  display: flex; gap: 6px; margin-bottom: 12px;
+  overflow-x: auto; padding-bottom: 4px;
+}
+.day-tab {
+  background: white; color: #2B8A3E;
+  border: 1px solid #2B8A3E; border-radius: 8px;
+  padding: 8px 6px; font-size: 11px; min-width: 60px;
+  cursor: pointer; flex-shrink: 0;
+}
+.day-tab.active { background: #2B8A3E; color: white; }
+.day-tab.disabled { background: #f0f0f0; color: #ccc;
+  border-color: #ddd; cursor: not-allowed; }
+.day-tab .day-name { font-size: 9px; text-transform: uppercase; }
+.day-tab .day-date { font-weight: 500; }
+
+.empty-msg {
+  text-align: center; padding: 20px; color: #888;
+  font-size: 12px;
+}
+
+.view-week-divider {
+  font-size: 11px; color: #888; text-align: center;
+  margin: 4px 0 12px; text-transform: uppercase; letter-spacing: 0.4px;
+  padding: 6px 0; border-top: 1px solid #2B8A3E;
+}
+
+#footer {
+  font-size: 10px; color: #aaa; text-align: center;
+  margin-top: 18px; padding: 8px;
+}
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <div id="header">
+    <h1>🚢 Cajas Reportadas — La Fiera</h1>
+    <div class="sub">Reporte de embarques · 2026</div>
+  </div>
+
+  <div id="period-nav">
+    <button id="period-prev" class="period-arrow">◀</button>
+    <div id="weekbig">
+      <div class="lab">Semana</div>
+      <div id="weekval">—</div>
+      <div class="dates" id="weekdates">—</div>
+    </div>
+    <button id="period-next" class="period-arrow">▶</button>
+  </div>
+
+  <div id="content"></div>
+
+  <div id="footer">Fincabene SAS · Cajas Reportadas 2026</div>
+</div>
+
+<script>
+const WEEKS = [{"week_num": 19, "year": 2026, "days": [{"name_full": "Lun 04/05", "day_es": "Lun", "date": "04/05", "col": 3}], "cajas": {"categories": [{"name": "ECUAPLUS", "days": [{"nb": 1080, "kg": 21065, "equiv": 1119}], "total": {"nb": 1080, "kg": 21065, "equiv": 1119}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 70, "kg": 952, "equiv": 51}], "total": {"nb": 70, "kg": 952, "equiv": 51}}], "total": {"days": [{"nb": 1150, "kg": 22017, "equiv": 1170}], "total": {"nb": 1150, "kg": 22017, "equiv": 1170}}}, "regimes": {"categories": [{"name": "Café  S08.26", "days": [{"nb": 463, "kg": 14125, "pds_moy": 30.51}], "total": {"nb": 463, "kg": 14125, "pds_moy": 30.51}}, {"name": "Amarila  S09.26", "days": [{"nb": 386, "kg": 12757, "pds_moy": 33.05}], "total": {"nb": 386, "kg": 12757, "pds_moy": 33.05}}], "total": {"days": [{"nb": 849, "kg": 26883, "pds_moy": 31.66}], "total": {"nb": 849, "kg": 26883, "pds_moy": 31.66}}}, "indicators": {"ratio": {"days": [1.38], "total": 1.38}, "dechet": {"days": [0.0693], "total": 0.0693}, "edad": {"days": [11.5], "total": 11.5}}}, {"week_num": 18, "year": 2026, "days": [{"name_full": "Lun 27/04", "day_es": "Lun", "date": "27/04", "col": 3}, {"name_full": "Mar 28/04", "day_es": "Mar", "date": "28/04", "col": 7}, {"name_full": "Mer 29/04", "day_es": "Mié", "date": "29/04", "col": 11}], "cajas": {"categories": [{"name": "ECUAPLUS", "days": [{"nb": 1080, "kg": 21065, "equiv": 1119}, {"nb": 1080, "kg": 21065, "equiv": 1119}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42130, "equiv": 2238}}, {"name": "SHARBATLY", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1540, "kg": 21654, "equiv": 1150}, {"nb": 1540, "kg": 21654, "equiv": 1150}], "total": {"nb": 3080, "kg": 43308, "equiv": 2300}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 70, "kg": 952, "equiv": 51}, {"nb": 140, "kg": 1905, "equiv": 101}, {"nb": 140, "kg": 1905, "equiv": 101}], "total": {"nb": 350, "kg": 4762, "equiv": 253}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21065, "equiv": 1119}], "total": {"nb": 1080, "kg": 21065, "equiv": 1119}}], "total": {"days": [{"nb": 1150, "kg": 22017, "equiv": 1170}, {"nb": 2760, "kg": 44624, "equiv": 2370}, {"nb": 2760, "kg": 44624, "equiv": 2370}], "total": {"nb": 6670, "kg": 111265, "equiv": 5910}}}, "regimes": {"categories": [{"name": "Roja  S07.26", "days": [{"nb": 497, "kg": 16177, "pds_moy": 32.55}, {"nb": 634, "kg": 20262, "pds_moy": 31.96}, {"nb": 80, "kg": 2388, "pds_moy": 29.85}], "total": {"nb": 1211, "kg": 38828, "pds_moy": 32.06}}, {"name": "Café  S08.26", "days": [{"nb": 318, "kg": 10704, "pds_moy": 33.66}, {"nb": 1034, "kg": 33609, "pds_moy": 32.5}, {"nb": 1582, "kg": 51586, "pds_moy": 32.61}], "total": {"nb": 2934, "kg": 95899, "pds_moy": 32.69}}], "total": {"days": [{"nb": 815, "kg": 26881, "pds_moy": 32.98}, {"nb": 1668, "kg": 53871, "pds_moy": 32.3}, {"nb": 1662, "kg": 53974, "pds_moy": 32.48}], "total": {"nb": 4145, "kg": 134726, "pds_moy": 32.5}}}, "indicators": {"ratio": {"days": [1.44, 1.42, 1.43], "total": 1.43}, "dechet": {"days": [0.0692, 0.0587, 0.0605], "total": 0.0615}, "edad": {"days": [11.6, 11.4, 11.0], "total": 11.3}}}, {"week_num": 17, "year": 2026, "days": [{"name_full": "Mar 21/04", "day_es": "Mar", "date": "21/04", "col": 3}, {"name_full": "Mer 22/04", "day_es": "Mié", "date": "22/04", "col": 7}, {"name_full": "Jeu 23/04", "day_es": "Jue", "date": "23/04", "col": 11}], "cajas": {"categories": [{"name": "ECUAPLUS", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21065, "equiv": 1119}, {"nb": 1080, "kg": 21065, "equiv": 1119}], "total": {"nb": 2160, "kg": 42130, "equiv": 2238}}, {"name": "Lolita-209 BonVia", "days": [{"nb": 1080, "kg": 19742, "equiv": 1049}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 19742, "equiv": 1049}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21654, "equiv": 1150}, {"nb": 1540, "kg": 21654, "equiv": 1150}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3080, "kg": 43308, "equiv": 2300}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 70, "kg": 952, "equiv": 51}, {"nb": 140, "kg": 1905, "equiv": 101}, {"nb": 70, "kg": 952, "equiv": 51}], "total": {"nb": 280, "kg": 3809, "equiv": 203}}], "total": {"days": [{"nb": 2690, "kg": 42348, "equiv": 2250}, {"nb": 2760, "kg": 44624, "equiv": 2370}, {"nb": 1150, "kg": 22017, "equiv": 1170}], "total": {"nb": 6600, "kg": 108989, "equiv": 5790}}}, "regimes": {"categories": [{"name": "Lila  S06.26", "days": [{"nb": 589, "kg": 19067, "pds_moy": 32.37}, {"nb": 265, "kg": 8548, "pds_moy": 32.26}, {"nb": 11, "kg": 279, "pds_moy": 25.39}], "total": {"nb": 865, "kg": 27894, "pds_moy": 32.25}}, {"name": "Roja  S07.26", "days": [{"nb": 971, "kg": 32219, "pds_moy": 33.18}, {"nb": 1376, "kg": 45441, "pds_moy": 33.02}, {"nb": 627, "kg": 20094, "pds_moy": 32.05}], "total": {"nb": 2974, "kg": 97754, "pds_moy": 32.87}}, {"name": "Café  S08.26", "days": [{"nb": 5, "kg": 196, "pds_moy": 39.16}, {"nb": 9, "kg": 306, "pds_moy": 34.03}, {"nb": 174, "kg": 6534, "pds_moy": 37.55}], "total": {"nb": 188, "kg": 7036, "pds_moy": 37.42}}], "total": {"days": [{"nb": 1565, "kg": 51482, "pds_moy": 32.9}, {"nb": 1650, "kg": 54295, "pds_moy": 32.91}, {"nb": 812, "kg": 26907, "pds_moy": 33.14}], "total": {"nb": 4027, "kg": 132684, "pds_moy": 32.95}}}, "indicators": {"ratio": {"days": [1.44, 1.44, 1.44], "total": 1.44}, "dechet": {"days": [0.0652, 0.066, 0.0701], "total": 0.0666}, "edad": {"days": [11.4, 11.2, 10.8], "total": 11.2}}}, {"week_num": 16, "year": 2026, "days": [{"name_full": "Mar 14/04", "day_es": "Mar", "date": "14/04", "col": 3}, {"name_full": "Mer 15/04", "day_es": "Mié", "date": "15/04", "col": 7}, {"name_full": "Jeu 16/04", "day_es": "Jue", "date": "16/04", "col": 11}], "cajas": {"categories": [{"name": "ORSERO 42LB", "days": [{"nb": 1080, "kg": 20575, "equiv": 1093}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 20575, "equiv": 1093}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21654, "equiv": 1150}, {"nb": 1540, "kg": 21654, "equiv": 1150}, {"nb": 1540, "kg": 21654, "equiv": 1150}], "total": {"nb": 4620, "kg": 64962, "equiv": 3450}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 70, "kg": 953, "equiv": 51}, {"nb": 70, "kg": 953, "equiv": 51}, {"nb": 70, "kg": 953, "equiv": 51}], "total": {"nb": 210, "kg": 2859, "equiv": 153}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21065, "equiv": 1119}, {"nb": 1080, "kg": 21065, "equiv": 1119}], "total": {"nb": 2160, "kg": 42130, "equiv": 2238}}], "total": {"days": [{"nb": 2690, "kg": 43182, "equiv": 2294}, {"nb": 2690, "kg": 43672, "equiv": 2320}, {"nb": 2690, "kg": 43672, "equiv": 2320}], "total": {"nb": 8070, "kg": 130526, "equiv": 6934}}}, "regimes": {"categories": [{"name": "Negra  S05.26", "days": [{"nb": 598, "kg": 19454, "pds_moy": 32.53}, {"nb": 252, "kg": 8119, "pds_moy": 32.22}, {"nb": 138, "kg": 4560, "pds_moy": 33.04}], "total": {"nb": 988, "kg": 32132, "pds_moy": 32.52}}, {"name": "Lila  S06.26", "days": [{"nb": 962, "kg": 33228, "pds_moy": 34.54}, {"nb": 1275, "kg": 43044, "pds_moy": 33.76}, {"nb": 1175, "kg": 39859, "pds_moy": 33.92}], "total": {"nb": 3412, "kg": 116131, "pds_moy": 34.04}}, {"name": "Roja  S07.26", "days": [{"nb": null, "kg": null, "pds_moy": null}, {"nb": 48, "kg": 1671, "pds_moy": 34.81}, {"nb": 225, "kg": 8682, "pds_moy": 38.59}], "total": {"nb": 273, "kg": 10353, "pds_moy": 37.92}}], "total": {"days": [{"nb": 1560, "kg": 52682, "pds_moy": 33.77}, {"nb": 1575, "kg": 52834, "pds_moy": 33.55}, {"nb": 1538, "kg": 53101, "pds_moy": 34.53}], "total": {"nb": 4673, "kg": 158616, "pds_moy": 33.94}}}, "indicators": {"ratio": {"days": [1.47, 1.47, 1.51], "total": 1.48}, "dechet": {"days": [0.0685, 0.0607, 0.0654], "total": 0.0649}, "edad": {"days": [11.4, 11.1, 10.9], "total": 11.2}}}, {"week_num": 15, "year": 2026, "days": [{"name_full": "Mar 07/04", "day_es": "Mar", "date": "07/04", "col": 3}, {"name_full": "Mer 08/04", "day_es": "Mié", "date": "08/04", "col": 7}, {"name_full": "Jeu 09/04", "day_es": "Jue", "date": "09/04", "col": 11}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "FAVORITA PROPLANET", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 864, "kg": 15855, "equiv": 842}], "total": {"nb": 864, "kg": 15855, "equiv": 842}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3080, "kg": 43476, "equiv": 2310}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 140, "kg": 1912, "equiv": 102}], "total": {"nb": 350, "kg": 4780, "equiv": 254}}, {"name": "Tropical Banannas", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42292, "equiv": 2246}}], "total": {"days": [{"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2084, "kg": 38913, "equiv": 2067}], "total": {"nb": 7534, "kg": 127549, "equiv": 6775}}}, "regimes": {"categories": [{"name": "Blanca  S04.26", "days": [{"nb": 606, "kg": 20872, "pds_moy": 34.44}, {"nb": 178, "kg": 5959, "pds_moy": 33.48}, {"nb": 213, "kg": 7134, "pds_moy": 33.49}], "total": {"nb": 997, "kg": 33965, "pds_moy": 34.07}}, {"name": "Negra  S05.26", "days": [{"nb": 779, "kg": 26891, "pds_moy": 34.52}, {"nb": 1373, "kg": 47254, "pds_moy": 34.42}, {"nb": 1116, "kg": 37173, "pds_moy": 33.31}], "total": {"nb": 3268, "kg": 111318, "pds_moy": 34.06}}, {"name": "Lila  S06.26", "days": [{"nb": 168, "kg": 6720, "pds_moy": 40.0}, {"nb": 24, "kg": 851, "pds_moy": 35.48}, {"nb": 44, "kg": 1495, "pds_moy": 33.97}], "total": {"nb": 236, "kg": 9066, "pds_moy": 38.42}}], "total": {"days": [{"nb": 1553, "kg": 54483, "pds_moy": 35.08}, {"nb": 1575, "kg": 54065, "pds_moy": 34.33}, {"nb": 1373, "kg": 45802, "pds_moy": 33.36}], "total": {"nb": 4501, "kg": 154350, "pds_moy": 34.29}}}, "indicators": {"ratio": {"days": [1.52, 1.49, 1.51], "total": 1.51}, "dechet": {"days": [0.0757, 0.0685, 0.0345], "total": 0.061}, "edad": {"days": [11.3, 11.1, 11.1], "total": 11.2}}}, {"week_num": 14, "year": 2026, "days": [{"name_full": "Mar 31/03", "day_es": "Mar", "date": "31/03", "col": 3}, {"name_full": "Mer 01/04", "day_es": "Mié", "date": "01/04", "col": 7}, {"name_full": "Jeu 02/04", "day_es": "Jue", "date": "02/04", "col": 11}], "cajas": {"categories": [{"name": "DERBY-2DERBPV", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "DULCITA 43.5 LB", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21392, "equiv": 1136}], "total": {"nb": 1080, "kg": 21392, "equiv": 1136}}, {"name": "SHARBATLY", "days": [{"nb": 1470, "kg": 20750, "equiv": 1102}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3010, "kg": 42488, "equiv": 2257}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 280, "kg": 3824, "equiv": 203}}, {"name": "Tropical Banannas", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42292, "equiv": 2246}}], "total": {"days": [{"nb": 2655, "kg": 43330, "equiv": 2301}, {"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2230, "kg": 43494, "equiv": 2310}], "total": {"nb": 7610, "kg": 131142, "equiv": 6965}}}, "regimes": {"categories": [{"name": "Azul  S03.26", "days": [{"nb": 528, "kg": 19259, "pds_moy": 36.48}, {"nb": 401, "kg": 13564, "pds_moy": 33.82}, {"nb": 36, "kg": 1351, "pds_moy": 37.54}], "total": {"nb": 965, "kg": 34174, "pds_moy": 35.41}}, {"name": "Blanca  S04.26", "days": [{"nb": 870, "kg": 30773, "pds_moy": 35.37}, {"nb": 1146, "kg": 38128, "pds_moy": 33.27}, {"nb": 1473, "kg": 50390, "pds_moy": 34.21}], "total": {"nb": 3489, "kg": 119291, "pds_moy": 34.19}}, {"name": "Negra  S05.26", "days": [{"nb": 127, "kg": 5000, "pds_moy": 39.37}, {"nb": 78, "kg": 2690, "pds_moy": 34.48}, {"nb": 21, "kg": 642, "pds_moy": 30.55}], "total": {"nb": 226, "kg": 8331, "pds_moy": 36.86}}], "total": {"days": [{"nb": 1525, "kg": 55032, "pds_moy": 36.09}, {"nb": 1625, "kg": 54381, "pds_moy": 33.47}, {"nb": 1530, "kg": 52383, "pds_moy": 34.24}], "total": {"nb": 4680, "kg": 161796, "pds_moy": 34.57}}}, "indicators": {"ratio": {"days": [1.51, 1.45, 1.51], "total": 1.49}, "dechet": {"days": [0.1053, 0.0739, 0.0565], "total": 0.0789}, "edad": {"days": [11.3, 11.2, 11.0], "total": 11.2}}}, {"week_num": 13, "year": 2026, "days": [{"name_full": "Lun 24/03", "day_es": "Lun", "date": "24/03", "col": 3}, {"name_full": "Mar 25/03", "day_es": "Mar", "date": "25/03", "col": 7}, {"name_full": "Jeu 26/03", "day_es": "Jue", "date": "26/03", "col": 11}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 2160, "kg": 42292, "equiv": 2247}], "total": {"nb": 2160, "kg": 42292, "equiv": 2247}}, {"name": "ECUAPLUS", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3080, "kg": 43476, "equiv": 2310}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 105, "kg": 1434, "equiv": 76}], "total": {"nb": 315, "kg": 4302, "equiv": 228}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2265, "kg": 43726, "equiv": 2323}], "total": {"nb": 7715, "kg": 132362, "equiv": 7031}}}, "regimes": {"categories": [{"name": "Verde  S02.26", "days": [{"nb": 787, "kg": 25107, "pds_moy": 31.9}, {"nb": 289, "kg": 9756, "pds_moy": 33.76}, {"nb": 169, "kg": 5306, "pds_moy": 31.39}], "total": {"nb": 1245, "kg": 40168, "pds_moy": 32.26}}, {"name": "Azul  S03.26", "days": [{"nb": 843, "kg": 28670, "pds_moy": 34.01}, {"nb": 1303, "kg": 44617, "pds_moy": 34.24}, {"nb": 1180, "kg": 41266, "pds_moy": 34.97}], "total": {"nb": 3326, "kg": 114552, "pds_moy": 34.44}}, {"name": "Blanca  S04.26", "days": [{"nb": 29, "kg": 933, "pds_moy": 32.17}, {"nb": 8, "kg": 285, "pds_moy": 35.62}, {"nb": 201, "kg": 7424, "pds_moy": 36.93}], "total": {"nb": 238, "kg": 8641, "pds_moy": 36.31}}], "total": {"days": [{"nb": 1659, "kg": 54709, "pds_moy": 32.98}, {"nb": 1600, "kg": 54658, "pds_moy": 34.16}, {"nb": 1550, "kg": 53995, "pds_moy": 34.84}], "total": {"nb": 4809, "kg": 163362, "pds_moy": 33.97}}}, "indicators": {"ratio": {"days": [1.42, 1.47, 1.5], "total": 1.46}, "dechet": {"days": [0.0795, 0.0786, 0.0797], "total": 0.0793}, "edad": {"days": [11.5, 11.2, 11.0], "total": 11.2}}}, {"week_num": 12, "year": 2026, "days": [{"name_full": "Mer 18/03", "day_es": "Mié", "date": "18/03", "col": 3}, {"name_full": "Jeu 19/03", "day_es": "Jue", "date": "19/03", "col": 7}, {"name_full": "Ven 20/03", "day_es": "Vie", "date": "20/03", "col": 11}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "Dulcita", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 2160, "kg": 42292, "equiv": 2247}], "total": {"nb": 2160, "kg": 42292, "equiv": 2247}}, {"name": "FAVORITA KRAFT 43LB", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3080, "kg": 43476, "equiv": 2310}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 102, "kg": 1393, "equiv": 74}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 277, "kg": 3783, "equiv": 201}}], "total": {"days": [{"nb": 2725, "kg": 44318, "equiv": 2354}, {"nb": 2722, "kg": 44277, "equiv": 2352}, {"nb": 2230, "kg": 43248, "equiv": 2298}], "total": {"nb": 7677, "kg": 131843, "equiv": 7004}}}, "regimes": {"categories": [{"name": "Amarila  S01.26", "days": [{"nb": 651, "kg": 22220, "pds_moy": 34.13}, {"nb": 453, "kg": 15560, "pds_moy": 34.35}, {"nb": 388, "kg": 13089, "pds_moy": 33.73}], "total": {"nb": 1492, "kg": 50868, "pds_moy": 34.09}}, {"name": "Verde  S02.26", "days": [{"nb": 932, "kg": 31219, "pds_moy": 33.5}, {"nb": 1046, "kg": 35695, "pds_moy": 34.12}, {"nb": 1109, "kg": 37621, "pds_moy": 33.92}], "total": {"nb": 3087, "kg": 104534, "pds_moy": 33.86}}, {"name": "Azul  S03.26", "days": [{"nb": 42, "kg": 1457, "pds_moy": 34.68}, {"nb": 106, "kg": 3708, "pds_moy": 34.98}, {"nb": 68, "kg": 2451, "pds_moy": 36.05}], "total": {"nb": 216, "kg": 7616, "pds_moy": 35.26}}], "total": {"days": [{"nb": 1625, "kg": 54895, "pds_moy": 33.78}, {"nb": 1605, "kg": 54963, "pds_moy": 34.24}, {"nb": 1565, "kg": 53161, "pds_moy": 33.97}], "total": {"nb": 4795, "kg": 163019, "pds_moy": 34.0}}}, "indicators": {"ratio": {"days": [1.45, 1.47, 1.47], "total": 1.46}, "dechet": {"days": [0.0826, 0.0846, 0.0755], "total": 0.081}, "edad": {"days": [11.4, 11.2, 11.2], "total": 11.3}}}, {"week_num": 11, "year": 2026, "days": [{"name_full": "Mar 10/03", "day_es": "Mar", "date": "10/03", "col": 3}, {"name_full": "Mer 11/03", "day_es": "Mié", "date": "11/03", "col": 7}, {"name_full": "Jeu 12/03", "day_es": "Jue", "date": "12/03", "col": 11}, {"name_full": "Ven 13/03", "day_es": "Vie", "date": "13/03", "col": 15}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "BNN QUIZA BANANA 40LB", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 2232, "kg": 40653, "equiv": 2160}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2232, "kg": 40653, "equiv": 2160}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": 1080, "kg": 19917, "equiv": 1058}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 19917, "equiv": 1058}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": null, "kg": null, "equiv": null}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 350, "kg": 4780, "equiv": 255}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2760, "kg": 43567, "equiv": 2315}, {"nb": 2372, "kg": 42565, "equiv": 2262}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 1150, "kg": 22102, "equiv": 1174}], "total": {"nb": 7362, "kg": 129380, "equiv": 6874}}}, "regimes": {"categories": [{"name": "Verde  S52.25", "days": [{"nb": 823, "kg": 26845, "pds_moy": 32.62}, {"nb": 483, "kg": 15881, "pds_moy": 32.88}, {"nb": 97, "kg": 3114, "pds_moy": 32.11}, {"nb": 222, "kg": 7393, "pds_moy": 33.3}], "total": {"nb": 1625, "kg": 53234, "pds_moy": 32.76}}, {"name": "Amarila  S01.26", "days": [{"nb": 802, "kg": 26737, "pds_moy": 33.34}, {"nb": 1067, "kg": 34735, "pds_moy": 32.55}, {"nb": 703, "kg": 22766, "pds_moy": 32.38}, {"nb": 565, "kg": 19331, "pds_moy": 34.21}], "total": {"nb": 3137, "kg": 103568, "pds_moy": 33.01}}, {"name": "Azul  S03.26", "days": [{"nb": null, "kg": null, "pds_moy": null}, {"nb": null, "kg": null, "pds_moy": null}, {"nb": null, "kg": null, "pds_moy": null}, {"nb": 13, "kg": 396, "pds_moy": 30.46}], "total": {"nb": 13, "kg": 396, "pds_moy": 30.46}}], "total": {"days": [{"nb": 1625, "kg": 53582, "pds_moy": 32.97}, {"nb": 1550, "kg": 50616, "pds_moy": 32.66}, {"nb": 800, "kg": 25880, "pds_moy": 32.35}, {"nb": 800, "kg": 27120, "pds_moy": 33.9}], "total": {"nb": 4775, "kg": 157198, "pds_moy": 32.92}}}, "indicators": {"ratio": {"days": [1.42, 1.46, 1.4, 1.47], "total": 1.44}, "dechet": {"days": [0.076, 0.0444, 0.0715, 0.0739], "total": 0.0647}, "edad": {"days": [11.5, 11.3, 11.1, 11.2], "total": 11.3}}}, {"week_num": 10, "year": 2026, "days": [{"name_full": "Mar 03/03", "day_es": "Mar", "date": "03/03", "col": 3}, {"name_full": "Mer 04/03", "day_es": "Mié", "date": "04/03", "col": 7}, {"name_full": "Jeu 05/03", "day_es": "Jue", "date": "05/03", "col": 11}, {"name_full": "Ven 06/03", "day_es": "Vie", "date": "06/03", "col": 15}], "cajas": {"categories": [{"name": "FAVORITA KRAFT 43LB", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": 2160, "kg": 39833, "equiv": 2116}, {"nb": 2160, "kg": 39833, "equiv": 2116}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 4320, "kg": 79666, "equiv": 4232}}, {"name": "SHARBATLY", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 105, "kg": 1434, "equiv": 76}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 385, "kg": 5258, "equiv": 280}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2265, "kg": 41267, "equiv": 2192}, {"nb": 2300, "kg": 41745, "equiv": 2218}, {"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 8405, "kg": 148954, "equiv": 7913}}}, "regimes": {"categories": [{"name": "Negra  S51.25", "days": [{"nb": 699, "kg": 23757, "pds_moy": 33.99}, {"nb": 807, "kg": 27038, "pds_moy": 33.5}, {"nb": 318, "kg": 10324, "pds_moy": 32.46}, {"nb": 3, "kg": 77, "pds_moy": 25.57}], "total": {"nb": 1827, "kg": 61195, "pds_moy": 33.5}}, {"name": "Verde  S52.25", "days": [{"nb": 767, "kg": 26294, "pds_moy": 34.28}, {"nb": 693, "kg": 23493, "pds_moy": 33.9}, {"nb": 1295, "kg": 44976, "pds_moy": 34.73}, {"nb": 632, "kg": 21320, "pds_moy": 33.73}], "total": {"nb": 3387, "kg": 116083, "pds_moy": 34.27}}, {"name": "Amarila  S01.26", "days": [{"nb": null, "kg": null, "pds_moy": null}, {"nb": null, "kg": null, "pds_moy": null}, {"nb": null, "kg": null, "pds_moy": null}, {"nb": 240, "kg": 8157, "pds_moy": 33.99}], "total": {"nb": 240, "kg": 8157, "pds_moy": 33.99}}], "total": {"days": [{"nb": 1466, "kg": 50051, "pds_moy": 34.14}, {"nb": 1500, "kg": 50531, "pds_moy": 33.69}, {"nb": 1613, "kg": 55300, "pds_moy": 34.28}, {"nb": 875, "kg": 29553, "pds_moy": 33.77}], "total": {"nb": 5454, "kg": 185435, "pds_moy": 34.0}}}, "indicators": {"ratio": {"days": [1.5, 1.48, 1.48, 1.28], "total": 1.45}, "dechet": {"days": [0.0631, 0.0612, 0.0795, 0.1869], "total": 0.0872}, "edad": {"days": [11.5, 11.5, 11.2, 10.7], "total": 11.3}}}, {"week_num": 9, "year": 2026, "days": [{"name_full": "Mar 24/02", "day_es": "Mar", "date": "24/02", "col": 3}, {"name_full": "Mer 25/02", "day_es": "Mié", "date": "25/02", "col": 7}, {"name_full": "Jeu 26/02", "day_es": "Jue", "date": "26/02", "col": 11}, {"name_full": "Ven 27/02", "day_es": "Vie", "date": "27/02", "col": 15}], "cajas": {"categories": [{"name": "Dulcita", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "FAVORITA PROPLANET RFA", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 19818, "equiv": 1053}], "total": {"nb": 1080, "kg": 19818, "equiv": 1053}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": 1080, "kg": 19917, "equiv": 1058}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 19917, "equiv": 1058}}, {"name": "OK-Closter", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 3, "kg": 29, "equiv": 2}], "total": {"nb": 3, "kg": 29, "equiv": 2}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 4620, "kg": 65214, "equiv": 3465}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 120, "kg": 1639, "equiv": 87}, {"nb": 160, "kg": 2186, "equiv": 116}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 420, "kg": 5737, "equiv": 305}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2740, "kg": 43294, "equiv": 2300}, {"nb": 2780, "kg": 45070, "equiv": 2394}, {"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 1083, "kg": 19847, "equiv": 1055}], "total": {"nb": 9363, "kg": 153007, "equiv": 8129}}}, "regimes": {"categories": [{"name": "Roja  S49.25", "days": [{"nb": 226, "kg": 7908, "pds_moy": 34.99}, {"nb": 22, "kg": 576, "pds_moy": 26.17}, {"nb": 35, "kg": 1052, "pds_moy": 30.05}, {"nb": 12, "kg": 315, "pds_moy": 26.28}], "total": {"nb": 295, "kg": 9850, "pds_moy": 33.39}}, {"name": "Café  S50.25", "days": [{"nb": 1190, "kg": 40800, "pds_moy": 34.29}, {"nb": 512, "kg": 17461, "pds_moy": 34.1}, {"nb": 571, "kg": 18785, "pds_moy": 32.9}, {"nb": 117, "kg": 3538, "pds_moy": 30.24}], "total": {"nb": 2390, "kg": 80584, "pds_moy": 33.72}}, {"name": "Negra  S51.25", "days": [{"nb": 155, "kg": 5206, "pds_moy": 33.59}, {"nb": 1073, "kg": 37751, "pds_moy": 35.18}, {"nb": 1014, "kg": 35188, "pds_moy": 34.7}, {"nb": 596, "kg": 20460, "pds_moy": 34.33}], "total": {"nb": 2838, "kg": 98605, "pds_moy": 34.74}}], "total": {"days": [{"nb": 1571, "kg": 53914, "pds_moy": 34.32}, {"nb": 1607, "kg": 55788, "pds_moy": 34.72}, {"nb": 1620, "kg": 55025, "pds_moy": 33.97}, {"nb": 725, "kg": 24313, "pds_moy": 33.54}], "total": {"nb": 5523, "kg": 189039, "pds_moy": 34.23}}}, "indicators": {"ratio": {"days": [1.46, 1.49, 1.47, 1.45], "total": 1.47}, "dechet": {"days": [0.0875, 0.082, 0.0749, 0.0723], "total": 0.0802}, "edad": {"days": [12.0, 11.3, 11.4, 11.2], "total": 11.5}}}, {"week_num": 8, "year": 2026, "days": [{"name_full": "Mer 18/02", "day_es": "Mié", "date": "18/02", "col": 3}, {"name_full": "Jeu 19/02", "day_es": "Jue", "date": "19/02", "col": 7}, {"name_full": "Ven 20/02", "day_es": "Vie", "date": "20/02", "col": 11}], "cajas": {"categories": [{"name": "BNN QUIZA BANANA 40LB", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 576, "kg": 10491, "equiv": 557}], "total": {"nb": 576, "kg": 10491, "equiv": 557}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 19917, "equiv": 1058}], "total": {"nb": 1080, "kg": 19917, "equiv": 1058}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 350, "kg": 4780, "equiv": 255}}, {"name": "Tropical Banannas", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 2160, "kg": 42292, "equiv": 2247}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 3240, "kg": 63438, "equiv": 3370}}], "total": {"days": [{"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 2300, "kg": 44204, "equiv": 2349}, {"nb": 1726, "kg": 31364, "equiv": 1666}], "total": {"nb": 6786, "kg": 120364, "equiv": 6395}}}, "regimes": {"categories": [{"name": "Lila  S48.25", "days": [{"nb": 108, "kg": 3309, "pds_moy": 30.64}, {"nb": 77, "kg": 2131, "pds_moy": 27.67}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 185, "kg": 5440, "pds_moy": 29.4}}, {"name": "Roja  S49.25", "days": [{"nb": 1105, "kg": 37666, "pds_moy": 34.09}, {"nb": 928, "kg": 30874, "pds_moy": 33.27}, {"nb": 612, "kg": 20227, "pds_moy": 33.05}], "total": {"nb": 2645, "kg": 88767, "pds_moy": 33.56}}, {"name": "Café  S50.25", "days": [{"nb": 397, "kg": 14268, "pds_moy": 35.94}, {"nb": 595, "kg": 20906, "pds_moy": 35.14}, {"nb": 551, "kg": 18152, "pds_moy": 32.94}], "total": {"nb": 1543, "kg": 53326, "pds_moy": 34.56}}], "total": {"days": [{"nb": 1610, "kg": 55243, "pds_moy": 34.31}, {"nb": 1600, "kg": 53911, "pds_moy": 33.69}, {"nb": 1163, "kg": 38379, "pds_moy": 33.0}], "total": {"nb": 4373, "kg": 147533, "pds_moy": 33.74}}}, "indicators": {"ratio": {"days": [1.48, 1.47, 1.43], "total": 1.46}, "dechet": {"days": [0.0785, 0.0682, 0.0713], "total": 0.0729}, "edad": {"days": [11.8, 11.7, 11.5], "total": 11.7}}}, {"week_num": 7, "year": 2026, "days": [{"name_full": "Jeu 12/02", "day_es": "Jue", "date": "12/02", "col": 3}, {"name_full": "Ven 13/02", "day_es": "Vie", "date": "13/02", "col": 7}, {"name_full": "Sam 14/02", "day_es": "Sáb", "date": "14/02", "col": 11}], "cajas": {"categories": [{"name": "ECUAPLUS", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42292, "equiv": 2246}}, {"name": "FAVORITA PROPLANET", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 540, "kg": 9909, "equiv": 526}], "total": {"nb": 540, "kg": 9909, "equiv": 526}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 19917, "equiv": 1058}], "total": {"nb": 1080, "kg": 19917, "equiv": 1058}}, {"name": "OK-Closter", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 10, "kg": 98, "equiv": 5}], "total": {"nb": 10, "kg": 98, "equiv": 5}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 770, "kg": 10869, "equiv": 577}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2310, "kg": 32607, "equiv": 1732}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 350, "kg": 4780, "equiv": 255}}], "total": {"days": [{"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 1990, "kg": 33927, "equiv": 1802}, {"nb": 1700, "kg": 30880, "equiv": 1640}], "total": {"nb": 6450, "kg": 109603, "equiv": 5822}}}, "regimes": {"categories": [{"name": "Amarila  S47.25", "days": [{"nb": 35, "kg": 947, "pds_moy": 27.07}, {"nb": 33, "kg": 917, "pds_moy": 27.78}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 68, "kg": 1864, "pds_moy": 27.41}}, {"name": "Lila  S48.25", "days": [{"nb": 579, "kg": 18622, "pds_moy": 32.16}, {"nb": 626, "kg": 21180, "pds_moy": 33.83}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 1205, "kg": 39802, "pds_moy": 33.03}}, {"name": "Roja  S49.25", "days": [{"nb": 661, "kg": 22203, "pds_moy": 33.59}, {"nb": 441, "kg": 15266, "pds_moy": 34.62}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 1102, "kg": 37470, "pds_moy": 34.0}}], "total": {"days": [{"nb": 1275, "kg": 41773, "pds_moy": 32.76}, {"nb": 1100, "kg": 37363, "pds_moy": 33.97}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 2375, "kg": 79136, "pds_moy": 33.32}}}, "indicators": {"ratio": {"days": [1.87, 1.64, null], "total": 2.45}, "dechet": {"days": [-0.2186, -0.0319, null], "total": -0.5739}, "edad": {"days": [11.5, 11.6, null], "total": 11.6}}}, {"week_num": 6, "year": 2026, "days": [{"name_full": "Mer 04/02", "day_es": "Mié", "date": "04/02", "col": 3}, {"name_full": "Jeu 05/02", "day_es": "Jue", "date": "05/02", "col": 7}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "Favorita Kraft Bon Via", "days": [{"nb": 1080, "kg": 19917, "equiv": 1058}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 19917, "equiv": 1058}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 1540, "kg": 21738, "equiv": 1155}], "total": {"nb": 3080, "kg": 43476, "equiv": 2310}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 70, "kg": 956, "equiv": 51}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 140, "kg": 1912, "equiv": 102}}, {"name": "YELLOW 22XU", "days": [{"nb": 54, "kg": 915, "equiv": 49}, {"nb": 54, "kg": 915, "equiv": 49}], "total": {"nb": 108, "kg": 1830, "equiv": 98}}], "total": {"days": [{"nb": 2744, "kg": 43526, "equiv": 2313}, {"nb": 2744, "kg": 44755, "equiv": 2378}], "total": {"nb": 5488, "kg": 88281, "equiv": 4691}}}, "regimes": {"categories": [{"name": "Blanca  S46.25", "days": [{"nb": 4, "kg": 100, "pds_moy": 25.12}, {"nb": 7, "kg": 152, "pds_moy": 21.79}], "total": {"nb": 11, "kg": 253, "pds_moy": 23.0}}, {"name": "Amarila  S47.25", "days": [{"nb": 1047, "kg": 34553, "pds_moy": 33.0}, {"nb": 965, "kg": 30072, "pds_moy": 31.16}], "total": {"nb": 2012, "kg": 64625, "pds_moy": 32.12}}, {"name": "Lila  S48.25", "days": [{"nb": 549, "kg": 18334, "pds_moy": 33.4}, {"nb": 728, "kg": 24146, "pds_moy": 33.17}], "total": {"nb": 1277, "kg": 42480, "pds_moy": 33.27}}], "total": {"days": [{"nb": 1600, "kg": 52988, "pds_moy": 33.12}, {"nb": 1700, "kg": 54371, "pds_moy": 31.98}], "total": {"nb": 3300, "kg": 107358, "pds_moy": 32.53}}}, "indicators": {"ratio": {"days": [1.45, 1.4], "total": 1.42}, "dechet": {"days": [0.0666, 0.0646], "total": 0.0656}, "edad": {"days": [11.7, 11.6], "total": 11.6}}}, {"week_num": 5, "year": 2026, "days": [{"name_full": "Mar 28/01", "day_es": "Mar", "date": "28/01", "col": 3}, {"name_full": "Mer 29/01", "day_es": "Mié", "date": "29/01", "col": 7}], "cajas": {"categories": [{"name": "ECUAPLUS", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "Favorita Roja 208 - Small", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}], "total": {"nb": 280, "kg": 3824, "equiv": 204}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": 770, "kg": 10869, "equiv": 577}], "total": {"nb": 2310, "kg": 32607, "equiv": 1732}}, {"name": "Tropical Banannas", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 1990, "kg": 33927, "equiv": 1802}], "total": {"nb": 4750, "kg": 78723, "equiv": 4182}}}, "regimes": {"categories": [{"name": "Azul  S45.25", "days": [{"nb": 7, "kg": 178, "pds_moy": 25.47}, {"nb": 19, "kg": 497, "pds_moy": 26.16}], "total": {"nb": 26, "kg": 675, "pds_moy": 25.97}}, {"name": "Blanca  S46.25", "days": [{"nb": 821, "kg": 26160, "pds_moy": 31.86}, {"nb": 359, "kg": 10943, "pds_moy": 30.48}], "total": {"nb": 1180, "kg": 37103, "pds_moy": 31.44}}, {"name": "Amarila  S47.25", "days": [{"nb": 874, "kg": 28075, "pds_moy": 32.12}, {"nb": 947, "kg": 29824, "pds_moy": 31.49}], "total": {"nb": 1821, "kg": 57898, "pds_moy": 31.79}}], "total": {"days": [{"nb": 1702, "kg": 54413, "pds_moy": 31.97}, {"nb": 1325, "kg": 41264, "pds_moy": 31.14}], "total": {"nb": 3027, "kg": 95677, "pds_moy": 31.61}}}, "indicators": {"ratio": {"days": [1.4, 1.36], "total": 1.38}, "dechet": {"days": [0.0645, 0.0657], "total": 0.065}, "edad": {"days": [11.5, 11.3], "total": 11.4}}}, {"week_num": 4, "year": 2026, "days": [{"name_full": "Mar 20/01", "day_es": "Mar", "date": "20/01", "col": 3}, {"name_full": "Mer 21/01", "day_es": "Mié", "date": "21/01", "col": 7}, {"name_full": "Jeu 22/01", "day_es": "Jue", "date": "22/01", "col": 11}], "cajas": {"categories": [{"name": "Favorita Kraft 21P-RFA", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1134, "kg": 20809, "equiv": 1105}, {"nb": 594, "kg": 10900, "equiv": 579}], "total": {"nb": 1728, "kg": 31709, "equiv": 1684}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 70, "kg": 956, "equiv": 51}, {"nb": 140, "kg": 1912, "equiv": 102}], "total": {"nb": 350, "kg": 4780, "equiv": 255}}, {"name": "Tropical Banannas", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 2160, "kg": 42292, "equiv": 2246}}], "total": {"days": [{"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 1204, "kg": 21765, "equiv": 1156}, {"nb": 1814, "kg": 33958, "equiv": 1804}], "total": {"nb": 5778, "kg": 100519, "equiv": 5340}}}, "regimes": {"categories": [{"name": "Verde  S44.25", "days": [{"nb": 14, "kg": 348, "pds_moy": 24.87}, {"nb": 7, "kg": 169, "pds_moy": 24.1}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 21, "kg": 517, "pds_moy": 24.61}}, {"name": "Azul  S45.25", "days": [{"nb": 840, "kg": 25329, "pds_moy": 30.15}, {"nb": 438, "kg": 13273, "pds_moy": 30.3}, {"nb": 155, "kg": 4723, "pds_moy": 30.47}], "total": {"nb": 1433, "kg": 43326, "pds_moy": 30.23}}, {"name": "Blanca  S46.25", "days": [{"nb": 871, "kg": 28385, "pds_moy": 32.59}, {"nb": 386, "kg": 12541, "pds_moy": 32.49}, {"nb": 1120, "kg": 36521, "pds_moy": 32.61}], "total": {"nb": 2377, "kg": 77447, "pds_moy": 32.58}}], "total": {"days": [{"nb": 1725, "kg": 54063, "pds_moy": 31.34}, {"nb": 831, "kg": 25983, "pds_moy": 31.27}, {"nb": 1275, "kg": 41244, "pds_moy": 32.35}], "total": {"nb": 3831, "kg": 121290, "pds_moy": 31.66}}}, "indicators": {"ratio": {"days": [1.38, 1.39, 1.41], "total": 1.39}, "dechet": {"days": [0.0584, 0.0481, 0.0644], "total": 0.0582}, "edad": {"days": [11.5, 11.5, 11.1], "total": 11.4}}}, {"week_num": 3, "year": 2026, "days": [{"name_full": "Mar 13/01", "day_es": "Mar", "date": "13/01", "col": 3}, {"name_full": "Mer 14/01", "day_es": "Mié", "date": "14/01", "col": 7}, {"name_full": "Jeu 15/01", "day_es": "Jue", "date": "15/01", "col": 11}], "cajas": {"categories": [{"name": "DERBY-2DERBPV", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "ECUAPLUS", "days": [{"nb": 2160, "kg": 42292, "equiv": 2247}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42292, "equiv": 2247}}, {"name": "Favorita kraf 40.3 Lbs", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 540, "kg": 9909, "equiv": 526}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 540, "kg": 9909, "equiv": 526}}, {"name": "OK-Closter", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 14, "kg": 137, "equiv": 7}], "total": {"nb": 14, "kg": 137, "equiv": 7}}, {"name": "SHARBATLY", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 70, "kg": 956, "equiv": 51}], "total": {"nb": 350, "kg": 4780, "equiv": 255}}], "total": {"days": [{"nb": 2300, "kg": 44204, "equiv": 2349}, {"nb": 2220, "kg": 33559, "equiv": 1783}, {"nb": 1164, "kg": 22239, "equiv": 1181}], "total": {"nb": 5684, "kg": 100002, "equiv": 5313}}}, "regimes": {"categories": [{"name": "Negra  S43.25", "days": [{"nb": 13, "kg": 367, "pds_moy": 28.22}, {"nb": 8, "kg": 163, "pds_moy": 20.42}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 21, "kg": 530, "pds_moy": 25.25}}, {"name": "Verde  S44.25", "days": [{"nb": 585, "kg": 17603, "pds_moy": 30.09}, {"nb": 633, "kg": 19531, "pds_moy": 30.85}, {"nb": 265, "kg": 7978, "pds_moy": 30.11}], "total": {"nb": 1483, "kg": 45112, "pds_moy": 30.42}}, {"name": "Azul  S45.25", "days": [{"nb": 1127, "kg": 35043, "pds_moy": 31.09}, {"nb": 659, "kg": 21100, "pds_moy": 32.02}, {"nb": 585, "kg": 18823, "pds_moy": 32.18}], "total": {"nb": 2371, "kg": 74966, "pds_moy": 31.62}}], "total": {"days": [{"nb": 1725, "kg": 53013, "pds_moy": 30.73}, {"nb": 1300, "kg": 40795, "pds_moy": 31.38}, {"nb": 850, "kg": 26801, "pds_moy": 31.53}], "total": {"nb": 3875, "kg": 120608, "pds_moy": 31.12}}}, "indicators": {"ratio": {"days": [1.36, 1.37, 1.39], "total": 1.37}, "dechet": {"days": [0.0525, 0.0652, 0.057], "total": 0.0578}, "edad": {"days": [11.4, 11.5, 11.3], "total": 11.4}}}, {"week_num": 2, "year": 2026, "days": [{"name_full": "Mar 06/01", "day_es": "Mar", "date": "06/01", "col": 3}, {"name_full": "Mer 07/01", "day_es": "Mié", "date": "07/01", "col": 7}, {"name_full": "Jeu 08/01", "day_es": "Jue", "date": "08/01", "col": 11}], "cajas": {"categories": [{"name": "BANINI", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 540, "kg": 10573, "equiv": 562}], "total": {"nb": 540, "kg": 10573, "equiv": 562}}, {"name": "ECUAPLUS", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}, {"name": "FAVORITA PROPLANET", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 19818, "equiv": 1053}], "total": {"nb": 1080, "kg": 19818, "equiv": 1053}}, {"name": "SHARBATLY", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 770, "kg": 10869, "equiv": 577}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 770, "kg": 10869, "equiv": 577}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}], "total": {"nb": 420, "kg": 5736, "equiv": 306}}, {"name": "Tropical Banannas", "days": [{"nb": 2160, "kg": 42292, "equiv": 2247}, {"nb": null, "kg": null, "equiv": null}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 2160, "kg": 42292, "equiv": 2247}}], "total": {"days": [{"nb": 2300, "kg": 44204, "equiv": 2349}, {"nb": 1990, "kg": 33927, "equiv": 1802}, {"nb": 1760, "kg": 32303, "equiv": 1717}], "total": {"nb": 6050, "kg": 110434, "equiv": 5868}}}, "regimes": {"categories": [{"name": "Café  S42.25", "days": [{"nb": 139, "kg": 3955, "pds_moy": 28.45}, {"nb": 36, "kg": 899, "pds_moy": 24.98}, {"nb": null, "kg": null, "pds_moy": null}], "total": {"nb": 175, "kg": 4855, "pds_moy": 27.74}}, {"name": "Negra  S43.25", "days": [{"nb": 1085, "kg": 33575, "pds_moy": 30.94}, {"nb": 559, "kg": 16856, "pds_moy": 30.15}, {"nb": 389, "kg": 11748, "pds_moy": 30.2}], "total": {"nb": 2033, "kg": 62178, "pds_moy": 30.58}}, {"name": "Verde  S44.25", "days": [{"nb": 501, "kg": 16416, "pds_moy": 32.77}, {"nb": 730, "kg": 23612, "pds_moy": 32.35}, {"nb": 836, "kg": 27241, "pds_moy": 32.59}], "total": {"nb": 2067, "kg": 67270, "pds_moy": 32.54}}], "total": {"days": [{"nb": 1725, "kg": 53946, "pds_moy": 31.27}, {"nb": 1325, "kg": 41367, "pds_moy": 31.22}, {"nb": 1225, "kg": 38989, "pds_moy": 31.83}], "total": {"nb": 4275, "kg": 134303, "pds_moy": 31.42}}}, "indicators": {"ratio": {"days": [1.36, 1.36, 1.4], "total": 1.37}, "dechet": {"days": [0.0688, 0.068, 0.0585], "total": 0.0656}, "edad": {"days": [11.8, 11.5, 11.3], "total": 11.6}}}, {"week_num": 1, "year": 2026, "days": [{"name_full": "Lun 29/12", "day_es": "Lun", "date": "29/12", "col": 3}, {"name_full": "Mar 30/12", "day_es": "Mar", "date": "30/12", "col": 7}], "cajas": {"categories": [{"name": "OK-Closter", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 10, "kg": 98, "equiv": 5}], "total": {"nb": 10, "kg": 98, "equiv": 5}}, {"name": "SHARBATLY", "days": [{"nb": 1540, "kg": 21738, "equiv": 1155}, {"nb": null, "kg": null, "equiv": null}], "total": {"nb": 1540, "kg": 21738, "equiv": 1155}}, {"name": "SHARBATLY SMALL", "days": [{"nb": 140, "kg": 1912, "equiv": 102}, {"nb": 140, "kg": 1912, "equiv": 102}], "total": {"nb": 280, "kg": 3824, "equiv": 204}}, {"name": "Tropical Banannas", "days": [{"nb": 1080, "kg": 21146, "equiv": 1123}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 2160, "kg": 42292, "equiv": 2246}}, {"name": "Tropical Golden Fruit", "days": [{"nb": null, "kg": null, "equiv": null}, {"nb": 1080, "kg": 21146, "equiv": 1123}], "total": {"nb": 1080, "kg": 21146, "equiv": 1123}}], "total": {"days": [{"nb": 2760, "kg": 44796, "equiv": 2380}, {"nb": 2310, "kg": 44302, "equiv": 2353}], "total": {"nb": 5070, "kg": 89098, "equiv": 4733}}}, "regimes": {"categories": [{"name": "Café  S42.25", "days": [{"nb": 1146, "kg": 34800, "pds_moy": 30.37}, {"nb": 868, "kg": 25584, "pds_moy": 29.47}], "total": {"nb": 2014, "kg": 60384, "pds_moy": 29.98}}, {"name": "Negra  S43.25", "days": [{"nb": 600, "kg": 19292, "pds_moy": 32.15}, {"nb": 878, "kg": 27338, "pds_moy": 31.14}], "total": {"nb": 1478, "kg": 46631, "pds_moy": 31.55}}], "total": {"days": [{"nb": 1746, "kg": 54092, "pds_moy": 30.98}, {"nb": 1746, "kg": 52922, "pds_moy": 30.31}], "total": {"nb": 3492, "kg": 107014, "pds_moy": 30.65}}}, "indicators": {"ratio": {"days": [1.36, 1.35], "total": 1.36}, "dechet": {"days": [0.0589, 0.0487], "total": 0.0539}, "edad": {"days": [11.7, 11.5], "total": 11.6}}}];
+const FINCA = "La Fiera";
+const EXPLOIT_COLOR = '#2B8A3E';
+const CINTA_COLORS = {"roja": "#C92D2D", "rojo": "#C92D2D", "cafe": "#6F4E37", "café": "#6F4E37", "amarila": "#DAA520", "amarilla": "#DAA520", "amarillo": "#DAA520", "verde": "#2B8A3E", "azul": "#0277BD", "blanca": "#999999", "blanco": "#999999", "naranja": "#E65100", "turquesa": "#1ABC9C", "lila": "#9B59B6", "morada": "#9B59B6", "rosa": "#E91E63", "negra": "#1a1a1a"};
+
+let currentWeekIdx = 0;  // 0 = semaine la plus recente
+let currentDayIdx = -1;  // -1 = vue total semaine, 0+ = jour selectionne
+
+function fmtNum(v) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'number') {
+    if (v === 0) return '0';
+    // entiers separateur fr (point pour milliers, virgule pour decimales)
+    if (Number.isInteger(v)) {
+      return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return v.toFixed(2).replace('.', ',');
+  }
+  return v;
+}
+function fmtNumDecimal(v, decimals) {
+  if (v === null || v === undefined) return '—';
+  if (typeof v === 'number') {
+    return v.toFixed(decimals != null ? decimals : 2).replace('.', ',');
+  }
+  return v;
+}
+function fmtPct(v) {
+  if (v === null || v === undefined) return '—';
+  return (v * 100).toFixed(1).replace('.', ',') + '%';
+}
+
+function getCintaColor(name) {
+  const lower = name.toLowerCase();
+  for (const [k, c] of Object.entries(CINTA_COLORS)) {
+    if (lower.includes(k)) return c;
+  }
+  return '#666';
+}
+
+function renderWeekTotalView(week) {
+  const cajas = week.cajas;
+  const regimes = week.regimes;
+  const ind = week.indicators;
+  let html = '';
+
+  // Section CAJAS
+  html += '<div class="section-card">';
+  html += '<div class="section-header"><div class="section-title">📦 CAJAS</div>';
+  html += '<div class="section-sub">Total semana</div></div>';
+  if (cajas && cajas.categories.length > 0) {
+    html += '<div class="tbl">';
+    html += '<div class="tbl-row head"><span>Categoría</span><span>Nb</span><span>Kg</span><span>Equiv</span></div>';
+    cajas.categories.forEach(c => {
+      html += `<div class="tbl-row">`;
+      html += `<span>${c.name}</span>`;
+      html += `<span>${fmtNum(c.total.nb)}</span>`;
+      html += `<span>${fmtNum(c.total.kg)}</span>`;
+      html += `<span>${fmtNum(c.total.equiv)}</span>`;
+      html += `</div>`;
+    });
+    if (cajas.total && cajas.total.total) {
+      html += `<div class="tbl-row total">`;
+      html += `<span>▶ TOTAL</span>`;
+      html += `<span>${fmtNum(cajas.total.total.nb)}</span>`;
+      html += `<span>${fmtNum(cajas.total.total.kg)}</span>`;
+      html += `<span>${fmtNum(cajas.total.total.equiv)}</span>`;
+      html += `</div>`;
+    }
+    html += '</div>';
+  } else {
+    html += '<div class="empty-msg">Sin datos</div>';
+  }
+  html += '</div>';
+
+  // Section REGIMES
+  html += '<div class="section-card">';
+  html += '<div class="section-header"><div class="section-title">🌿 RÉGIMES</div>';
+  html += '<div class="section-sub">Total semana</div></div>';
+  if (regimes && regimes.categories.length > 0) {
+    html += '<div class="tbl">';
+    html += '<div class="tbl-row head"><span>Cinta</span><span>Nb</span><span>Kg</span><span>PdMoy</span></div>';
+    regimes.categories.forEach(c => {
+      const col = getCintaColor(c.name);
+      html += `<div class="tbl-row">`;
+      html += `<span><span class="cinta-dot" style="background:${col}"></span>${c.name}</span>`;
+      html += `<span>${fmtNum(c.total.nb)}</span>`;
+      html += `<span>${fmtNum(c.total.kg)}</span>`;
+      html += `<span>${fmtNumDecimal(c.total.pds_moy, 1)}</span>`;
+      html += `</div>`;
+    });
+    if (regimes.total && regimes.total.total) {
+      html += `<div class="tbl-row total">`;
+      html += `<span>▶ TOTAL</span>`;
+      html += `<span>${fmtNum(regimes.total.total.nb)}</span>`;
+      html += `<span>${fmtNum(regimes.total.total.kg)}</span>`;
+      html += `<span>${fmtNumDecimal(regimes.total.total.pds_moy, 1)}</span>`;
+      html += `</div>`;
+    }
+    html += '</div>';
+  } else {
+    html += '<div class="empty-msg">Sin datos</div>';
+  }
+  html += '</div>';
+
+  // Section INDICATEURS (totaux)
+  if (ind) {
+    html += '<div class="indicators">';
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">📊 Ratio</div>`;
+    html += `<div class="ind-value accent">${fmtNumDecimal(ind.ratio.total, 2)}</div>`;
+    html += `</div>`;
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">♻️ Déchet</div>`;
+    html += `<div class="ind-value">${fmtPct(ind.dechet.total)}</div>`;
+    html += `</div>`;
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">🕐 Edad</div>`;
+    html += `<div class="ind-value">${fmtNumDecimal(ind.edad.total, 1)}</div>`;
+    html += `</div>`;
+    html += '</div>';
+  }
+
+  // Bouton detail jour
+  if (week.days.length > 0) {
+    html += '<button class="btn-detail" onclick="enterDayView()">📅 Ver detalle por día →</button>';
+  }
+
+  return html;
+}
+
+function renderDayView(week, dayIdx) {
+  const day = week.days[dayIdx];
+  const cajas = week.cajas;
+  const regimes = week.regimes;
+  const ind = week.indicators;
+  let html = '';
+
+  html += `<button class="btn-back" onclick="exitDayView()">← Volver al total semana</button>`;
+  html += `<div class="view-week-divider">${week.year} S${String(week.week_num).padStart(2,'0')} · Detalle por día</div>`;
+
+  // Onglets jours
+  html += '<div id="day-tabs">';
+  week.days.forEach((d, i) => {
+    const cls = (i === dayIdx) ? 'day-tab active' : 'day-tab';
+    html += `<button class="${cls}" onclick="setDay(${i})">`;
+    html += `<div class="day-name">${d.day_es}</div>`;
+    html += `<div class="day-date">${d.date}</div>`;
+    html += `</button>`;
+  });
+  html += '</div>';
+
+  // Section CAJAS jour
+  html += '<div class="section-card">';
+  html += `<div class="section-header"><div class="section-title">📦 CAJAS · ${day.day_es} ${day.date}</div></div>`;
+  if (cajas && cajas.categories.length > 0) {
+    html += '<div class="tbl">';
+    html += '<div class="tbl-row head"><span>Categoría</span><span>Nb</span><span>Kg</span><span>Equiv</span></div>';
+    let hasData = false;
+    cajas.categories.forEach(c => {
+      const d = c.days[dayIdx];
+      if (d && (d.nb || d.kg || d.equiv)) {
+        hasData = true;
+        html += `<div class="tbl-row">`;
+        html += `<span>${c.name}</span>`;
+        html += `<span>${fmtNum(d.nb)}</span>`;
+        html += `<span>${fmtNum(d.kg)}</span>`;
+        html += `<span>${fmtNum(d.equiv)}</span>`;
+        html += `</div>`;
+      }
+    });
+    if (cajas.total && cajas.total.days[dayIdx]) {
+      const t = cajas.total.days[dayIdx];
+      if (t.nb || t.kg) {
+        html += `<div class="tbl-row total">`;
+        html += `<span>▶ TOTAL</span>`;
+        html += `<span>${fmtNum(t.nb)}</span>`;
+        html += `<span>${fmtNum(t.kg)}</span>`;
+        html += `<span>${fmtNum(t.equiv)}</span>`;
+        html += `</div>`;
+      }
+    }
+    html += '</div>';
+    if (!hasData) html += '<div class="empty-msg">Sin cajas este día</div>';
+  }
+  html += '</div>';
+
+  // Section REGIMES jour
+  html += '<div class="section-card">';
+  html += `<div class="section-header"><div class="section-title">🌿 RÉGIMES · ${day.day_es} ${day.date}</div></div>`;
+  if (regimes && regimes.categories.length > 0) {
+    html += '<div class="tbl">';
+    html += '<div class="tbl-row head"><span>Cinta</span><span>Nb</span><span>Kg</span><span>PdMoy</span></div>';
+    let hasData = false;
+    regimes.categories.forEach(c => {
+      const d = c.days[dayIdx];
+      if (d && (d.nb || d.kg)) {
+        hasData = true;
+        const col = getCintaColor(c.name);
+        html += `<div class="tbl-row">`;
+        html += `<span><span class="cinta-dot" style="background:${col}"></span>${c.name}</span>`;
+        html += `<span>${fmtNum(d.nb)}</span>`;
+        html += `<span>${fmtNum(d.kg)}</span>`;
+        html += `<span>${fmtNumDecimal(d.pds_moy, 1)}</span>`;
+        html += `</div>`;
+      }
+    });
+    if (regimes.total && regimes.total.days[dayIdx]) {
+      const t = regimes.total.days[dayIdx];
+      if (t.nb || t.kg) {
+        html += `<div class="tbl-row total">`;
+        html += `<span>▶ TOTAL</span>`;
+        html += `<span>${fmtNum(t.nb)}</span>`;
+        html += `<span>${fmtNum(t.kg)}</span>`;
+        html += `<span>${fmtNumDecimal(t.pds_moy, 1)}</span>`;
+        html += `</div>`;
+      }
+    }
+    html += '</div>';
+    if (!hasData) html += '<div class="empty-msg">Sin régimes este día</div>';
+  }
+  html += '</div>';
+
+  // Indicateurs jour
+  if (ind && ind.ratio.days[dayIdx] !== null) {
+    html += '<div class="indicators">';
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">📊 Ratio</div>`;
+    html += `<div class="ind-value accent">${fmtNumDecimal(ind.ratio.days[dayIdx], 2)}</div>`;
+    html += `</div>`;
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">♻️ Déchet</div>`;
+    html += `<div class="ind-value">${fmtPct(ind.dechet.days[dayIdx])}</div>`;
+    html += `</div>`;
+    html += `<div class="ind-cell">`;
+    html += `<div class="ind-label">🕐 Edad</div>`;
+    html += `<div class="ind-value">${fmtNumDecimal(ind.edad.days[dayIdx], 1)}</div>`;
+    html += `</div>`;
+    html += '</div>';
+  }
+
+  return html;
+}
+
+function render() {
+  const week = WEEKS[currentWeekIdx];
+  if (!week) return;
+
+  document.getElementById('weekval').textContent =
+    `S${String(week.week_num).padStart(2,'0')} / ${week.year}`;
+
+  const ndays = week.days.length;
+  if (ndays > 0) {
+    const first = week.days[0].date;
+    const last = week.days[ndays - 1].date;
+    document.getElementById('weekdates').textContent = `${first} — ${last} · ${ndays} días`;
+  } else {
+    document.getElementById('weekdates').textContent = 'Sin datos';
+  }
+
+  const content = document.getElementById('content');
+  if (currentDayIdx === -1) {
+    content.innerHTML = renderWeekTotalView(week);
+  } else {
+    content.innerHTML = renderDayView(week, currentDayIdx);
+  }
+
+  // Etat boutons navigation
+  document.getElementById('period-prev').disabled = (currentWeekIdx >= WEEKS.length - 1);
+  document.getElementById('period-next').disabled = (currentWeekIdx <= 0);
+}
+
+function enterDayView() {
+  const week = WEEKS[currentWeekIdx];
+  if (week.days.length > 0) {
+    currentDayIdx = 0;
+    render();
+  }
+}
+
+function exitDayView() {
+  currentDayIdx = -1;
+  render();
+}
+
+function setDay(idx) {
+  currentDayIdx = idx;
+  render();
+}
+
+document.getElementById('period-prev').addEventListener('click', () => {
+  if (currentWeekIdx < WEEKS.length - 1) {
+    currentWeekIdx++; currentDayIdx = -1; render();
+  }
+});
+document.getElementById('period-next').addEventListener('click', () => {
+  if (currentWeekIdx > 0) {
+    currentWeekIdx--; currentDayIdx = -1; render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
