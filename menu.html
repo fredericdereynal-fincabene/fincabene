@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Fincabene · Delia y Fiera</title>
 
+<!-- Anti-cache : force le navigateur à toujours recharger ce menu -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <!-- PWA : icône installable sur écran d'accueil -->
 <meta name="theme-color" content="#E65100">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -277,8 +282,52 @@ html, body {
 </div>
 
 <script>
-// Date dernière mise à jour (basée sur le HTML Stock Fiera)
-fetch('Analisis_Stock_tiempo_La_Fiera_es.html', { method: 'HEAD' })
+// ============================================================
+// CACHE-BUSTING AUTOMATIQUE
+// ============================================================
+// À chaque ouverture du menu, on récupère la date de dernière
+// modification de chaque carte HTML sur le serveur, et on ajoute
+// un paramètre ?v=<timestamp> au lien correspondant.
+// Si la carte a été mise à jour, le navigateur voit une URL
+// différente et recharge la nouvelle version automatiquement.
+// ============================================================
+
+(async function setupCacheBusting() {
+  // Pour chaque lien <a> qui pointe vers un fichier HTML local
+  const links = document.querySelectorAll('a.card[href$=".html"]');
+
+  await Promise.all(Array.from(links).map(async (link) => {
+    const url = link.getAttribute('href');
+    try {
+      // HEAD request : récupère juste les headers, pas le contenu
+      const resp = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+      const lastMod = resp.headers.get('last-modified');
+      if (lastMod) {
+        // Convertir la date en timestamp court (ex: 1714845600)
+        const ts = Math.floor(new Date(lastMod).getTime() / 1000);
+        link.setAttribute('href', `${url}?v=${ts}`);
+      } else {
+        // Fallback : timestamp courant (recharge à chaque ouverture)
+        link.setAttribute('href', `${url}?v=${Date.now()}`);
+      }
+    } catch (e) {
+      // En cas d'erreur réseau, on ajoute un timestamp courant
+      link.setAttribute('href', `${url}?v=${Date.now()}`);
+    }
+  }));
+
+  // Cache-busting aussi pour le KMZ Google Earth
+  const kmzLinks = document.querySelectorAll('a.card[href$=".kmz"]');
+  kmzLinks.forEach(link => {
+    const url = link.getAttribute('href');
+    link.setAttribute('href', `${url}?v=${Date.now()}`);
+  });
+})();
+
+// ============================================================
+// Date dernière mise à jour (affichée en haut du menu)
+// ============================================================
+fetch('Analisis_Stock_tiempo_La_Fiera_es.html', { method: 'HEAD', cache: 'no-store' })
   .then(resp => {
     const lastModified = resp.headers.get('last-modified');
     if (lastModified) {
@@ -295,7 +344,9 @@ fetch('Analisis_Stock_tiempo_La_Fiera_es.html', { method: 'HEAD' })
     document.getElementById('last-update').textContent = '—';
   });
 
+// ============================================================
 // Invitation à installer la PWA si pas déjà en mode standalone
+// ============================================================
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches
                   || window.navigator.standalone === true;
 if (!isStandalone) {
@@ -304,7 +355,9 @@ if (!isStandalone) {
   }, 2000);
 }
 
-// Désactiver le cache (forcer rechargement)
+// ============================================================
+// Désactiver les service workers pour éviter le cache PWA
+// ============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
 }
