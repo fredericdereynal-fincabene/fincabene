@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fincabene &mdash; Panel de Control</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F8FAFC;
+    color: #1E293B;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .topbar {
+    background: #1565C0;
+    color: white;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .topbar-icon svg { width: 20px; height: 20px; fill: white; }
+  .topbar-title { font-size: 18px; font-weight: 600; }
+  .topbar-sub   { font-size: 12px; opacity: 0.75; margin-top: 1px; }
+  .topbar-date  { margin-left: auto; font-size: 12px; opacity: 0.7; }
+
+  .content { max-width: 700px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: #64748B;
+    margin-bottom: 12px; margin-top: 28px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .card-main {
+    display: flex; align-items: center; gap: 16px;
+    background: #E3F2FD; border: 1.5px solid #BBDEFB;
+    border-radius: 14px; padding: 20px;
+    text-decoration: none; color: inherit;
+    transition: box-shadow .15s, transform .1s;
+    margin-bottom: 8px;
+  }
+  .card-main:hover { box-shadow: 0 4px 20px rgba(21,101,192,.15); transform: translateY(-1px); }
+  .card-icon {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-icon svg { width: 26px; height: 26px; fill: white; }
+  .card-body { flex: 1; }
+  .card-title { font-size: 16px; font-weight: 600; }
+  .card-desc  { font-size: 13px; color: #475569; margin-top: 3px; }
+  .card-open  {
+    color: white; font-size: 13px; font-weight: 600;
+    padding: 8px 18px; border-radius: 8px; flex-shrink: 0;
+  }
+
+  .grid-sec { display: flex; flex-direction: column; gap: 8px; }
+  .card-sec {
+    display: flex; align-items: center; gap: 14px;
+    background: white; border: 1px solid #E2E8F0;
+    border-radius: 12px; padding: 14px 16px;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .card-sec:hover { border-color: #94A3B8; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+  .card-icon-sm {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-icon-sm svg { width: 20px; height: 20px; }
+  .card-title-sm { font-size: 14px; font-weight: 600; }
+  .card-desc-sm  { font-size: 12px; color: #64748B; margin-top: 2px; }
+  .card-size  { font-size: 11px; color: #94A3B8; margin-left: auto; flex-shrink: 0; }
+  .card-arrow { font-size: 22px; margin-left: 8px; flex-shrink: 0; font-weight: 300; }
+
+  .missing {
+    margin-top: 20px; font-size: 12px; color: #94A3B8;
+    background: #F8FAFC; border: 1px dashed #CBD5E1;
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .missing ul { margin-top: 4px; padding-left: 16px; }
+  .missing li { margin-top: 2px; }
+
+  .footer {
+    margin-top: 40px; padding-top: 16px;
+    border-top: 1px solid #E2E8F0;
+    font-size: 12px; color: #94A3B8;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-icon">
+    <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+  </div>
+  <div>
+    <div class="topbar-title">Fincabene</div>
+    <div class="topbar-sub">Delia Francia &middot; La Fiera</div>
+  </div>
+  <div class="topbar-date">Mis &agrave; jour le 05/05/2026 &agrave; 06:30</div>
+</div>
+
+<div class="content">
+
+  <div class="section-label">Tableau de bord</div>
+  <p style="color:#94A3B8;font-size:13px;">Panel de Control non disponible.</p>
+
+  <div class='section-label'>Analyses d&eacute;taill&eacute;es</div><div class='grid-sec'>
+        <a href="Cajas_Reportadas_Analisis.xlsx" class="card-sec" style="border-color:#2E7D3230;">
+          <div class="card-icon-sm" style="background:#E8F5E9;">
+            <svg viewBox="0 0 24 24" style="fill:#2E7D32;"><path d="M20 7H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-9 10H4v-3h7v3zm9 0h-7v-3h7v3zm0-5H4V9h16v3z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title-sm" style="color:#2E7D32;">Cajas Reportadas</div>
+            <div class="card-desc-sm">Analyse d&eacute;taill&eacute;e par semaine, jour et cat&eacute;gorie</div>
+          </div>
+          <div class="card-size">622 Ko</div>
+          <div class="card-arrow" style="color:#2E7D32;">&#8250;</div>
+        </a>
+        <a href="Enfundes_Analisis.xlsx" class="card-sec" style="border-color:#E6510030;">
+          <div class="card-icon-sm" style="background:#FBE9E7;">
+            <svg viewBox="0 0 24 24" style="fill:#E65100;"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-2 .9-2 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title-sm" style="color:#E65100;">Enfundes</div>
+            <div class="card-desc-sm">Suivi des enfundes par semaine et parcelle</div>
+          </div>
+          <div class="card-size">187 Ko</div>
+          <div class="card-arrow" style="color:#E65100;">&#8250;</div>
+        </a>
+        <a href="Racimos_Analisis.xlsx" class="card-sec" style="border-color:#00838F30;">
+          <div class="card-icon-sm" style="background:#E0F7FA;">
+            <svg viewBox="0 0 24 24" style="fill:#00838F;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title-sm" style="color:#00838F;">Racimos</div>
+            <div class="card-desc-sm">Cosecha par cohorte, &acirc;ge et poids</div>
+          </div>
+          <div class="card-size">177 Ko</div>
+          <div class="card-arrow" style="color:#00838F;">&#8250;</div>
+        </a>
+        <a href="Stock_Analisis.xlsx" class="card-sec" style="border-color:#6A1B9A30;">
+          <div class="card-icon-sm" style="background:#F3E5F5;">
+            <svg viewBox="0 0 24 24" style="fill:#6A1B9A;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title-sm" style="color:#6A1B9A;">Stock</div>
+            <div class="card-desc-sm">Inventaire et suivi hebdomadaire</div>
+          </div>
+          <div class="card-size">1.9 Mo</div>
+          <div class="card-arrow" style="color:#6A1B9A;">&#8250;</div>
+        </a></div>
+
+  <div class="missing"><b>Non disponibles :</b><ul><li>Panel de Control</li></ul></div>
+
+  <div class="footer">
+    <div class="dot"></div>
+    Donn&eacute;es copi&eacute;es depuis OneDrive le 05/05/2026 &agrave; 06:30 &mdash; fichiers locaux, lecture seule
+  </div>
+
+</div>
+</body>
+</html>
