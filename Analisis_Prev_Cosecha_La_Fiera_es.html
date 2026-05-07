@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prev. Cosecha — La Fiera</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f5f7f5; color: #1a1a1a;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+#wrap { max-width: 480px; margin: 0 auto; padding: 14px; }
+#header {
+  text-align: center; padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0; margin-bottom: 12px;
+}
+#header h1 {
+  font-size: 17px; font-weight: 600; margin: 0;
+  color: #2E7D32;
+}
+#header .sub { font-size: 11px; color: #888; margin-top: 3px; }
+
+/* Carousel header */
+#weeknav {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.nav-arrow {
+  background: white; border: 2px solid #2E7D32;
+  color: #2E7D32; border-radius: 10px;
+  width: 40px; height: 40px;
+  font-size: 18px; font-weight: bold;
+  cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+#weekbig {
+  flex: 1; background: white; border: 2px solid #2E7D32;
+  border-radius: 10px; padding: 6px 10px; text-align: center;
+  position: relative;
+}
+#weekbig .lab {
+  font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;
+}
+#weekbig #weekval {
+  font-size: 18px; font-weight: 600; color: #2E7D32;
+}
+#weekbig .badge {
+  position: absolute; top: 4px; right: 6px;
+  font-size: 9px; padding: 2px 6px; border-radius: 8px;
+  background: #fffbe6; color: #b58900; font-weight: 600;
+}
+#weekbig .badge.current {
+  background: #e3fcec; color: #1b7c3a;
+}
+
+/* Dots indicator */
+#dots {
+  display: flex; justify-content: center; gap: 6px; margin-bottom: 14px;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #cccccc; transition: all 0.2s;
+}
+.dot.active {
+  background: #2E7D32;
+  width: 22px; border-radius: 4px;
+}
+
+/* Carousel container */
+#carousel {
+  overflow: hidden; touch-action: pan-y;
+}
+#carousel-track {
+  display: flex;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.slide {
+  flex: 0 0 100%; padding: 0 1px;
+}
+
+/* Cards */
+.card {
+  background: white; border: 1px solid #e5e8e5;
+  border-radius: 12px; padding: 12px; margin-bottom: 10px;
+}
+.card-title {
+  font-size: 12px; font-weight: 700; color: #1a1a1a;
+  margin-bottom: 8px; padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.card-title .icon { margin-right: 4px; }
+
+/* Compare Table (Prev / Real / Δ%) */
+.compare {
+  width: 100%; font-size: 12px;
+}
+.compare .row {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.9fr;
+  gap: 6px; padding: 5px 4px;
+  align-items: center;
+}
+.compare .row.head {
+  font-size: 10px; color: #1a1a1a; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  border-bottom: 1px solid #eee; padding-bottom: 5px;
+}
+.compare .row:not(.head):nth-child(even) {
+  background: #fafbfc;
+}
+.compare .lbl { font-weight: 600; color: #1a1a1a; }
+.compare .v { text-align: right; font-variant-numeric: tabular-nums; color: #1a1a1a; }
+.compare .delta {
+  text-align: right; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 6px; border-radius: 6px; font-size: 11px;
+}
+.compare .delta.pos { background: #e3fcec; color: #1b7c3a; }
+.compare .delta.neg { background: #ffe5e5; color: #b00020; }
+.compare .delta.neu { color: #888; }
+
+/* Forecast Table (Prev only) */
+.forecast {
+  width: 100%; font-size: 12px;
+}
+.forecast .row {
+  display: grid; grid-template-columns: 1.6fr 1fr;
+  gap: 6px; padding: 5px 4px;
+}
+.forecast .row:not(:last-child) { border-bottom: 1px solid #f3f3f3; }
+.forecast .lbl { color: #1a1a1a; font-weight: 600; }
+.forecast .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; color: #1a1a1a; }
+
+/* Cohorts — disposition tableau : 1 colonne intitulés à gauche + 6 colonnes valeurs */
+.cohorts-table {
+  display: grid;
+  grid-template-columns: auto repeat(6, 1fr);
+  gap: 0; margin-top: 6px;
+  border: 1px solid #e5e8e5; border-radius: 6px;
+  overflow: hidden;
+  font-size: 10px;
+}
+.cohorts-table .cell {
+  padding: 4px 4px;
+  text-align: center;
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.cohorts-table .cell:last-child { border-right: none; }
+.cohorts-table .cell.lbl {
+  text-align: right;
+  background: #f8f9fa;
+  color: #1a1a1a; font-weight: 600;
+  padding-right: 6px;
+  border-right: 1px solid #e5e8e5;
+}
+.cohorts-table .cell.head-age {
+  background: #f8f9fa; color: #1a1a1a; font-weight: 700;
+  font-size: 9px;
+}
+.cohorts-table .cell.head-pastille {
+  background: #f8f9fa;
+  padding: 4px 2px;
+}
+.cohorts-table .cell.head-pastille .pastille {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  vertical-align: middle;
+}
+.cohorts-table .cell.head-name {
+  background: #f8f9fa;
+  font-size: 8px; color: #555; font-weight: 500;
+  padding-bottom: 5px;
+}
+.cohorts-table .row-bottom .cell { border-bottom: none; }
+.cohorts-table .v {
+  font-variant-numeric: tabular-nums; font-weight: 600;
+  color: #1a1a1a;
+}
+.cohorts-table .v.zero { color: #bbb; font-weight: 400; }
+
+/* KPI big cards — Racimos & Cajas : titre + lignes Real / Prev */
+.kpis {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 10px;
+}
+.kpi {
+  background: white; border: 1px solid #e5e8e5;
+  border-radius: 10px; padding: 10px 12px;
+}
+.kpi .title {
+  font-size: 11px; font-weight: 700; color: #1a1a1a;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  margin-bottom: 6px; padding-bottom: 4px;
+  border-bottom: 1px solid #eee; text-align: center;
+}
+.kpi .ln {
+  display: flex; justify-content: center; align-items: baseline;
+  gap: 8px; padding: 2px 0;
+}
+.kpi .ln .k {
+  font-size: 10px; color: #555; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.kpi .ln .v {
+  font-size: 16px; font-weight: 700; color: #2E7D32;
+  font-variant-numeric: tabular-nums;
+}
+.kpi .ln.prev .v {
+  font-size: 13px; color: #888; font-weight: 600;
+}
+
+/* Avertissement sur semaines de prévision futures */
+.warn {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: #fffbe6; border: 1px solid #f6c84a;
+  border-left: 4px solid #e0a800;
+  border-radius: 8px; padding: 8px 10px;
+  margin-bottom: 10px;
+}
+.warn-icon {
+  font-size: 16px; flex-shrink: 0; line-height: 1.2;
+}
+.warn-text {
+  font-size: 11px; color: #5b4500; line-height: 1.35;
+  font-weight: 500;
+}
+.warn-date {
+  margin-top: 4px; padding-top: 4px;
+  border-top: 1px solid #f6c84a;
+  font-size: 11px; color: #5b4500;
+}
+
+/* Footer info */
+#footer {
+  text-align: center; font-size: 10px; color: #999;
+  padding: 8px 0 16px; margin-top: 8px;
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="header">
+    <h1>Previsión Cosecha — La Fiera</h1>
+    <div class="sub" id="sub"></div>
+  </div>
+
+  <div id="weeknav">
+    <button class="nav-arrow" id="prev-btn" onclick="navWeek(-1)">‹</button>
+    <div id="weekbig">
+      <div class="lab">Semana</div>
+      <div id="weekval">—</div>
+      <div class="badge" id="badge"></div>
+    </div>
+    <button class="nav-arrow" id="next-btn" onclick="navWeek(1)">›</button>
+  </div>
+
+  <div id="dots"></div>
+
+  <div id="carousel">
+    <div id="carousel-track"></div>
+  </div>
+
+  <div id="footer">Generado: <span id="gen"></span></div>
+</div>
+
+<script>
+const DATA = {"finca": "La Fiera", "tab_name": "Prev.Cos.Fiera", "yr_courante": 2026, "sem_courante": 19, "n_sem": 4, "alpha_corr": 0.5, "ratio_global": 1.0346471883663604, "ratio_correctores": {"9": 1.0484631493223644, "10": 1.01406276298907}, "slope": 0.019857142857142827, "phase": "ESTABLE", "last_record_date": "2026-05-06", "weeks": [{"delta": 0, "yr": 2026, "sem": 19, "is_current": true, "tot_enf": 29345, "tot_si": 17252, "tot_cos": 3635, "tot_sf": 12933, "poids_total": 113559, "poids_moy_prev": 31.24, "merma_pct": 6.4, "cajas": 4970, "ratio_caj_rac": 1.37, "edad_prom": 11.57, "cohortes": [{"age_id": 8, "age_app": 9, "cinta": "Azul", "enfundes": 4480, "saldo_ini": 4480, "cosecha": 0, "saldo_fin": 4480, "poids_pred": 31.06}, {"age_id": 9, "age_app": 10, "cinta": "Verde", "enfundes": 4690, "saldo_ini": 4690, "cosecha": 33, "saldo_fin": 4690, "poids_pred": 31.55}, {"age_id": 10, "age_app": 11, "cinta": "Amar", "enfundes": 4950, "saldo_ini": 4950, "cosecha": 1792, "saldo_fin": 2546, "poids_pred": 31.01}, {"age_id": 11, "age_app": 12, "cinta": "Cafe", "enfundes": 5500, "saldo_ini": 2378, "cosecha": 1510, "saldo_fin": 463, "poids_pred": 31.43}, {"age_id": 12, "age_app": 13, "cinta": "Roja", "enfundes": 4830, "saldo_ini": 372, "cosecha": 300, "saldo_fin": 372, "poids_pred": 31.63}, {"age_id": 13, "age_app": 14, "cinta": "Lila", "enfundes": 4895, "saldo_ini": 382, "cosecha": 0, "saldo_fin": 382, "poids_pred": 31.56}], "real": {"tot_cos": 4319, "poids_total": 134994, "poids_moy": 31.26, "cajas": 5911, "merma_pct": 6.3, "ratio_caj_rac": 1.3686}}, {"delta": 1, "yr": 2026, "sem": 20, "is_current": false, "tot_enf": 29265, "tot_si": 17366, "tot_cos": 3411, "tot_sf": 13955, "poids_total": 106561, "poids_moy_prev": 31.24, "merma_pct": 6.4, "cajas": 4664, "ratio_caj_rac": 1.37, "edad_prom": 11.8, "cohortes": [{"age_id": 8, "age_app": 9, "cinta": "Blanca", "enfundes": 4815, "saldo_ini": 4815, "cosecha": 0, "saldo_fin": 4815, "poids_pred": 31.19}, {"age_id": 9, "age_app": 10, "cinta": "Azul", "enfundes": 4480, "saldo_ini": 4480, "cosecha": 18, "saldo_fin": 4462, "poids_pred": 31.27}, {"age_id": 10, "age_app": 11, "cinta": "Verde", "enfundes": 4690, "saldo_ini": 4690, "cosecha": 1041, "saldo_fin": 3649, "poids_pred": 31.02}, {"age_id": 11, "age_app": 12, "cinta": "Amar", "enfundes": 4950, "saldo_ini": 2546, "cosecha": 1971, "saldo_fin": 575, "poids_pred": 31.32}, {"age_id": 12, "age_app": 13, "cinta": "Cafe", "enfundes": 5500, "saldo_ini": 463, "cosecha": 381, "saldo_fin": 82, "poids_pred": 31.43}, {"age_id": 13, "age_app": 14, "cinta": "Roja", "enfundes": 4830, "saldo_ini": 372, "cosecha": 0, "saldo_fin": 372, "poids_pred": 31.63}]}, {"delta": 2, "yr": 2026, "sem": 21, "is_current": false, "tot_enf": 29404, "tot_si": 18552, "tot_cos": 4347, "tot_sf": 14205, "poids_total": 135564, "poids_moy_prev": 31.19, "merma_pct": 6.4, "cajas": 5933, "ratio_caj_rac": 1.36, "edad_prom": 11.86, "cohortes": [{"age_id": 8, "age_app": 9, "cinta": "Negra", "enfundes": 4969, "saldo_ini": 4969, "cosecha": 0, "saldo_fin": 4969, "poids_pred": 30.93}, {"age_id": 9, "age_app": 10, "cinta": "Blanca", "enfundes": 4815, "saldo_ini": 4815, "cosecha": 19, "saldo_fin": 4796, "poids_pred": 31.4}, {"age_id": 10, "age_app": 11, "cinta": "Azul", "enfundes": 4480, "saldo_ini": 4462, "cosecha": 1057, "saldo_fin": 3405, "poids_pred": 30.74}, {"age_id": 11, "age_app": 12, "cinta": "Verde", "enfundes": 4690, "saldo_ini": 3649, "cosecha": 2770, "saldo_fin": 879, "poids_pred": 31.33}, {"age_id": 12, "age_app": 13, "cinta": "Amar", "enfundes": 4950, "saldo_ini": 575, "cosecha": 501, "saldo_fin": 74, "poids_pred": 31.32}, {"age_id": 13, "age_app": 14, "cinta": "Cafe", "enfundes": 5500, "saldo_ini": 82, "cosecha": 0, "saldo_fin": 82, "poids_pred": 31.43}]}, {"delta": 3, "yr": 2026, "sem": 22, "is_current": false, "tot_enf": 28784, "tot_si": 19003, "tot_cos": 4500, "tot_sf": 14503, "poids_total": 139813, "poids_moy_prev": 31.07, "merma_pct": 6.4, "cajas": 6119, "ratio_caj_rac": 1.36, "edad_prom": 11.95, "cohortes": [{"age_id": 8, "age_app": 9, "cinta": "Lila", "enfundes": 4880, "saldo_ini": 4880, "cosecha": 0, "saldo_fin": 4880, "poids_pred": 30.78}, {"age_id": 9, "age_app": 10, "cinta": "Negra", "enfundes": 4969, "saldo_ini": 4969, "cosecha": 15, "saldo_fin": 4954, "poids_pred": 31.14}, {"age_id": 10, "age_app": 11, "cinta": "Blanca", "enfundes": 4815, "saldo_ini": 4796, "cosecha": 983, "saldo_fin": 3813, "poids_pred": 30.88}, {"age_id": 11, "age_app": 12, "cinta": "Azul", "enfundes": 4480, "saldo_ini": 3405, "cosecha": 2693, "saldo_fin": 712, "poids_pred": 31.06}, {"age_id": 12, "age_app": 13, "cinta": "Verde", "enfundes": 4690, "saldo_ini": 879, "cosecha": 809, "saldo_fin": 70, "poids_pred": 31.33}, {"age_id": 13, "age_app": 14, "cinta": "Amar", "enfundes": 4950, "saldo_ini": 74, "cosecha": 0, "saldo_fin": 74, "poids_pred": 31.32}]}]};
+const CINTA_COLORS = {"roja": "#C92D2D", "rojo": "#C92D2D", "cafe": "#6F4E37", "café": "#6F4E37", "amarila": "#DAA520", "amarilla": "#DAA520", "amarillo": "#DAA520", "amar": "#DAA520", "verde": "#2B8A3E", "azul": "#2E7D32", "blanca": "#999999", "blanco": "#999999", "naranja": "#E65100", "turquesa": "#1ABC9C", "lila": "#9B59B6", "morada": "#9B59B6", "rosa": "#E91E63", "negra": "#1a1a1a", "?": "#cccccc"};
+const WEEKS = DATA.weeks || [];
+let CURRENT = 0;
+
+const fmtNum = (v, dec = 0) => {
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  return n.toLocaleString('es-ES', {
+    minimumFractionDigits: dec,
+    maximumFractionDigits: dec,
+    useGrouping: true
+  });
+};
+const fmtPct = (v, dec = 1, signed = false) => {
+  if (v === null || v === undefined) return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  return (signed && n >= 0 ? '+' : '') + n.toFixed(dec) + '%';
+};
+const fmtDeltaPct = (prev, real, dec = 1) => {
+  if (prev === null || real === null || prev === undefined || real === undefined) return null;
+  if (prev === 0) return null;
+  return ((real - prev) / prev) * 100;
+};
+const cintaColor = (name) => {
+  if (!name) return '#cccccc';
+  const k = String(name).toLowerCase().trim();
+  return CINTA_COLORS[k] || '#cccccc';
+};
+
+function deltaCell(prev, real, fmtFn = (v) => fmtNum(v, 0)) {
+  const pct = fmtDeltaPct(prev, real);
+  if (pct === null) return '<div class="delta neu">—</div>';
+  const cls = pct >= 0 ? 'pos' : 'neg';
+  const sign = pct >= 0 ? '+' : '';
+  return '<div class="delta ' + cls + '">' + sign + pct.toFixed(1) + '%</div>';
+}
+
+function renderCompare(week) {
+  const prev = week;
+  const real = week.real || {};
+  const lines = [
+    { key: 'Racimos',      p: prev.tot_cos,        r: real.tot_cos,        dec: 0 },
+    { key: 'Peso prom.',   p: prev.poids_moy_prev, r: real.poids_moy,      dec: 2, suffix: ' kg' },
+    { key: 'Cajas',        p: prev.cajas,          r: real.cajas,          dec: 0 },
+    { key: 'Merma',        p: prev.merma_pct,      r: real.merma_pct,      dec: 1, suffix: ' %' },
+    { key: 'Ratio caj/rac',p: prev.ratio_caj_rac,  r: real.ratio_caj_rac,  dec: 2 },
+  ];
+  let html = '<div class="card"><div class="card-title">📊 Previsto vs Real</div>';
+  html += '<div class="compare">';
+  html += '<div class="row head"><div>Indicador</div><div class="v">Previsto</div><div class="v">Real</div><div class="v">Δ%</div></div>';
+  for (const l of lines) {
+    const fmtV = (v) => v === null || v === undefined ? '—' : fmtNum(v, l.dec) + (l.suffix || '');
+    html += '<div class="row">';
+    html += '<div class="lbl">' + l.key + '</div>';
+    html += '<div class="v">' + fmtV(l.p) + '</div>';
+    html += '<div class="v">' + fmtV(l.r) + '</div>';
+    html += deltaCell(l.p, l.r);
+    html += '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function renderForecast(week) {
+  const lines = [
+    { key: 'Racimos previstos',  v: week.tot_cos,        dec: 0 },
+    { key: 'Peso prom. (kg/rac)',v: week.poids_moy_prev, dec: 2 },
+    { key: 'Peso total (kg)',    v: week.poids_total,    dec: 0 },
+    { key: 'Merma %',            v: week.merma_pct,      dec: 1 },
+    { key: 'Cajas previstas',    v: week.cajas,          dec: 0 },
+    { key: 'Ratio caj/rac',      v: week.ratio_caj_rac,  dec: 2 },
+    { key: 'Edad prom.',         v: week.edad_prom,      dec: 2 },
+  ];
+  let html = '<div class="card"><div class="card-title">🔮 Previsión semanal</div>';
+  html += '<div class="forecast">';
+  for (const l of lines) {
+    const v = l.v === null || l.v === undefined ? '—' : fmtNum(l.v, l.dec);
+    html += '<div class="row"><div class="lbl">' + l.key + '</div><div class="v">' + v + '</div></div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function renderCohorts(week) {
+  const cohortes = week.cohortes || [];
+  let html = '<div class="card"><div class="card-title">🎨 Cohortes por edad</div>';
+  html += '<div class="cohorts-table">';
+
+  // Row 1 : âges (+9sem...) — 1ère colonne vide
+  html += '<div class="cell lbl"></div>';
+  for (const c of cohortes) {
+    html += '<div class="cell head-age">+' + c.age_app + 'sem</div>';
+  }
+
+  // Row 2 : pastilles couleur — 1ère colonne vide
+  html += '<div class="cell lbl"></div>';
+  for (const c of cohortes) {
+    const col = cintaColor(c.cinta);
+    html += '<div class="cell head-pastille">'
+         + '<span class="pastille" style="background:' + col + '"></span></div>';
+  }
+
+  // Row 3 : nom couleur (Azul, Verde...) — 1ère colonne vide
+  html += '<div class="cell lbl"></div>';
+  for (const c of cohortes) {
+    html += '<div class="cell head-name">' + (c.cinta || '?') + '</div>';
+  }
+
+  // Row 4 : Saldo Inicial
+  html += '<div class="cell lbl">Saldo ini</div>';
+  for (const c of cohortes) {
+    const cls = (c.saldo_ini === 0 ? 'v zero' : 'v');
+    html += '<div class="cell"><span class="' + cls + '">' + fmtNum(c.saldo_ini) + '</span></div>';
+  }
+
+  // Row 5 : Cosecha
+  html += '<div class="cell lbl">Cosecha</div>';
+  for (const c of cohortes) {
+    const cls = (c.cosecha === 0 ? 'v zero' : 'v');
+    html += '<div class="cell"><span class="' + cls + '">' + fmtNum(c.cosecha) + '</span></div>';
+  }
+
+  // Row 6 : Saldo Final (dernière ligne, pas de border-bottom)
+  html += '<div class="cell lbl row-bottom">Saldo fin</div>';
+  for (const c of cohortes) {
+    const cls = (c.saldo_fin === 0 ? 'v zero' : 'v');
+    html += '<div class="cell row-bottom"><span class="' + cls + '">' + fmtNum(c.saldo_fin) + '</span></div>';
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+function renderKpis(week) {
+  const real = week.real || {};
+  const useReal = week.is_current && real.tot_cos !== undefined;
+  let html = '<div class="kpis">';
+
+  // Card Racimos
+  html += '<div class="kpi"><div class="title">Racimos</div>';
+  if (useReal) {
+    html += '<div class="ln"><span class="k">Real</span><span class="v">' + fmtNum(real.tot_cos) + '</span></div>';
+    html += '<div class="ln prev"><span class="k">Prev</span><span class="v">' + fmtNum(week.tot_cos) + '</span></div>';
+  } else {
+    html += '<div class="ln"><span class="k">Prev</span><span class="v">' + fmtNum(week.tot_cos) + '</span></div>';
+  }
+  html += '</div>';
+
+  // Card Cajas
+  html += '<div class="kpi"><div class="title">Cajas</div>';
+  if (useReal) {
+    html += '<div class="ln"><span class="k">Real</span><span class="v">' + fmtNum(real.cajas) + '</span></div>';
+    html += '<div class="ln prev"><span class="k">Prev</span><span class="v">' + fmtNum(week.cajas) + '</span></div>';
+  } else {
+    html += '<div class="ln"><span class="k">Prev</span><span class="v">' + fmtNum(week.cajas) + '</span></div>';
+  }
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderSlide(week) {
+  let html = '<div class="slide">';
+  html += renderKpis(week);
+  if (week.is_current && week.real) {
+    html += renderCompare(week);
+  } else {
+    // Bandeau d'avertissement sur les semaines de prévision futures
+    let dateStr = '';
+    if (DATA.last_record_date) {
+      try {
+        const d = new Date(DATA.last_record_date + 'T00:00:00');
+        dateStr = d.toLocaleDateString('es-ES', {
+          day: '2-digit', month: 'long', year: 'numeric'
+        });
+      } catch (e) { dateStr = DATA.last_record_date; }
+    }
+    html += '<div class="warn">';
+    html += '<div class="warn-icon">⚠️</div>';
+    html += '<div class="warn-text">';
+    html += 'Estos datos son una proyección basada en los últimos registros validados. ';
+    html += 'Pueden variar significativamente con la realidad.';
+    if (dateStr) {
+      html += '<div class="warn-date">Último registro: <b>' + dateStr + '</b></div>';
+    }
+    html += '</div>';
+    html += '</div>';
+    html += renderForecast(week);
+  }
+  html += renderCohorts(week);
+  html += '</div>';
+  return html;
+}
+
+function init() {
+  // Header sub
+  const phase = DATA.phase || '';
+  const slope = DATA.slope !== null && DATA.slope !== undefined ? DATA.slope.toFixed(3) : '';
+  const ratio_g = DATA.ratio_global !== null && DATA.ratio_global !== undefined
+    ? ' · Corr: ' + ((DATA.ratio_global - 1) * 100).toFixed(1) + '%'
+    : '';
+  document.getElementById('sub').textContent =
+    phase + (slope ? ' (slope=' + slope + ')' : '') + ratio_g;
+
+  // Render slides
+  const track = document.getElementById('carousel-track');
+  track.innerHTML = WEEKS.map(renderSlide).join('');
+
+  // Dots
+  const dots = document.getElementById('dots');
+  dots.innerHTML = WEEKS.map((_, i) => '<div class="dot" data-i="' + i + '"></div>').join('');
+  dots.querySelectorAll('.dot').forEach(d => {
+    d.addEventListener('click', () => goTo(parseInt(d.dataset.i)));
+  });
+
+  // Footer
+  document.getElementById('gen').textContent = DATA.generated_at || '';
+
+  goTo(0);
+}
+
+function goTo(i) {
+  if (i < 0 || i >= WEEKS.length) return;
+  CURRENT = i;
+  const track = document.getElementById('carousel-track');
+  track.style.transform = 'translateX(-' + (i * 100) + '%)';
+
+  const w = WEEKS[i];
+  document.getElementById('weekval').textContent =
+    'S' + String(w.sem).padStart(2, '0') + '.' + w.yr;
+  const badge = document.getElementById('badge');
+  if (w.is_current) {
+    badge.textContent = 'ACTUAL';
+    badge.className = 'badge current';
+  } else {
+    badge.textContent = '+' + w.delta;
+    badge.className = 'badge';
+  }
+
+  document.getElementById('prev-btn').disabled = (i === 0);
+  document.getElementById('next-btn').disabled = (i === WEEKS.length - 1);
+
+  document.querySelectorAll('.dot').forEach((d, di) => {
+    d.classList.toggle('active', di === i);
+  });
+}
+
+function navWeek(dir) { goTo(CURRENT + dir); }
+
+// Touch swipe
+let touchStartX = 0, touchEndX = 0;
+document.getElementById('carousel').addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+document.getElementById('carousel').addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  const dx = touchEndX - touchStartX;
+  if (Math.abs(dx) > 40) {
+    navWeek(dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') navWeek(-1);
+  else if (e.key === 'ArrowRight') navWeek(1);
+});
+
+init();
+</script>
+</body>
+</html>
