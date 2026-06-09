@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clima Cosecha · La Fiera</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<meta name="theme-color" content="#E65100">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fincabene">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+  background:#f5f7f5;color:#1a1a1a;min-height:100vh;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#wrap{max-width:520px;margin:0 auto;padding:14px 12px 36px}
+#header{text-align:center;padding:8px 0 14px;border-bottom:1px solid #e3d4c4;margin-bottom:14px}
+#header h1{font-size:19px;font-weight:700;margin:0 0 3px;color:#E65100;letter-spacing:.3px}
+#header .finca{font-size:16px;font-weight:700;margin:0;color:#2B8A3E}
+#header .updated{font-size:11px;color:#999;margin-top:5px}
+#header .updated strong{color:#E65100;font-weight:600}
+.tablewrap{border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);background:#fff;overflow:hidden}
+table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:12px}
+.grid th,.grid td{padding:6px 2px;text-align:center;border-bottom:1px solid #eef0ee}
+.grid thead th{background:#E8F5E9;font-weight:600;color:#555}
+.grid .agehead{font-size:14px;font-weight:700;color:#2B8A3E}
+.grid .agehead span{display:block;font-size:8.5px;font-weight:500;color:#999}
+.grid col.lab{width:74px}
+.grid .rowlab{text-align:left;font-weight:600;color:#444;font-size:10.5px;line-height:1.15;
+  background:#fafbfa;padding-left:7px}
+.grid td.colorcell{font-weight:700;font-size:10.5px}
+.grid td.sub{font-size:10px;color:#888;font-weight:600}
+.grid td.sub span{color:#bbb;font-weight:500}
+.grid td.num{font-variant-numeric:tabular-nums;color:#222}
+.grid td.strong{font-weight:700;font-size:13px;color:#111}
+.grid tr.r-hot td.hot{font-variant-numeric:tabular-nums;color:#222}
+.grid tr.r-hot td.hot span{font-size:8.5px;color:#bbb;font-weight:500}
+.grid tr.r-proj td.proj{font-variant-numeric:tabular-nums;font-weight:700;color:#E65100;background:#FFF6EE}
+.grid tr.r-proj td.proj .delta{display:block;font-size:9px;font-weight:600;color:#F9A36B}
+.grid tr.r-saldo td,.grid tr.r-saldo th{border-top:2px solid #e3e6e3}
+.empty{text-align:center;color:#999;padding:30px 10px;font-size:13px}
+.legend{margin-top:16px;font-size:11.5px;color:#8a8a8a;line-height:1.55;
+  background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.legend b{color:#555}
+.legend .k{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.back{display:block;text-align:center;margin-top:18px;color:#E65100;font-size:13px;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="header">
+    <h1>Clima · Cosecha</h1>
+    <p class="finca">La Fiera</p>
+    <p class="updated">Semana <strong>2026 · S24</strong> · datos al <strong>09/06/2026</strong></p>
+  </div>
+  <div class="tablewrap"><table class="grid"><colgroup><col class="lab"><col><col><col><col><col><col></colgroup><thead><tr><th class="rowlab">Edad / Sem</th><th class="agehead">14<span>sem</span></th><th class="agehead">13<span>sem</span></th><th class="agehead">12<span>sem</span></th><th class="agehead">11<span>sem</span></th><th class="agehead">10<span>sem</span></th><th class="agehead">9<span>sem</span></th></tr></thead><tbody><tr class="r-color"><th class="rowlab">Color</th><td class="colorcell" style="background:#0202C6;color:#FFFFFF">Azul</td><td class="colorcell" style="background:#F2F2F2;color:#595959">Blanca</td><td class="colorcell" style="background:#1F1F1F;color:#FFFFFF">Negra</td><td class="colorcell" style="background:#7030A0;color:#FFFFFF">Lila</td><td class="colorcell" style="background:#FF0000;color:#FFFFFF">Roja</td><td class="colorcell" style="background:#6C2826;color:#FFFFFF">Café</td></tr><tr class="r-sub"><th class="rowlab">Sem. Enfunde</th><td class="sub">S11<span>/2026</span></td><td class="sub">S12<span>/2026</span></td><td class="sub">S13<span>/2026</span></td><td class="sub">S14<span>/2026</span></td><td class="sub">S15<span>/2026</span></td><td class="sub">S16<span>/2026</span></td></tr><tr class="r-saldo"><th class="rowlab">Saldo racimos</th><td class="num strong">118</td><td class="num strong">-33</td><td class="num strong">3 315</td><td class="num strong">4 880</td><td class="num strong">4 971</td><td class="num strong">4 910</td></tr><tr class="r-num"><th class="rowlab">Suma T°</th><td class="num">1 314</td><td class="num">1 217</td><td class="num">1 117</td><td class="num">1 016</td><td class="num">912</td><td class="num">808</td></tr><tr class="r-hot"><th class="rowlab">Horas T &gt; 32 °C</th><td class="hot">309<span>h</span></td><td class="hot">291<span>h</span></td><td class="hot">267<span>h</span></td><td class="hot">243<span>h</span></td><td class="hot">207<span>h</span></td><td class="hot">172<span>h</span></td></tr><tr class="r-num"><th class="rowlab">Suma lluvia (mm)</th><td class="num">281</td><td class="num">201</td><td class="num">197</td><td class="num">197</td><td class="num">197</td><td class="num">197</td></tr><tr class="r-num"><th class="rowlab">BMI 30 días</th><td class="num">142</td><td class="num">142</td><td class="num">142</td><td class="num">142</td><td class="num">142</td><td class="num">142</td></tr><tr class="r-proj"><th class="rowlab">Proy. T° fin sem.</th><td class="proj">1 363<span class="delta">+49</span></td><td class="proj">1 267<span class="delta">+49</span></td><td class="proj">1 166<span class="delta">+49</span></td><td class="proj">1 065<span class="delta">+49</span></td><td class="proj">962<span class="delta">+49</span></td><td class="proj">857<span class="delta">+49</span></td></tr></tbody></table></div>
+  <div class="legend">
+    <b>Cómo leer</b> — cada columna es un color de conteo, de la edad 14 (más cerca de la
+    cosecha) a la 9.<br>
+    · <b>Saldo racimos</b>, <b>Suma T°</b> y <b>Suma lluvia</b> son acumulados desde la
+    aparición (enfunde) hasta hoy.<br>
+    · <b>Horas T&gt;32 °C</b> : horas acumuladas por encima de 32 °C
+    desde la aparición (calor que estresa el racimo).<br>
+    · <b>BMI 30 días</b> : índice de madurez de los últimos 30 días (tomado del ICG) —
+    igual para todos los colores, pues todos superan los 30 días.<br>
+    · <span class="k" style="background:#FFF6EE;border:1px solid #f3d4b8"></span>
+    <b>Proy. T° fin sem.</b> : Suma T° actual + media de los 7 últimos días de T° efectiva
+    × los días restantes hasta el sábado.
+    <span class="delta" style="color:#F9A36B">+x</span> = aporte estimado de fin de semana.
+  </div>
+  <a class="back" href="menu.html">← Volver al menú</a>
+</div>
+</body>
+</html>
