@@ -49,7 +49,29 @@ table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-
   text-align:left;box-shadow:1px 0 0 #d8e4ea}
 .matrix td.d{color:#333}
 .matrix td.tot,.matrix th.tot{font-weight:700;color:#111;background:#f7f9f7}
+/* página Semana : columna Total fija a la derecha durante el swipe */
+.matrix.sticky-right td.tot{position:sticky;right:0;z-index:1;box-shadow:-1px 0 0 #e0e4e0}
+.matrix.sticky-right thead th.tot{position:sticky;top:0;right:0;z-index:3;box-shadow:-1px 0 0 #d8e4ea}
+.matrix.sticky-right tr.rtot td.tot{z-index:2}
+/* récap : bloque Total + % fijo a la derecha (anchos fijos para el offset) */
+.matrix.sticky-recap td.tot,.matrix.sticky-recap th.tot{position:sticky;right:46px;z-index:1;
+  width:60px;min-width:60px;box-shadow:-1px 0 0 #e0e4e0}
+.matrix.sticky-recap td.pc,.matrix.sticky-recap th.pc{position:sticky;right:0;z-index:1;
+  width:46px;min-width:46px;background:#f7f9f7}
+.matrix.sticky-recap thead th.tot{position:sticky;top:0;right:46px;z-index:3}
+.matrix.sticky-recap thead th.pc{position:sticky;top:0;right:0;z-index:3}
+.matrix.sticky-recap tr.rtot td.tot,.matrix.sticky-recap tr.rtot td.pc{z-index:2}
 .matrix td.pc,.matrix th.pc{color:#888;font-size:11px}
+/* selectores semana / día */
+.selrow{display:flex;gap:6px;overflow-x:auto;padding:2px 1px 8px;-webkit-overflow-scrolling:touch}
+.selrow::-webkit-scrollbar{display:none}
+.selrow b.lbl{align-self:center;font-size:10.5px;color:#999;font-weight:600;
+  padding-right:2px;white-space:nowrap;text-transform:uppercase;letter-spacing:.4px}
+.pill{flex:0 0 auto;border:none;cursor:pointer;padding:7px 12px;border-radius:9px;
+  font-size:12.5px;font-weight:600;color:#777;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);font-family:inherit}
+.pill.on{background:#E8F5E9;color:#2B8A3E}
+.day-sel{margin-top:-2px}
 .matrix tr.rtot th,.matrix tr.rtot td{font-weight:700;color:#111;background:#f2f4f2;
   border-top:2px solid #e0e4e0}
 .matrix tr.rsub th,.matrix tr.rsub td{color:#999;font-size:10.5px;background:#fcfcfc;font-weight:500}
@@ -74,12 +96,36 @@ table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-
     <a href="Analisis_Rechazos_Semana_La_Fiera_es.html" class="on">Semana · lotes</a>
   </div>
   <div class="kpi">
-    <div class="c"><b>S27</b><span>última semana</span></div>
-    <div class="c"><b>22</b><span>rechazos sem.</span></div>
-    <div class="c"><b>4</b><span>lotes top</span></div>
+    <div class="c"><b><span id="kw">—</span></b><span>semana · día</span></div>
+    <div class="c"><b><span id="kn">—</span></b><span>rechazos</span></div>
+    <div class="c"><b><span id="kl">—</span></b><span>lotes</span></div>
   </div>
-  <div class="scroller"><table class="matrix"><thead><tr><th class="corner">Categoría</th><th class="wk">A01</th><th class="wk">B06</th><th class="wk">B12</th><th class="wk">C02</th><th class="tot">Total</th></tr></thead><tbody><tr><th class="cat">Pobre</th><td class="d" style="">·</td><td class="d" style="background:rgba(214,40,40,0.435)">3</td><td class="d" style="">·</td><td class="d" style="background:rgba(214,40,40,0.185)">1</td><td class="tot">4</td></tr><tr><th class="cat">Alterado</th><td class="d" style="background:rgba(214,40,40,0.435)">3</td><td class="d" style="background:rgba(214,40,40,0.185)">1</td><td class="d" style="">·</td><td class="d" style="">·</td><td class="tot">4</td></tr><tr><th class="cat">Sobregrado</th><td class="d" style="background:rgba(214,40,40,0.560)">4</td><td class="d" style="background:rgba(214,40,40,0.560)">4</td><td class="d" style="background:rgba(214,40,40,0.310)">2</td><td class="d" style="">·</td><td class="tot">10</td></tr><tr><th class="cat">Virosis</th><td class="d" style="background:rgba(214,40,40,0.310)">2</td><td class="d" style="">·</td><td class="d" style="background:rgba(214,40,40,0.310)">2</td><td class="d" style="">·</td><td class="tot">4</td></tr><tr class="rtot"><th class="cat tt">TOTAL lote</th><td class="d tt">9</td><td class="d tt">8</td><td class="d tt">4</td><td class="d tt">1</td><td class="tot tt">22</td></tr></tbody></table></div>
-  <div class="note"><b>Cómo leer</b> — última semana disponible. Categorías en filas (fijas), principales lotes en columnas (encabezado fijo). Lotes ordenados por nº de rechazos de la semana. Color ∝ nº.</div>
+  <div class="selrow" id="wkSel"><b class="lbl">Semana</b></div><div class="selrow day-sel" id="daySel"></div><div id="tblHost"></div><script>
+const RD = {"cats": ["Pobre", "Alterado", "Sobregrado", "Virosis", "Erwinia", "Cochinilla", "Caído", "Explosivo"], "weeks": [24, 25, 26, 27], "days": {"24": [["2026-06-11", "Jue 11/06"]], "25": [["2026-06-16", "Mar 16/06"], ["2026-06-17", "Mié 17/06"], ["2026-06-18", "Jue 18/06"]], "26": [["2026-06-23", "Mar 23/06"], ["2026-06-24", "Mié 24/06"], ["2026-06-25", "Jue 25/06"], ["2026-07-01", "Mié 01/07"]], "27": [["2026-06-30", "Mar 30/06"]]}, "rows": [[24, "2026-06-11", "FIE-A05", 0, 4], [24, "2026-06-11", "FIE-A05", 0, 1], [24, "2026-06-11", "FIE-A07", 1, 1], [24, "2026-06-11", "FIE-A07", 0, 3], [24, "2026-06-11", "FIE-B03", 0, 1], [24, "2026-06-11", "FIE-B05", 5, 1], [24, "2026-06-11", "FIE-B05", 1, 1], [24, "2026-06-11", "FIE-B05", 0, 1], [24, "2026-06-11", "FIE-B05", 0, 2], [24, "2026-06-11", "FIE-B08", 5, 1], [24, "2026-06-11", "FIE-B08", 4, 1], [24, "2026-06-11", "FIE-B09", 0, 1], [24, "2026-06-11", "FIE-B10", 0, 1], [25, "2026-06-16", "FIE-A02", 0, 1], [25, "2026-06-16", "FIE-A02", 7, 1], [25, "2026-06-16", "FIE-A02", 2, 1], [25, "2026-06-16", "FIE-A03", 0, 2], [25, "2026-06-16", "FIE-A03", 1, 1], [25, "2026-06-16", "FIE-A05", 0, 1], [25, "2026-06-16", "FIE-A05", 1, 1], [25, "2026-06-16", "FIE-A09", 2, 1], [25, "2026-06-16", "FIE-C02", 0, 2], [25, "2026-06-17", "FIE-A01", 1, 2], [25, "2026-06-17", "FIE-A01", 3, 1], [25, "2026-06-17", "FIE-A01", 0, 1], [25, "2026-06-17", "FIE-A02", 0, 1], [25, "2026-06-17", "FIE-A04", 1, 1], [25, "2026-06-17", "FIE-A10", 0, 2], [25, "2026-06-17", "FIE-A10", 1, 1], [25, "2026-06-17", "FIE-B05", 0, 1], [25, "2026-06-17", "FIE-B06", 0, 1], [25, "2026-06-17", "FIE-B12", 3, 2], [25, "2026-06-17", "FIE-B12", 0, 1], [25, "2026-06-17", "FIE-C01", 6, 1], [25, "2026-06-17", "FIE-C01", 3, 1], [25, "2026-06-18", "FIE-A0", 4, 2], [25, "2026-06-18", "FIE-A01", 1, 1], [25, "2026-06-18", "FIE-A01", 0, 1], [25, "2026-06-18", "FIE-A07", 0, 3], [25, "2026-06-18", "FIE-A07", 1, 1], [25, "2026-06-18", "FIE-A08", 0, 2], [25, "2026-06-18", "FIE-A08", 2, 1], [25, "2026-06-18", "FIE-A08", 2, 1], [25, "2026-06-18", "FIE-B03", 1, 2], [25, "2026-06-18", "FIE-B03", 0, 1], [25, "2026-06-18", "FIE-C01", 0, 1], [25, "2026-06-18", "FIE-C01", 3, 2], [25, "2026-06-18", "FIE-C01", 0, 1], [26, "2026-06-23", "FIE-A02", 3, 3], [26, "2026-06-23", "FIE-A02", 0, 1], [26, "2026-06-23", "FIE-A05", 2, 2], [26, "2026-06-23", "FIE-A05", 0, 2], [26, "2026-06-23", "FIE-A06", 2, 2], [26, "2026-06-23", "FIE-A06", 0, 1], [26, "2026-06-23", "FIE-A09", 0, 2], [26, "2026-06-23", "FIE-B02", 1, 1], [26, "2026-06-23", "FIE-B03", 0, 3], [26, "2026-06-23", "FIE-B03", 1, 1], [26, "2026-06-23", "FIE-B07", 0, 1], [26, "2026-06-23", "FIE-B07", 0, 1], [26, "2026-06-23", "FIE-C02", 1, 1], [26, "2026-06-24", "FIE-A01", 3, 2], [26, "2026-06-24", "FIE-A01", 0, 4], [26, "2026-06-24", "FIE-A01", 1, 3], [26, "2026-06-24", "FIE-A03", 6, 1], [26, "2026-06-24", "FIE-A03", 4, 1], [26, "2026-06-24", "FIE-A04", 0, 3], [26, "2026-06-24", "FIE-A10", 0, 1], [26, "2026-06-24", "FIE-B01", 1, 1], [26, "2026-06-24", "FIE-C0", 1, 1], [26, "2026-06-24", "FIE-C0", 0, 1], [26, "2026-06-25", "FIE-A0", 0, 2], [26, "2026-06-25", "FIE-A0", 4, 2], [26, "2026-06-25", "FIE-A0", 1, 1], [26, "2026-06-25", "FIE-A01", 1, 1], [26, "2026-06-25", "FIE-A08", 0, 3], [26, "2026-06-25", "FIE-A10", 2, 1], [26, "2026-06-25", "FIE-B06", 0, 1], [26, "2026-06-25", "FIE-B09", 0, 3], [26, "2026-06-25", "FIE-B09", 1, 1], [26, "2026-06-25", "FIE-C02", 0, 1], [27, "2026-06-30", "FIE-A01", 2, 4], [27, "2026-06-30", "FIE-A01", 1, 3], [27, "2026-06-30", "FIE-A01", 3, 2], [27, "2026-06-30", "FIE-B06", 0, 1], [27, "2026-06-30", "FIE-B06", 2, 4], [27, "2026-06-30", "FIE-B06", 0, 2], [27, "2026-06-30", "FIE-B06", 1, 1], [27, "2026-06-30", "FIE-B12", 3, 2], [27, "2026-06-30", "FIE-B12", 2, 2], [27, "2026-06-30", "FIE-C02", 0, 1], [26, "2026-07-01", "FIE-A01", 5, 2], [26, "2026-07-01", "FIE-A02", 2, 3], [26, "2026-07-01", "FIE-A02", 4, 2], [26, "2026-07-01", "FIE-A02", 0, 1], [26, "2026-07-01", "FIE-B01", 0, 1], [26, "2026-07-01", "FIE-B02", 0, 1], [26, "2026-07-01", "FIE-B03", 0, 1], [26, "2026-07-01", "FIE-B06", 1, 1], [26, "2026-07-01", "FIE-B06", 0, 1], [26, "2026-07-01", "FIE-B07", 5, 2], [26, "2026-07-01", "FIE-B07", 2, 1], [26, "2026-07-01", "FIE-B07", 2, 1], [26, "2026-07-01", "FIE-C02", 1, 1], [26, "2026-07-01", "FIE-C02", 0, 1]]};
+let curW = RD.weeks[RD.weeks.length-1], curD = "all";
+const short = l => (l.split("-").pop());
+function heat(v,mx){if(!v||!mx)return "";const a=(0.06+0.50*(v/mx)).toFixed(3);return "background:rgba(214,40,40,"+a+")";}
+function fmt(v){return v?String(v).replace(/\B(?=(\d{3})+(?!\d))/g," "):"·";}
+function pills(host,items,cur,on){host.querySelectorAll(".pill").forEach(e=>e.remove());items.forEach(it=>{const b=document.createElement("button");b.className="pill"+(it.v===cur?" on":"");b.textContent=it.t;b.onclick=()=>on(it.v);host.appendChild(b);});}
+function renderWeeks(){pills(document.getElementById("wkSel"),RD.weeks.map(w=>({v:w,t:"S"+w})),curW,w=>{curW=w;curD="all";renderDays();renderTable();});}
+function renderDays(){const ds=RD.days[String(curW)]||[];const items=[{v:"all",t:"Semana"}].concat(ds.map(x=>({v:x[0],t:x[1]})));pills(document.getElementById("daySel"),items,curD,dd=>{curD=dd;renderDays();renderTable();});}
+function renderTable(){
+ let rs=RD.rows.filter(r=>r[0]===curW && (curD==="all"||r[1]===curD));
+ const host=document.getElementById("tblHost");
+ if(!rs.length){host.innerHTML="<p class=\"empty\">Sin rechazos.</p>";setKpi(0,0);return;}
+ const lotSum={},catSet={};rs.forEach(r=>{lotSum[r[2]]=(lotSum[r[2]]||0)+r[4];catSet[r[3]]=1;});
+ const lotes=Object.keys(lotSum).sort((a,b)=>lotSum[b]-lotSum[a]);
+ const cix=RD.cats.map((c,i)=>i).filter(i=>catSet[i]);
+ const cell={};let vmax=0,gtot=0;rs.forEach(r=>{const k=r[3]+"|"+r[2];cell[k]=(cell[k]||0)+r[4];if(cell[k]>vmax)vmax=cell[k];gtot+=r[4];});
+ let h='<div class="scroller"><table class="matrix sticky-right"><thead><tr>';
+ h+='<th class="corner">Categoría</th>';lotes.forEach(l=>h+='<th class="wk">'+short(l)+'</th>');h+='<th class="tot">Total</th></tr></thead><tbody>';
+ cix.forEach(i=>{h+='<tr><th class="cat">'+RD.cats[i]+'</th>';let tc=0;lotes.forEach(l=>{const v=cell[i+"|"+l]||0;tc+=v;h+='<td class="d" style="'+heat(v,vmax)+'">'+fmt(v)+'</td>';});h+='<td class="tot">'+fmt(tc)+'</td></tr>';});
+ h+='<tr class="rtot"><th class="cat tt">TOTAL lote</th>';lotes.forEach(l=>h+='<td class="d tt">'+fmt(lotSum[l])+'</td>');h+='<td class="tot tt">'+fmt(gtot)+'</td></tr>';
+ h+='</tbody></table></div>';host.innerHTML=h;setKpi(gtot,lotes.length);}
+function setKpi(n,nl){const kw=document.getElementById("kw");kw.textContent="S"+curW+(curD==="all"?"":" · "+((RD.days[String(curW)].find(x=>x[0]===curD)||["",""])[1]));document.getElementById("kn").textContent=fmt(n);document.getElementById("kl").textContent=nl;}
+renderWeeks();renderDays();renderTable();
+</script>
+  <div class="note"><b>Cómo leer</b> — elige la <b>semana</b> y opcionalmente el <b>día</b>. Categorías en filas (fijas a la izquierda), <b>todos</b> los lotes en columnas — se desliza en horizontal y el <b>Total</b> queda fijo a la derecha. Lotes ordenados por nº de rechazos. Color ∝ nº.</div>
   <a class="back" href="menu.html">← Volver al menú</a>
 </div>
 </body>
