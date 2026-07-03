@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rechazos · Delia Francia</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<meta name="theme-color" content="#E65100">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fincabene">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+  background:#f5f7f5;color:#1a1a1a;min-height:100vh;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#wrap{max-width:560px;margin:0 auto;padding:14px 12px 36px}
+#header{text-align:center;padding:8px 0 12px;border-bottom:1px solid #e3d4c4;margin-bottom:12px}
+#header h1{font-size:19px;font-weight:700;margin:0 0 3px;color:#E65100;letter-spacing:.3px}
+#header .finca{font-size:16px;font-weight:700;margin:0;color:#0277BD}
+#header .updated{font-size:11px;color:#999;margin-top:5px}
+#header .updated strong{color:#E65100;font-weight:600}
+/* segmented nav */
+.seg{display:flex;gap:6px;margin:0 0 14px}
+.seg a{flex:1;text-align:center;padding:8px 4px;border-radius:10px;font-size:12.5px;
+  font-weight:600;text-decoration:none;color:#777;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.seg a.on{background:#E3F2FD;color:#0277BD}
+.kpi{display:flex;gap:8px;margin:0 0 14px}
+.kpi .c{flex:1;background:#fff;border-radius:12px;padding:10px 8px;text-align:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.kpi .c b{display:block;font-size:18px;color:#0277BD;font-variant-numeric:tabular-nums}
+.kpi .c span{font-size:10.5px;color:#888}
+/* matriz con cabecera + 1ª columna fijas */
+.scroller{position:relative;overflow:auto;max-height:72vh;border-radius:14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.07);background:#fff;-webkit-overflow-scrolling:touch}
+table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-content;min-width:100%}
+.matrix th,.matrix td{padding:7px 8px;text-align:center;white-space:nowrap;
+  border-bottom:1px solid #eef0ee;font-variant-numeric:tabular-nums}
+.matrix thead th{position:sticky;top:0;z-index:2;background:#E3F2FD;
+  color:#555;font-weight:600;font-size:11px;border-bottom:1px solid #d8e4ea}
+.matrix thead th.wk{color:#0277BD;font-weight:700}
+.matrix th.cat{position:sticky;left:0;z-index:1;background:#fafbfa;text-align:left;
+  font-weight:600;color:#333;font-size:11.5px;box-shadow:1px 0 0 #ececec}
+.matrix th.corner{position:sticky;left:0;top:0;z-index:3;background:#E3F2FD;
+  text-align:left;box-shadow:1px 0 0 #d8e4ea}
+.matrix td.d{color:#333}
+.matrix td.tot,.matrix th.tot{font-weight:700;color:#111;background:#f7f9f7}
+/* página Semana : columna Total fija a la derecha durante el swipe */
+.matrix.sticky-right td.tot{position:sticky;right:0;z-index:1;box-shadow:-1px 0 0 #e0e4e0}
+.matrix.sticky-right thead th.tot{position:sticky;top:0;right:0;z-index:3;box-shadow:-1px 0 0 #d8e4ea}
+.matrix.sticky-right tr.rtot td.tot{z-index:2}
+/* récap : bloque Total + % fijo a la derecha (anchos fijos para el offset) */
+.matrix.sticky-recap td.tot,.matrix.sticky-recap th.tot{position:sticky;right:46px;z-index:1;
+  width:60px;min-width:60px;box-shadow:-1px 0 0 #e0e4e0}
+.matrix.sticky-recap td.pc,.matrix.sticky-recap th.pc{position:sticky;right:0;z-index:1;
+  width:46px;min-width:46px;background:#f7f9f7}
+.matrix.sticky-recap thead th.tot{position:sticky;top:0;right:46px;z-index:3}
+.matrix.sticky-recap thead th.pc{position:sticky;top:0;right:0;z-index:3}
+.matrix.sticky-recap tr.rtot td.tot,.matrix.sticky-recap tr.rtot td.pc{z-index:2}
+.matrix td.pc,.matrix th.pc{color:#888;font-size:11px}
+/* selectores semana / día */
+.selrow{display:flex;gap:6px;overflow-x:auto;padding:2px 1px 8px;-webkit-overflow-scrolling:touch}
+.selrow::-webkit-scrollbar{display:none}
+.selrow b.lbl{align-self:center;font-size:10.5px;color:#999;font-weight:600;
+  padding-right:2px;white-space:nowrap;text-transform:uppercase;letter-spacing:.4px}
+.pill{flex:0 0 auto;border:none;cursor:pointer;padding:7px 12px;border-radius:9px;
+  font-size:12.5px;font-weight:600;color:#777;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);font-family:inherit}
+.pill.on{background:#E3F2FD;color:#0277BD}
+.day-sel{margin-top:-2px}
+.matrix tr.rtot th,.matrix tr.rtot td{font-weight:700;color:#111;background:#f2f4f2;
+  border-top:2px solid #e0e4e0}
+.matrix tr.rsub th,.matrix tr.rsub td{color:#999;font-size:10.5px;background:#fcfcfc;font-weight:500}
+.matrix tr.rsub th.cat{background:#fcfcfc}
+.empty{text-align:center;color:#999;padding:30px 10px;font-size:13px}
+.note{margin-top:14px;font-size:11.5px;color:#8a8a8a;line-height:1.55;
+  background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.note b{color:#555}
+.back{display:block;text-align:center;margin-top:18px;color:#E65100;font-size:13px;
+  font-weight:600;text-decoration:none}
+/* --- gráficos : botones + carrusel bloqueado horizontal (estilo Panel) --- */
+.gbtns2{display:flex;flex-direction:column;gap:10px;margin:2px 0 6px}
+.gbig{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);border-radius:13px;padding:16px;font-size:16px;
+  font-weight:700;color:#333;cursor:pointer;font-family:inherit}
+.gbig small{font-weight:500;color:#999;font-size:12px}
+.gbig:active{background:#f3f5f3}
+.grow{display:flex;gap:6px;overflow-x:auto;padding:0 1px 12px;-webkit-overflow-scrolling:touch}
+.grow::-webkit-scrollbar{display:none}
+.gp{flex:0 0 auto;border:none;cursor:pointer;padding:9px 14px;border-radius:10px;font-size:12.5px;
+  font-weight:700;color:#fff;background:#0277BD;box-shadow:0 1px 3px rgba(0,0,0,.12);font-family:inherit}
+.gp.alt{background:#fff;color:#0277BD}
+#carousel{display:none;position:fixed;inset:0;background:#fff;z-index:60}
+#carousel.open{display:block}
+.land{position:absolute;top:50%;left:50%;width:100vh;height:100vw;
+  transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center;
+  display:flex;flex-direction:column;background:#fff}
+@media(orientation:landscape){.land{width:100vw;height:100vh;transform:translate(-50%,-50%) rotate(0deg)}}
+.ctop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 12px 4px}
+.ctop .cw{font-size:14px;font-weight:700;color:#333;flex:1;text-align:center}
+.cright{display:flex;gap:6px}
+.cnav{border:0;background:#f0f2f0;border-radius:8px;width:30px;height:30px;font-size:19px;line-height:1;color:#555;cursor:pointer}
+.cclose{border:0;background:#f0f2f0;border-radius:50%;width:30px;height:30px;font-size:14px;color:#555;cursor:pointer}
+.vp{flex:1;min-height:0;overflow:hidden}
+#track{display:flex;height:100%;will-change:transform}
+.slide{min-width:100%;height:100%;display:flex;flex-direction:column;padding:0 14px 6px;overflow:hidden}
+.slide .stl{font-size:15px;font-weight:700;color:#555;text-align:center;margin:2px 0 4px;flex:none}
+.scont{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.scont svg.fill{width:100%;height:100%}
+.scont svg.fit{width:100%;height:auto;max-height:100%;margin:auto}
+.dots{display:flex;justify-content:center;gap:7px;padding:5px 0 7px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#d0d4d0;transition:.2s}
+.dot.on{background:#0277BD;width:20px;border-radius:4px}
+.nodata{padding:40px;text-align:center;color:#999}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="header">
+    <h1>Rechazos</h1>
+    <p class="finca">Delia Francia</p>
+    <p class="updated">Semanas <strong>23–27 · 2026</strong></p>
+  </div>
+  <div class="seg">
+    <a href="Analisis_Rechazos_Recap_Delia_Francia_es.html" class="">Recap semanas</a>
+    <a href="Analisis_Rechazos_Semana_Delia_Francia_es.html" class="">Semana · lotes</a>
+    <a href="Analisis_Rechazos_Graficos_Delia_Francia_es.html" class="on">Gráficos</a>
+  </div>
+  <div class="kpi">
+    <div class="c"><b>1 296</b><span>rechazos</span></div>
+    <div class="c"><b>4</b><span>causas · graf.</span></div>
+    <div class="c"><b>10</b><span>lotes · graf.</span></div>
+  </div>
+  <div class="gbtns2"><button class="gbig" onclick="openCar('c',GR)">📊 Causas <small>· 4 principales · por semana</small></button><button class="gbig" onclick="openCar('l',GR)">📦 Lotes <small>· top 10 · por causa</small></button><button class="gbig" onclick="openCar('l3',GR)">🎯 Lotes S/E/M <small>· sobregrado · explosivo · mutante · top 10</small></button><button class="gbig" onclick="openCar('l4',GR)">🎯 Lotes P/P/A <small>· pobre · pesonudo · alterado · top 10</small></button><button class="gbig" onclick="openCar('l5',GR)">🎯 Lotes C/M/E <small>· cochinilla · mancha roja · erwinia · top 10</small></button></div><div id="carousel"><div class="land"><div class="ctop"><button class="cnav" onclick="prevS()">‹</button><span class="cw" id="cw"></span><span class="cright"><button class="cnav" onclick="nextS()">›</button><button class="cclose" onclick="closeC()">✕</button></span></div><div class="vp" id="vp"><div id="track"></div></div><div class="dots" id="dots"></div></div></div><script>
+const GR = {"weeks": [23, 24, 25, 26, 27], "causes": ["Pobre", "Alterado", "Mutante", "Sobregrado", "Pesonudo", "Cochinilla", "Caído", "Erwinia", "Crema", "Explosivo", "Daño por sol", "Daño animal", "Mancha roja", "Maduro"], "causeWeekly": {"Pobre": [19, 65, 200, 176, 140], "Alterado": [8, 14, 46, 94, 47], "Mutante": [2, 9, 26, 69, 55], "Sobregrado": [1, 6, 10, 27, 57], "Pesonudo": [2, 6, 25, 26, 24], "Cochinilla": [4, 3, 9, 15, 7], "Caído": [1, 3, 11, 6, 2], "Erwinia": [1, 0, 2, 7, 10], "Crema": [0, 0, 8, 9, 3], "Explosivo": [0, 1, 3, 3, 10], "Daño por sol": [0, 4, 3, 4, 0], "Daño animal": [1, 0, 5, 2, 0], "Mancha roja": [0, 0, 0, 4, 0], "Maduro": [0, 0, 0, 0, 1]}, "lots": [{"name": "LOTE 07C", "total": 99, "byCause": [["Pobre", 39], ["Mutante", 19], ["Alterado", 18], ["Sobregrado", 8], ["Pesonudo", 6], ["Explosivo", 3], ["Cochinilla", 3], ["Daño por sol", 3]]}, {"name": "LOTE 19B", "total": 62, "byCause": [["Pobre", 28], ["Alterado", 12], ["Mutante", 7], ["Pesonudo", 5], ["Sobregrado", 3], ["Crema", 2], ["Erwinia", 2], ["Caído", 2], ["Daño animal", 1]]}, {"name": "LOTE 17B", "total": 58, "byCause": [["Pobre", 37], ["Alterado", 4], ["Mutante", 4], ["Pesonudo", 4], ["Explosivo", 3], ["Mancha roja", 2], ["Sobregrado", 2], ["Daño animal", 1], ["Erwinia", 1]]}, {"name": "LOTE 13B", "total": 57, "byCause": [["Pobre", 35], ["Alterado", 9], ["Sobregrado", 4], ["Mutante", 4], ["Explosivo", 3], ["Pesonudo", 2]]}, {"name": "LOTE 16A", "total": 56, "byCause": [["Pobre", 23], ["Mutante", 15], ["Alterado", 9], ["Sobregrado", 4], ["Erwinia", 2], ["Crema", 1], ["Daño por sol", 1], ["Mancha roja", 1]]}, {"name": "LOTE 05A", "total": 51, "byCause": [["Pobre", 29], ["Alterado", 12], ["Pesonudo", 4], ["Mutante", 4], ["Cochinilla", 1], ["Sobregrado", 1]]}, {"name": "LOTE 15A", "total": 50, "byCause": [["Pobre", 18], ["Alterado", 9], ["Sobregrado", 6], ["Crema", 5], ["Mutante", 5], ["Cochinilla", 3], ["Caído", 2], ["Daño por sol", 1], ["Pesonudo", 1]]}, {"name": "LOTE 04A", "total": 49, "byCause": [["Pobre", 24], ["Alterado", 15], ["Mutante", 5], ["Pesonudo", 4], ["Sobregrado", 1]]}, {"name": "LOTE 18B", "total": 44, "byCause": [["Pobre", 28], ["Mutante", 6], ["Alterado", 3], ["Crema", 2], ["Caído", 2], ["Pesonudo", 2], ["Erwinia", 1]]}, {"name": "LOTE 21B", "total": 43, "byCause": [["Sobregrado", 12], ["Mutante", 10], ["Alterado", 6], ["Pobre", 6], ["Caído", 4], ["Explosivo", 3], ["Daño animal", 1], ["Cochinilla", 1]]}], "lots3": [{"name": "LOTE 07C", "total": 30, "byCause": [["Mutante", 19], ["Sobregrado", 8], ["Explosivo", 3]]}, {"name": "LOTE 21B", "total": 25, "byCause": [["Sobregrado", 12], ["Mutante", 10], ["Explosivo", 3]]}, {"name": "LOTE 16A", "total": 19, "byCause": [["Mutante", 15], ["Sobregrado", 4], ["Explosivo", 0]]}, {"name": "LOTE 08B", "total": 14, "byCause": [["Sobregrado", 9], ["Mutante", 5], ["Explosivo", 0]]}, {"name": "LOTE 07B", "total": 13, "byCause": [["Sobregrado", 8], ["Mutante", 5], ["Explosivo", 0]]}, {"name": "LOTE 15A", "total": 11, "byCause": [["Sobregrado", 6], ["Mutante", 5], ["Explosivo", 0]]}, {"name": "LOTE 13B", "total": 11, "byCause": [["Sobregrado", 4], ["Mutante", 4], ["Explosivo", 3]]}, {"name": "LOTE 19B", "total": 10, "byCause": [["Mutante", 7], ["Sobregrado", 3], ["Explosivo", 0]]}, {"name": "LOTE 10A", "total": 10, "byCause": [["Sobregrado", 8], ["Mutante", 2], ["Explosivo", 0]]}, {"name": "LOTE 17B", "total": 9, "byCause": [["Mutante", 4], ["Explosivo", 3], ["Sobregrado", 2]]}], "lotsA": [{"name": "LOTE 07C", "total": 63, "byCause": [["Pobre", 39], ["Alterado", 18], ["Pesonudo", 6]]}, {"name": "LOTE 13B", "total": 46, "byCause": [["Pobre", 35], ["Alterado", 9], ["Pesonudo", 2]]}, {"name": "LOTE 05A", "total": 45, "byCause": [["Pobre", 29], ["Alterado", 12], ["Pesonudo", 4]]}, {"name": "LOTE 17B", "total": 45, "byCause": [["Pobre", 37], ["Pesonudo", 4], ["Alterado", 4]]}, {"name": "LOTE 19B", "total": 45, "byCause": [["Pobre", 28], ["Alterado", 12], ["Pesonudo", 5]]}, {"name": "LOTE 04A", "total": 43, "byCause": [["Pobre", 24], ["Alterado", 15], ["Pesonudo", 4]]}, {"name": "LOTE 18B", "total": 33, "byCause": [["Pobre", 28], ["Alterado", 3], ["Pesonudo", 2]]}, {"name": "LOTE 16A", "total": 32, "byCause": [["Pobre", 23], ["Alterado", 9], ["Pesonudo", 0]]}, {"name": "LOTE 06B", "total": 30, "byCause": [["Pobre", 15], ["Alterado", 13], ["Pesonudo", 2]]}, {"name": "LOTE 12B", "total": 28, "byCause": [["Pobre", 17], ["Alterado", 8], ["Pesonudo", 3]]}], "lotsB": [{"name": "LOTE 08B", "total": 7, "byCause": [["Cochinilla", 5], ["Erwinia", 2], ["Mancha roja", 0]]}, {"name": "LOTE 10A", "total": 7, "byCause": [["Cochinilla", 6], ["Erwinia", 1], ["Mancha roja", 0]]}, {"name": "LOTE 09A", "total": 4, "byCause": [["Erwinia", 4], ["Cochinilla", 0], ["Mancha roja", 0]]}, {"name": "LOTE 07C", "total": 3, "byCause": [["Cochinilla", 3], ["Mancha roja", 0], ["Erwinia", 0]]}, {"name": "LOTE 16A", "total": 3, "byCause": [["Erwinia", 2], ["Mancha roja", 1], ["Cochinilla", 0]]}, {"name": "LOTE 12B", "total": 3, "byCause": [["Cochinilla", 3], ["Mancha roja", 0], ["Erwinia", 0]]}, {"name": "LOTE 06B", "total": 3, "byCause": [["Cochinilla", 1], ["Mancha roja", 1], ["Erwinia", 1]]}, {"name": "LOTE 08A", "total": 3, "byCause": [["Cochinilla", 2], ["Erwinia", 1], ["Mancha roja", 0]]}, {"name": "LOTE 03A", "total": 3, "byCause": [["Cochinilla", 2], ["Erwinia", 1], ["Mancha roja", 0]]}, {"name": "LOTE 15A", "total": 3, "byCause": [["Cochinilla", 3], ["Mancha roja", 0], ["Erwinia", 0]]}], "grand": {"l": 1296, "l3": 279, "l4": 892, "l5": 62}, "cos": {"23": 11432, "24": 9136, "25": 9356, "26": 10547, "27": 8159}, "cosTot": 48630, "accent": "#0277BD"};
+
+function barV(vals,weeks,color,cos){
+  const W=880,H=440,pl=48,pr=18,pt=36,pb=42,pw=W-pl-pr,ph=H-pt-pb;
+  const hi=Math.max(1,...vals),n=weeks.length,gap=pw/n,bw=gap*0.68;
+  let g='';const NY=5;
+  for(let i=0;i<=NY;i++){const gv=hi*i/NY,gy=pt+(1-i/NY)*ph;
+    g+='<line x1="'+pl+'" y1="'+gy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gy.toFixed(1)+'" stroke="'+(i?'#eef0ee':'#cfd4cf')+'"/>';
+    g+='<text x="'+(pl-6)+'" y="'+(gy+4).toFixed(1)+'" text-anchor="end" font-size="12" fill="#888">'+Math.round(gv)+'</text>';}
+  const step=Math.max(1,Math.ceil(n/13));
+  vals.forEach((v,i)=>{const x=pl+gap*i+(gap-bw)/2,h=v/hi*ph,y=pt+ph-h;
+    if(v>0){g+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="1.5" fill="'+color+'"/>';
+      g+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(y-16).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#555" font-weight="700">'+v+'</text>';
+      if(cos&&cos[i])g+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" text-anchor="middle" font-size="9.5" fill="#999">'+(v/cos[i]*100).toFixed(1).replace('.',',')+'%</text>';}
+    if(i%step===0)g+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-pb+18)+'" text-anchor="middle" font-size="11" fill="#888">S'+weeks[i]+'</text>';});
+  g+='<text x="'+(pl+pw/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" fill="#999">Semana · nº (% s/cosecha)</text>';
+  return '<svg class="fill" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+g+'</svg>';
+}
+function barsH(items,color){
+  const n=items.length; if(!n)return '<div class="nodata">Sin datos</div>';
+  const totLot=items.reduce((s,x)=>s+x[1],0)||1;
+  const W=880,pl=170,pr=92,pt=14,rh=Math.max(30,Math.min(54,360/n)),H=pt+n*rh+14;
+  const hi=Math.max(1,...items.map(x=>x[1])),pw=W-pl-pr;let g='';
+  items.forEach((it,i)=>{const y=pt+i*rh,cy=y+rh/2,bw=it[1]/hi*pw,pc=Math.round(it[1]/totLot*100);
+    g+='<text x="'+(pl-8)+'" y="'+(cy+4).toFixed(1)+'" text-anchor="end" font-size="14" fill="#444">'+it[0]+'</text>';
+    g+='<rect x="'+pl+'" y="'+(y+rh*0.16).toFixed(1)+'" width="'+Math.max(0,bw).toFixed(1)+'" height="'+(rh*0.68).toFixed(1)+'" rx="3" fill="'+color+'"/>';
+    g+='<text x="'+(pl+Math.max(0,bw)+7).toFixed(1)+'" y="'+(cy+4).toFixed(1)+'" font-size="13" fill="#222" font-weight="700">'+it[1]+' · '+pc+'%</text>';});
+  return '<svg class="fit" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+g+'</svg>';
+}
+let carItems=[],carIdx=0;
+function openCar(kind,GR){
+  const AC=GR.accent,tr=document.getElementById('track');tr.innerHTML='';
+  if(kind==='c'){const cosArr=(GR.weeks||[]).map(w=>(GR.cos&&GR.cos[w])||0);
+    const causeAll=(GR.causes||[]).map(c=>[c,(GR.causeWeekly[c]||[]).reduce((a,b)=>a+b,0)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+    const tot=(GR.grand&&GR.grand.l)||causeAll.reduce((a,b)=>a+b[1],0);
+    const rt0=GR.cosTot?(' · '+(tot/GR.cosTot*100).toFixed(1).replace('.',',')+'% s/cos'):'';
+    carItems=[{t:'Reparto de causas — '+tot+' rech'+rt0,html:'<div class="scont">'+barsH(causeAll,AC)+'</div>'}];
+    if((GR.weeks||[]).length>1){causeAll.forEach(ca=>{const c=ca[0],tt=ca[1];
+      const rt=GR.cosTot?(' · '+(tt/GR.cosTot*100).toFixed(1).replace('.',',')+'% s/cos'):'';
+      carItems.push({t:'Causa · '+c+' — '+tt+' rech'+rt,html:'<div class="scont">'+barV(GR.causeWeekly[c],GR.weeks,AC,cosArr)+'</div>'});});}}
+  else{const arr=({l:GR.lots,l3:(GR.lots3||[]),l4:(GR.lotsA||[]),l5:(GR.lotsB||[])})[kind]||[];
+    const gt=(GR.grand&&GR.grand[kind])||0;
+    carItems=arr.map(l=>{const sh=gt?(' · '+Math.round(l.total/gt*100)+'% del total'):'';
+      return {t:'Lote · '+l.name+' — '+l.total+' rech'+sh,html:'<div class="scont">'+barsH(l.byCause,AC)+'</div>'};});}
+  if(!carItems.length)carItems=[{t:'—',html:'<div class="nodata">Sin datos en la selección</div>'}];
+  carItems.forEach(it=>{const d=document.createElement('div');d.className='slide';d.innerHTML='<div class="stl">'+it.t+'</div>'+it.html;tr.appendChild(d);});
+  document.getElementById('dots').innerHTML=carItems.map(()=>'<span class="dot"></span>').join('');
+  goTo(0,false);
+  document.getElementById('carousel').classList.add('open');document.body.style.overflow='hidden';
+}
+function goTo(i,anim){const n=carItems.length;carIdx=((i%n)+n)%n;const tr=document.getElementById('track');
+  tr.style.transition=anim?'transform .28s ease':'none';tr.style.transform='translateX('+(-carIdx*100)+'%)';
+  document.querySelectorAll('#dots .dot').forEach((d,j)=>d.classList.toggle('on',j===carIdx));
+  document.getElementById('cw').textContent=carItems[carIdx].t;}
+function nextS(){goTo(carIdx+1,true);}function prevS(){goTo(carIdx-1,true);}
+function closeC(){document.getElementById('carousel').classList.remove('open');document.body.style.overflow='';}
+(function(){const vp=document.getElementById('vp');let x0=0,y0=0,on=false;
+  vp.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;on=true;},{passive:true});
+  vp.addEventListener('touchend',e=>{if(!on)return;on=false;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){dx<0?nextS():prevS();}},{passive:true});})();
+
+</script>
+  <div class="note"><b>Cómo leer</b> — pulsa <b>Causas</b>, <b>Lotes</b> o <b>Lotes S/E/M</b> : los gráficos se abren a pantalla completa, <b>bloqueados en horizontal</b> ; desliza (o ‹ ›) para pasar de uno a otro, en bucle. <b>Causas</b> = nº de rechazos por semana (4 principales). <b>Lotes</b> = nº de rechazos por causa (top 10 lotes). <b>Lotes S/E/M</b> = top 10 lotes más afectados solo por sobregrado, explosivo y mutante. <b>Lotes P/P/A</b> = top 10 lotes solo por pobre, pesonudo y alterado. <b>Lotes C/M/E</b> = top 10 lotes solo por cochinilla, mancha roja y erwinia.</div>
+  <a class="back" href="menu.html">← Volver al menú</a>
+</div>
+</body>
+</html>

@@ -127,81 +127,16 @@ table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-
   </div>
   <div class="seg">
     <a href="Analisis_Rechazos_Recap_La_Fiera_es.html" class="">Recap semanas</a>
-    <a href="Analisis_Rechazos_Semana_La_Fiera_es.html" class="on">Semana · lotes</a>
-    <a href="Analisis_Rechazos_Graficos_La_Fiera_es.html" class="">Gráficos</a>
+    <a href="Analisis_Rechazos_Semana_La_Fiera_es.html" class="">Semana · lotes</a>
+    <a href="Analisis_Rechazos_Graficos_La_Fiera_es.html" class="on">Gráficos</a>
   </div>
   <div class="kpi">
-    <div class="c"><b><span id="kw">—</span></b><span>periodo</span></div>
-    <div class="c"><b><span id="kn">—</span></b><span>rechazos · % s/cos</span></div>
-    <div class="c"><b><span id="kl">—</span></b><span>lotes</span></div>
+    <div class="c"><b>178</b><span>rechazos</span></div>
+    <div class="c"><b>4</b><span>causas · graf.</span></div>
+    <div class="c"><b>10</b><span>lotes · graf.</span></div>
   </div>
-  <div class="selrow" id="scopeSel"><b class="lbl">Periodo</b></div><div class="selrow" id="ctx1"></div><div class="selrow day-sel" id="ctx2"></div><div class="grow"><button class="gp" onclick="openCarSel('c')">📊 Causas</button><button class="gp alt" onclick="openCarSel('l')">📦 Lotes</button><button class="gp alt" onclick="openCarSel('l3')">🎯 S/E/M</button><button class="gp alt" onclick="openCarSel('l4')">🎯 P/P/A</button><button class="gp alt" onclick="openCarSel('l5')">🎯 C/M/E</button></div><div id="tblHost"></div><div id="carousel"><div class="land"><div class="ctop"><button class="cnav" onclick="prevS()">‹</button><span class="cw" id="cw"></span><span class="cright"><button class="cnav" onclick="nextS()">›</button><button class="cclose" onclick="closeC()">✕</button></span></div><div class="vp" id="vp"><div id="track"></div></div><div class="dots" id="dots"></div></div></div><script>
-const RD = {"cats": ["Pobre", "Alterado", "Sobregrado", "Virosis", "Erwinia", "Cochinilla", "Caído", "Explosivo"], "weeks": [24, 25, 26, 27], "days": {"24": [["2026-06-11", "Jue 11/06"]], "25": [["2026-06-16", "Mar 16/06"], ["2026-06-17", "Mié 17/06"], ["2026-06-18", "Jue 18/06"]], "26": [["2026-06-23", "Mar 23/06"], ["2026-06-24", "Mié 24/06"], ["2026-06-25", "Jue 25/06"], ["2026-07-01", "Mié 01/07"]], "27": [["2026-06-30", "Mar 30/06"], ["2026-07-02", "Jue 02/07"]]}, "rows": [[24, "2026-06-11", "FIE-A05", 0, 4], [24, "2026-06-11", "FIE-A05", 0, 1], [24, "2026-06-11", "FIE-A07", 1, 1], [24, "2026-06-11", "FIE-A07", 0, 3], [24, "2026-06-11", "FIE-B03", 0, 1], [24, "2026-06-11", "FIE-B05", 5, 1], [24, "2026-06-11", "FIE-B05", 1, 1], [24, "2026-06-11", "FIE-B05", 0, 1], [24, "2026-06-11", "FIE-B05", 0, 2], [24, "2026-06-11", "FIE-B08", 5, 1], [24, "2026-06-11", "FIE-B08", 4, 1], [24, "2026-06-11", "FIE-B09", 0, 1], [24, "2026-06-11", "FIE-B10", 0, 1], [25, "2026-06-16", "FIE-A02", 0, 1], [25, "2026-06-16", "FIE-A02", 7, 1], [25, "2026-06-16", "FIE-A02", 2, 1], [25, "2026-06-16", "FIE-A03", 0, 2], [25, "2026-06-16", "FIE-A03", 1, 1], [25, "2026-06-16", "FIE-A05", 0, 1], [25, "2026-06-16", "FIE-A05", 1, 1], [25, "2026-06-16", "FIE-A09", 2, 1], [25, "2026-06-16", "FIE-C02", 0, 2], [25, "2026-06-17", "FIE-A01", 1, 2], [25, "2026-06-17", "FIE-A01", 3, 1], [25, "2026-06-17", "FIE-A01", 0, 1], [25, "2026-06-17", "FIE-A02", 0, 1], [25, "2026-06-17", "FIE-A04", 1, 1], [25, "2026-06-17", "FIE-A10", 0, 2], [25, "2026-06-17", "FIE-A10", 1, 1], [25, "2026-06-17", "FIE-B05", 0, 1], [25, "2026-06-17", "FIE-B06", 0, 1], [25, "2026-06-17", "FIE-B12", 3, 2], [25, "2026-06-17", "FIE-B12", 0, 1], [25, "2026-06-17", "FIE-C01", 6, 1], [25, "2026-06-17", "FIE-C01", 3, 1], [25, "2026-06-18", "FIE-A0", 4, 2], [25, "2026-06-18", "FIE-A01", 1, 1], [25, "2026-06-18", "FIE-A01", 0, 1], [25, "2026-06-18", "FIE-A07", 0, 3], [25, "2026-06-18", "FIE-A07", 1, 1], [25, "2026-06-18", "FIE-A08", 0, 2], [25, "2026-06-18", "FIE-A08", 2, 1], [25, "2026-06-18", "FIE-A08", 2, 1], [25, "2026-06-18", "FIE-B03", 1, 2], [25, "2026-06-18", "FIE-B03", 0, 1], [25, "2026-06-18", "FIE-C01", 0, 1], [25, "2026-06-18", "FIE-C01", 3, 2], [25, "2026-06-18", "FIE-C01", 0, 1], [26, "2026-06-23", "FIE-A02", 3, 3], [26, "2026-06-23", "FIE-A02", 0, 1], [26, "2026-06-23", "FIE-A05", 2, 2], [26, "2026-06-23", "FIE-A05", 0, 2], [26, "2026-06-23", "FIE-A06", 2, 2], [26, "2026-06-23", "FIE-A06", 0, 1], [26, "2026-06-23", "FIE-A09", 0, 2], [26, "2026-06-23", "FIE-B02", 1, 1], [26, "2026-06-23", "FIE-B03", 0, 3], [26, "2026-06-23", "FIE-B03", 1, 1], [26, "2026-06-23", "FIE-B07", 0, 1], [26, "2026-06-23", "FIE-B07", 0, 1], [26, "2026-06-23", "FIE-C02", 1, 1], [26, "2026-06-24", "FIE-A01", 3, 2], [26, "2026-06-24", "FIE-A01", 0, 4], [26, "2026-06-24", "FIE-A01", 1, 3], [26, "2026-06-24", "FIE-A03", 6, 1], [26, "2026-06-24", "FIE-A03", 4, 1], [26, "2026-06-24", "FIE-A04", 0, 3], [26, "2026-06-24", "FIE-A10", 0, 1], [26, "2026-06-24", "FIE-B01", 1, 1], [26, "2026-06-24", "FIE-C0", 1, 1], [26, "2026-06-24", "FIE-C0", 0, 1], [26, "2026-06-25", "FIE-A0", 0, 2], [26, "2026-06-25", "FIE-A0", 4, 2], [26, "2026-06-25", "FIE-A0", 1, 1], [26, "2026-06-25", "FIE-A01", 1, 1], [26, "2026-06-25", "FIE-A08", 0, 3], [26, "2026-06-25", "FIE-A10", 2, 1], [26, "2026-06-25", "FIE-B06", 0, 1], [26, "2026-06-25", "FIE-B09", 0, 3], [26, "2026-06-25", "FIE-B09", 1, 1], [26, "2026-06-25", "FIE-C02", 0, 1], [27, "2026-06-30", "FIE-A01", 2, 4], [27, "2026-06-30", "FIE-A01", 1, 3], [27, "2026-06-30", "FIE-A01", 3, 2], [27, "2026-06-30", "FIE-B06", 0, 1], [27, "2026-06-30", "FIE-B06", 2, 4], [27, "2026-06-30", "FIE-B06", 0, 2], [27, "2026-06-30", "FIE-B06", 1, 1], [27, "2026-06-30", "FIE-B12", 3, 2], [27, "2026-06-30", "FIE-B12", 2, 2], [27, "2026-06-30", "FIE-C02", 0, 1], [26, "2026-07-01", "FIE-A01", 5, 2], [26, "2026-07-01", "FIE-A02", 2, 3], [26, "2026-07-01", "FIE-A02", 4, 2], [26, "2026-07-01", "FIE-A02", 0, 1], [26, "2026-07-01", "FIE-B01", 0, 1], [26, "2026-07-01", "FIE-B02", 0, 1], [26, "2026-07-01", "FIE-B03", 0, 1], [26, "2026-07-01", "FIE-B06", 1, 1], [26, "2026-07-01", "FIE-B06", 0, 1], [26, "2026-07-01", "FIE-B07", 5, 2], [26, "2026-07-01", "FIE-B07", 2, 1], [26, "2026-07-01", "FIE-B07", 2, 1], [26, "2026-07-01", "FIE-C02", 1, 1], [26, "2026-07-01", "FIE-C02", 0, 1], [27, "2026-07-02", "FIE-A0", 1, 1], [27, "2026-07-02", "FIE-A03", 0, 3], [27, "2026-07-02", "FIE-A04", 4, 2], [27, "2026-07-02", "FIE-A04", 0, 1], [27, "2026-07-02", "FIE-A04", 1, 1], [27, "2026-07-02", "FIE-A05", 0, 1], [27, "2026-07-02", "FIE-A08", 1, 1], [27, "2026-07-02", "FIE-A08", 2, 1], [27, "2026-07-02", "FIE-B10", 0, 1], [27, "2026-07-02", "FIE-C01", 3, 5]], "lotNames": {"FIE-A05": "LOTE A05", "FIE-A07": "LOTE A07", "FIE-B03": "LOTE B03", "FIE-B05": "LOTE B05", "FIE-B08": "LOTE B08", "FIE-B09": "LOTE B09", "FIE-B10": "LOTE B10", "FIE-A02": "LOTE A02", "FIE-A03": "LOTE A03", "FIE-A09": "LOTE A09", "FIE-C02": "LOTE C02", "FIE-A01": "LOTE A01", "FIE-A04": "LOTE A04", "FIE-A10": "LOTE A10", "FIE-B06": "LOTE B06", "FIE-B12": "LOTE B12", "FIE-C01": "LOTE C01", "FIE-A0": "LOTE A0", "FIE-A08": "LOTE A08", "FIE-A06": "LOTE A06", "FIE-B02": "LOTE B02", "FIE-B07": "LOTE B07", "FIE-B01": "LOTE B01", "FIE-C0": "LOTE C0"}, "cos": {"24": 5025, "25": 4026, "26": 4881, "27": 4900}, "accent": "#2B8A3E"};
-
-const short=l=>String(l).split("-").pop();
-function heat(v,mx){if(!v||!mx)return "";const a=(0.06+0.50*(v/mx)).toFixed(3);return "background:rgba(214,40,40,"+a+")";}
-function fmt(v){return v?String(v).replace(/\B(?=(\d{3})+(?!\d))/g," "):"·";}
-let scope='sem',curW=RD.weeks[RD.weeks.length-1],curD='all',rgA=RD.weeks[0],rgB=RD.weeks[RD.weeks.length-1];
-function filterRows(){
-  if(scope==='anio')return RD.rows;
-  if(scope==='rango')return RD.rows.filter(r=>r[0]>=rgA&&r[0]<=rgB);
-  return RD.rows.filter(r=>r[0]===curW&&(curD==='all'||r[1]===curD));
-}
-function computeGR(rows){
-  const catTot={};rows.forEach(r=>catTot[r[3]]=(catTot[r[3]]||0)+r[4]);
-  const order=Object.keys(catTot).map(Number).sort((a,b)=>catTot[b]-catTot[a]);
-  const wset=[...new Set(rows.map(r=>r[0]))].sort((a,b)=>a-b);
-  const causesIdx=order,causes=causesIdx.map(i=>RD.cats[i]),causeWeekly={};
-  causesIdx.forEach(ci=>{causeWeekly[RD.cats[ci]]=wset.map(w=>rows.reduce((s,r)=>s+((r[0]===w&&r[3]===ci)?r[4]:0),0));});
-  function topLots(set){const tot={},byLot={};
-    rows.forEach(r=>{if(set&&!set.has(r[3]))return;tot[r[2]]=(tot[r[2]]||0)+r[4];byLot[r[2]]=byLot[r[2]]||{};byLot[r[2]][r[3]]=(byLot[r[2]][r[3]]||0)+r[4];});
-    return Object.keys(tot).sort((a,b)=>tot[b]-tot[a]).slice(0,10).map(lid=>{let bc;
-      if(set){bc=[...set].map(ci=>[RD.cats[ci],byLot[lid][ci]||0]).sort((a,b)=>b[1]-a[1]);}
-      else{bc=Object.keys(byLot[lid]).map(ci=>[RD.cats[+ci],byLot[lid][ci]]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);}
-      return {name:RD.lotNames[lid]||String(lid),total:tot[lid],byCause:bc};});}
-  const gi=names=>new Set(names.map(n=>RD.cats.indexOf(n)).filter(i=>i>=0));
-  const cosTot=wset.reduce((s,w)=>s+((RD.cos&&RD.cos[w])||0),0);
-  const groupTot=set=>rows.reduce((t,r)=>t+((!set||set.has(r[3]))?r[4]:0),0);
-  const SEM=gi(['Sobregrado','Explosivo','Mutante']),PPA=gi(['Pobre','Pesonudo','Alterado']),CME=gi(['Cochinilla','Mancha roja','Erwinia']);
-  return {weeks:wset,causes,causeWeekly,cosTot,cos:RD.cos,
-    grand:{l:groupTot(null),l3:groupTot(SEM),l4:groupTot(PPA),l5:groupTot(CME)},
-    lots:topLots(null),lots3:topLots(SEM),lotsA:topLots(PPA),lotsB:topLots(CME),accent:RD.accent};
-}
-function openCarSel(kind){openCar(kind,computeGR(filterRows()));}
-function addLbl(h,t){const b=document.createElement('b');b.className='lbl';b.textContent=t;h.appendChild(b);}
-function addPill(h,t,on,cb){const b=document.createElement('button');b.className='pill'+(on?' on':'');b.textContent=t;b.onclick=cb;h.appendChild(b);}
-function renderScope(){const h=document.getElementById('scopeSel');h.querySelectorAll('.pill').forEach(e=>e.remove());
-  [['sem','Semana'],['rango','Rango'],['anio','Año']].forEach(a=>addPill(h,a[1],scope===a[0],()=>{scope=a[0];renderCtx();renderTable();}));}
-function renderCtx(){const c1=document.getElementById('ctx1'),c2=document.getElementById('ctx2');c1.innerHTML='';c2.innerHTML='';
-  if(scope==='sem'){addLbl(c1,'Semana');RD.weeks.forEach(w=>addPill(c1,'S'+w,w===curW,()=>{curW=w;curD='all';renderCtx();renderTable();}));
-    addLbl(c2,'Día');addPill(c2,'Semana',curD==='all',()=>{curD='all';renderCtx();renderTable();});
-    (RD.days[String(curW)]||[]).forEach(x=>addPill(c2,x[1],curD===x[0],()=>{curD=x[0];renderCtx();renderTable();}));}
-  else if(scope==='rango'){addLbl(c1,'Desde');RD.weeks.forEach(w=>addPill(c1,'S'+w,w===rgA,()=>{rgA=w;if(rgB<rgA)rgB=rgA;renderCtx();renderTable();}));
-    addLbl(c2,'Hasta');RD.weeks.forEach(w=>addPill(c2,'S'+w,w===rgB,()=>{rgB=w;if(rgA>rgB)rgA=rgB;renderCtx();renderTable();}));}}
-function periodLabel(){if(scope==='anio')return 'Año S'+RD.weeks[0]+'–S'+RD.weeks[RD.weeks.length-1];
-  if(scope==='rango')return 'S'+rgA+'–S'+rgB;
-  return 'S'+curW+(curD==='all'?'':' · '+((RD.days[String(curW)].find(x=>x[0]===curD)||['',''])[1]));}
-function renderTable(){const rs=filterRows(),host=document.getElementById('tblHost');
-  if(!rs.length){host.innerHTML='<p class="empty">Sin rechazos en la selección.</p>';setKpi(0,0);return;}
-  const lotSum={},catSet={};rs.forEach(r=>{lotSum[r[2]]=(lotSum[r[2]]||0)+r[4];catSet[r[3]]=1;});
-  const lotes=Object.keys(lotSum).sort((a,b)=>lotSum[b]-lotSum[a]);
-  const cix=RD.cats.map((c,i)=>i).filter(i=>catSet[i]);
-  const cell={};let vmax=0,gtot=0;rs.forEach(r=>{const k=r[3]+'|'+r[2];cell[k]=(cell[k]||0)+r[4];if(cell[k]>vmax)vmax=cell[k];gtot+=r[4];});
-  let h='<div class="scroller"><table class="matrix sticky-right"><thead><tr><th class="corner">Categoría</th>';
-  lotes.forEach(l=>h+='<th class="wk">'+short(l)+'</th>');h+='<th class="tot">Total</th></tr></thead><tbody>';
-  cix.forEach(i=>{h+='<tr><th class="cat">'+RD.cats[i]+'</th>';let tc=0;lotes.forEach(l=>{const v=cell[i+'|'+l]||0;tc+=v;h+='<td class="d" style="'+heat(v,vmax)+'">'+fmt(v)+'</td>';});h+='<td class="tot">'+fmt(tc)+'</td></tr>';});
-  h+='<tr class="rtot"><th class="cat tt">TOTAL lote</th>';lotes.forEach(l=>h+='<td class="d tt">'+fmt(lotSum[l])+'</td>');h+='<td class="tot tt">'+fmt(gtot)+'</td></tr>';
-  h+='</tbody></table></div>';host.innerHTML=h;setKpi(gtot,lotes.length);}
-function setKpi(n,nl){
-  const ws=[...new Set(filterRows().map(r=>r[0]))];
-  const cs=ws.reduce((s,w)=>s+((RD.cos&&RD.cos[w])||0),0);
-  const dayMode=(scope==='sem'&&curD!=='all');
-  const rate=(cs&&!dayMode)?' · '+(n/cs*100).toFixed(1).replace('.',',')+'%':'';
-  document.getElementById('kw').textContent=periodLabel();
-  document.getElementById('kn').textContent=fmt(n)+rate;
-  document.getElementById('kl').textContent=nl;}
-renderScope();renderCtx();renderTable();
-
+  <div class="gbtns2"><button class="gbig" onclick="openCar('c',GR)">📊 Causas <small>· 4 principales · por semana</small></button><button class="gbig" onclick="openCar('l',GR)">📦 Lotes <small>· top 10 · por causa</small></button><button class="gbig" onclick="openCar('l3',GR)">🎯 Lotes S/E/M <small>· sobregrado · explosivo · mutante · top 10</small></button><button class="gbig" onclick="openCar('l4',GR)">🎯 Lotes P/P/A <small>· pobre · pesonudo · alterado · top 10</small></button><button class="gbig" onclick="openCar('l5',GR)">🎯 Lotes C/M/E <small>· cochinilla · mancha roja · erwinia · top 10</small></button></div><div id="carousel"><div class="land"><div class="ctop"><button class="cnav" onclick="prevS()">‹</button><span class="cw" id="cw"></span><span class="cright"><button class="cnav" onclick="nextS()">›</button><button class="cclose" onclick="closeC()">✕</button></span></div><div class="vp" id="vp"><div id="track"></div></div><div class="dots" id="dots"></div></div></div><script>
+const GR = {"weeks": [23, 24, 25, 26, 27], "causes": ["Pobre", "Alterado", "Sobregrado", "Virosis", "Erwinia", "Cochinilla", "Caído", "Explosivo"], "causeWeekly": {"Pobre": [0, 14, 22, 36, 10], "Alterado": [0, 2, 10, 13, 7], "Sobregrado": [0, 0, 4, 10, 11], "Virosis": [0, 0, 6, 5, 9], "Erwinia": [0, 1, 2, 5, 2], "Cochinilla": [0, 2, 0, 4, 0], "Caído": [0, 0, 1, 1, 0], "Explosivo": [0, 0, 1, 0, 0]}, "lots": [{"name": "LOTE A01", "total": 27, "byCause": [["Alterado", 10], ["Pobre", 6], ["Virosis", 5], ["Sobregrado", 4], ["Cochinilla", 2]]}, {"name": "LOTE A02", "total": 14, "byCause": [["Pobre", 4], ["Sobregrado", 4], ["Virosis", 3], ["Erwinia", 2], ["Explosivo", 1]]}, {"name": "LOTE A05", "total": 12, "byCause": [["Pobre", 9], ["Sobregrado", 2], ["Alterado", 1]]}, {"name": "LOTE B06", "total": 12, "byCause": [["Pobre", 6], ["Sobregrado", 4], ["Alterado", 2]]}, {"name": "LOTE C01", "total": 11, "byCause": [["Virosis", 8], ["Pobre", 2], ["Caído", 1]]}, {"name": "LOTE B03", "total": 9, "byCause": [["Pobre", 6], ["Alterado", 3]]}, {"name": "LOTE A08", "total": 9, "byCause": [["Pobre", 5], ["Sobregrado", 3], ["Alterado", 1]]}, {"name": "LOTE A0", "total": 8, "byCause": [["Erwinia", 4], ["Alterado", 2], ["Pobre", 2]]}, {"name": "LOTE A04", "total": 8, "byCause": [["Pobre", 4], ["Alterado", 2], ["Erwinia", 2]]}, {"name": "LOTE A07", "total": 8, "byCause": [["Pobre", 6], ["Alterado", 2]]}], "lots3": [{"name": "LOTE A02", "total": 5, "byCause": [["Sobregrado", 4], ["Explosivo", 1], ["Mutante", 0]]}, {"name": "LOTE A01", "total": 4, "byCause": [["Sobregrado", 4], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE B06", "total": 4, "byCause": [["Sobregrado", 4], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE A08", "total": 3, "byCause": [["Sobregrado", 3], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE A06", "total": 2, "byCause": [["Sobregrado", 2], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE A05", "total": 2, "byCause": [["Sobregrado", 2], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE B12", "total": 2, "byCause": [["Sobregrado", 2], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE B07", "total": 2, "byCause": [["Sobregrado", 2], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE A09", "total": 1, "byCause": [["Sobregrado", 1], ["Explosivo", 0], ["Mutante", 0]]}, {"name": "LOTE A10", "total": 1, "byCause": [["Sobregrado", 1], ["Explosivo", 0], ["Mutante", 0]]}], "lotsA": [{"name": "LOTE A01", "total": 16, "byCause": [["Alterado", 10], ["Pobre", 6], ["Pesonudo", 0]]}, {"name": "LOTE A05", "total": 10, "byCause": [["Pobre", 9], ["Alterado", 1], ["Pesonudo", 0]]}, {"name": "LOTE B03", "total": 9, "byCause": [["Pobre", 6], ["Alterado", 3], ["Pesonudo", 0]]}, {"name": "LOTE A07", "total": 8, "byCause": [["Pobre", 6], ["Alterado", 2], ["Pesonudo", 0]]}, {"name": "LOTE B06", "total": 8, "byCause": [["Pobre", 6], ["Alterado", 2], ["Pesonudo", 0]]}, {"name": "LOTE C02", "total": 7, "byCause": [["Pobre", 5], ["Alterado", 2], ["Pesonudo", 0]]}, {"name": "LOTE A03", "total": 6, "byCause": [["Pobre", 5], ["Alterado", 1], ["Pesonudo", 0]]}, {"name": "LOTE A08", "total": 6, "byCause": [["Pobre", 5], ["Alterado", 1], ["Pesonudo", 0]]}, {"name": "LOTE A04", "total": 6, "byCause": [["Pobre", 4], ["Alterado", 2], ["Pesonudo", 0]]}, {"name": "LOTE B05", "total": 5, "byCause": [["Pobre", 4], ["Alterado", 1], ["Pesonudo", 0]]}], "lotsB": [{"name": "LOTE A0", "total": 4, "byCause": [["Erwinia", 4], ["Cochinilla", 0], ["Mancha roja", 0]]}, {"name": "LOTE A01", "total": 2, "byCause": [["Cochinilla", 2], ["Mancha roja", 0], ["Erwinia", 0]]}, {"name": "LOTE A02", "total": 2, "byCause": [["Erwinia", 2], ["Cochinilla", 0], ["Mancha roja", 0]]}, {"name": "LOTE A04", "total": 2, "byCause": [["Erwinia", 2], ["Cochinilla", 0], ["Mancha roja", 0]]}, {"name": "LOTE B08", "total": 2, "byCause": [["Cochinilla", 1], ["Erwinia", 1], ["Mancha roja", 0]]}, {"name": "LOTE B07", "total": 2, "byCause": [["Cochinilla", 2], ["Mancha roja", 0], ["Erwinia", 0]]}, {"name": "LOTE A03", "total": 1, "byCause": [["Erwinia", 1], ["Cochinilla", 0], ["Mancha roja", 0]]}, {"name": "LOTE B05", "total": 1, "byCause": [["Cochinilla", 1], ["Mancha roja", 0], ["Erwinia", 0]]}], "grand": {"l": 178, "l3": 26, "l4": 114, "l5": 16}, "cos": {"23": 5721, "24": 5025, "25": 4026, "26": 4881, "27": 4900}, "cosTot": 24553, "accent": "#2B8A3E"};
 
 function barV(vals,weeks,color,cos){
   const W=880,H=440,pl=48,pr=18,pt=36,pb=42,pw=W-pl-pr,ph=H-pt-pb;
@@ -263,7 +198,7 @@ function closeC(){document.getElementById('carousel').classList.remove('open');d
     if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){dx<0?nextS():prevS();}},{passive:true});})();
 
 </script>
-  <div class="note"><b>Cómo leer</b> — elige la <b>semana</b> y opcionalmente el <b>día</b>. Categorías en filas (fijas a la izquierda), <b>todos</b> los lotes en columnas — se desliza en horizontal y el <b>Total</b> queda fijo a la derecha. Lotes ordenados por nº de rechazos. Color ∝ nº.</div>
+  <div class="note"><b>Cómo leer</b> — pulsa <b>Causas</b>, <b>Lotes</b> o <b>Lotes S/E/M</b> : los gráficos se abren a pantalla completa, <b>bloqueados en horizontal</b> ; desliza (o ‹ ›) para pasar de uno a otro, en bucle. <b>Causas</b> = nº de rechazos por semana (4 principales). <b>Lotes</b> = nº de rechazos por causa (top 10 lotes). <b>Lotes S/E/M</b> = top 10 lotes más afectados solo por sobregrado, explosivo y mutante. <b>Lotes P/P/A</b> = top 10 lotes solo por pobre, pesonudo y alterado. <b>Lotes C/M/E</b> = top 10 lotes solo por cochinilla, mancha roja y erwinia.</div>
   <a class="back" href="menu.html">← Volver al menú</a>
 </div>
 </body>

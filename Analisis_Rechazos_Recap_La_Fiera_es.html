@@ -82,6 +82,40 @@ table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-
 .note b{color:#555}
 .back{display:block;text-align:center;margin-top:18px;color:#E65100;font-size:13px;
   font-weight:600;text-decoration:none}
+/* --- gráficos : botones + carrusel bloqueado horizontal (estilo Panel) --- */
+.gbtns2{display:flex;flex-direction:column;gap:10px;margin:2px 0 6px}
+.gbig{display:flex;align-items:center;gap:8px;width:100%;border:0;background:#fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);border-radius:13px;padding:16px;font-size:16px;
+  font-weight:700;color:#333;cursor:pointer;font-family:inherit}
+.gbig small{font-weight:500;color:#999;font-size:12px}
+.gbig:active{background:#f3f5f3}
+.grow{display:flex;gap:6px;overflow-x:auto;padding:0 1px 12px;-webkit-overflow-scrolling:touch}
+.grow::-webkit-scrollbar{display:none}
+.gp{flex:0 0 auto;border:none;cursor:pointer;padding:9px 14px;border-radius:10px;font-size:12.5px;
+  font-weight:700;color:#fff;background:#2B8A3E;box-shadow:0 1px 3px rgba(0,0,0,.12);font-family:inherit}
+.gp.alt{background:#fff;color:#2B8A3E}
+#carousel{display:none;position:fixed;inset:0;background:#fff;z-index:60}
+#carousel.open{display:block}
+.land{position:absolute;top:50%;left:50%;width:100vh;height:100vw;
+  transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center;
+  display:flex;flex-direction:column;background:#fff}
+@media(orientation:landscape){.land{width:100vw;height:100vh;transform:translate(-50%,-50%) rotate(0deg)}}
+.ctop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 12px 4px}
+.ctop .cw{font-size:14px;font-weight:700;color:#333;flex:1;text-align:center}
+.cright{display:flex;gap:6px}
+.cnav{border:0;background:#f0f2f0;border-radius:8px;width:30px;height:30px;font-size:19px;line-height:1;color:#555;cursor:pointer}
+.cclose{border:0;background:#f0f2f0;border-radius:50%;width:30px;height:30px;font-size:14px;color:#555;cursor:pointer}
+.vp{flex:1;min-height:0;overflow:hidden}
+#track{display:flex;height:100%;will-change:transform}
+.slide{min-width:100%;height:100%;display:flex;flex-direction:column;padding:0 14px 6px;overflow:hidden}
+.slide .stl{font-size:15px;font-weight:700;color:#555;text-align:center;margin:2px 0 4px;flex:none}
+.scont{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.scont svg.fill{width:100%;height:100%}
+.scont svg.fit{width:100%;height:auto;max-height:100%;margin:auto}
+.dots{display:flex;justify-content:center;gap:7px;padding:5px 0 7px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#d0d4d0;transition:.2s}
+.dot.on{background:#2B8A3E;width:20px;border-radius:4px}
+.nodata{padding:40px;text-align:center;color:#999}
 </style>
 </head>
 <body>
@@ -94,6 +128,7 @@ table.matrix{border-collapse:separate;border-spacing:0;font-size:12px;width:max-
   <div class="seg">
     <a href="Analisis_Rechazos_Recap_La_Fiera_es.html" class="on">Recap semanas</a>
     <a href="Analisis_Rechazos_Semana_La_Fiera_es.html" class="">Semana · lotes</a>
+    <a href="Analisis_Rechazos_Graficos_La_Fiera_es.html" class="">Gráficos</a>
   </div>
   <div class="kpi">
     <div class="c"><b>178</b><span>rechazos</span></div>
