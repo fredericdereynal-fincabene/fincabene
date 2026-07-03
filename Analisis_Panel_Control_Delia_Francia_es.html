@@ -5,7 +5,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7f5;color:#1a1a1a;min-height:100vh}
 #wrap{max-width:520px;margin:0 auto;padding:14px 12px 36px;position:relative}
-#header{text-align:left;padding:6px 0 8px}
+#header{text-align:center;padding:6px 0 8px}
 #header h1{font-size:18px;font-weight:700;margin:0 0 2px;color:#E65100;letter-spacing:.3px}
 #header .finca{font-size:15px;font-weight:700;margin:0;color:#0277BD}
 #header .updated{font-size:11px;color:#999;margin-top:5px}
@@ -43,33 +43,39 @@ table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px
 #carousel.open{display:block}
 .land{position:absolute;top:50%;left:50%;width:100vh;height:100vw;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center;display:flex;flex-direction:column;background:#fff}
 @media(orientation:landscape){.land{width:100vw;height:100vh;transform:translate(-50%,-50%) rotate(0deg)}}
-.ctop{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px}
-.ctop .cw{font-size:12px;font-weight:600;color:#888}
-.cclose{border:0;background:#f0f2f0;border-radius:50%;width:32px;height:32px;font-size:15px;color:#555;cursor:pointer}
-#track{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;min-height:0;scrollbar-width:none}
-#track::-webkit-scrollbar{display:none}
-.slide{min-width:100%;scroll-snap-align:start;display:flex;flex-direction:column;padding:2px 14px 6px;min-height:0}
-.slide .stl{font-size:15px;font-weight:700;color:#333;text-align:center;margin:2px 0 4px}
-.scont{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.ctop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 12px 4px}
+.ctop .cw{font-size:14px;font-weight:700;color:#333;flex:1;text-align:center}
+.cright{display:flex;gap:6px}
+.cnav{border:0;background:#f0f2f0;border-radius:8px;width:30px;height:30px;font-size:19px;line-height:1;color:#555;cursor:pointer}
+.cclose{border:0;background:#f0f2f0;border-radius:50%;width:30px;height:30px;font-size:14px;color:#555;cursor:pointer}
+.vp{flex:1;min-height:0;overflow:hidden}
+#track{display:flex;height:100%;will-change:transform}
+.slide{min-width:100%;height:100%;display:flex;flex-direction:column;padding:0 12px 4px;overflow:hidden}
+.slide .stl{font-size:14px;font-weight:700;color:#555;text-align:center;margin:2px 0 4px;flex:none}
+.scont{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
 .scont svg{width:100%;height:100%}
-.dots{display:flex;justify-content:center;gap:7px;padding:6px 0 8px}
+.dots{display:flex;justify-content:center;gap:7px;padding:5px 0 7px;flex-wrap:wrap}
 .dot{width:8px;height:8px;border-radius:50%;background:#d0d4d0;transition:.2s}
 .dot.on{background:#0277BD;width:20px;border-radius:4px}
 .nodata{padding:40px;text-align:center;color:#999}
-.dt{border-collapse:collapse;width:100%;font-size:12px}
-.dt th,.dt td{padding:5px 3px;text-align:center;border-bottom:1px solid #eee;font-variant-numeric:tabular-nums}
-.dt thead th{position:sticky;top:0;background:#E3F2FD;color:#555;font-weight:700}
-.dt tr.cur td{background:#FFF6EE;font-weight:700}
-.dt td:first-child,.dt th:first-child{font-weight:700;color:#666}
+.ptw{flex:1;min-height:0;overflow:auto}
+.pt{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+.pt th,.pt td{padding:6px 3px;text-align:center;border-bottom:1px solid #eee;font-variant-numeric:tabular-nums}
+.pt thead th{position:sticky;top:0;background:#f4f6f4;font-weight:700;color:#555;z-index:3;box-shadow:0 1px 0 #e2e6e2;line-height:1.12}
+.pt tfoot td{position:sticky;bottom:0;background:#eef1ee;font-weight:700;z-index:3;box-shadow:0 -1px 0 #dbe0db}
+.pt tfoot td span{font-weight:500;color:#888;font-size:8.5px}
+.pt .y0{color:#2E7D32}.pt .y1{color:#1E88E5}.pt .y2{color:#E53935}
+.pt td:first-child,.pt th:first-child{color:#999;font-weight:700}
+.pt tr.cur td{background:#FFF6EE}
+.pt td.pc{color:#1a1a1a;font-weight:600}
+.pt tfoot td,.pt tfoot td.y0,.pt tfoot td.y1,.pt tfoot td.y2{color:#1a1a1a}
+.pt tfoot td:first-child{color:#666}
 </style></head><body><div id="wrap">
   <div id="header"><h1>Panel de Control</h1><p class="finca">Delia Francia</p>
     <p class="updated">Semana <strong>2026 · S27</strong> · datos al <strong>02/07/2026</strong></p></div>
   <div class="gtop">
-    <button class="gt" onclick="openC(0)"><span>📦</span>Cajas</button>
-    <button class="gt" onclick="openC(1)"><span>⚖️</span>Peso</button>
-    <button class="gt" onclick="openC(2)"><span>📈</span>Ratio</button>
-    <button class="gt" onclick="openC(3)"><span>🌸</span>Enfundes</button>
-    <button class="gt" onclick="openC(4)"><span>📋</span>Datos</button>
+    <button class="gt" onclick="openCar('g')"><span>📈</span>Gráficos</button>
+    <button class="gt" onclick="openCar('t')"><span>📋</span>Tablas</button>
   </div>
   <div class="wnav">
     <button id="wprev" onclick="stepW(-1)">◀</button>
@@ -86,14 +92,18 @@ table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px
 
 <div id="carousel">
   <div class="land">
-    <div class="ctop"><span class="cw" id="cw"></span><button class="cclose" onclick="closeC()">✕</button></div>
-    <div id="track"></div>
+    <div class="ctop">
+      <button class="cnav" onclick="prevS()">‹</button>
+      <span class="cw" id="cw"></span>
+      <span class="cright"><button class="cnav" onclick="nextS()">›</button><button class="cclose" onclick="closeC()">✕</button></span>
+    </div>
+    <div class="vp" id="vp"><div id="track"></div></div>
     <div class="dots" id="dots"></div>
   </div>
 </div>
 
 <script>
-const D = {"finca":"Delia Francia","accent":"#0277BD","ha":213.92,"year":2026,"week":27,"years":[2024,2025,2026],"wk":{"2024":{"52":{"ce":11335,"ck":213378,"rn":8141,"rk":262521,"en":13239},"51":{"ce":13051,"ck":245689,"rn":9559,"rk":305715,"en":10571},"50":{"ce":11357,"ck":213783,"rn":8280,"rk":266170,"en":10039},"49":{"ce":10965,"ck":206393,"rn":8288,"rk":260623,"en":11112},"48":{"ce":11780,"ck":221739,"rn":8979,"rk":279528,"en":10205},"47":{"ce":10435,"ck":196460,"rn":8020,"rk":248827,"en":9615},"46":{"ce":11067,"ck":208337,"rn":8818,"rk":266432,"en":8580},"45":{"ce":10559,"ck":198777,"rn":8285,"rk":247796,"en":8384},"44":{"ce":13574,"ck":255518,"rn":10614,"rk":315891,"en":8572},"43":{"ce":14577,"ck":274417,"rn":11449,"rk":345408,"en":8917},"42":{"ce":14841,"ck":279374,"rn":11725,"rk":354154,"en":8167},"41":{"ce":11436,"ck":215292,"rn":8872,"rk":267134,"en":8372},"40":{"ce":14156,"ck":266457,"rn":11141,"rk":329125,"en":7900},"39":{"ce":10866,"ck":204544,"rn":9065,"rk":257651,"en":7242},"38":{"ce":13794,"ck":259700,"rn":11691,"rk":320541,"en":8038},"37":{"ce":13610,"ck":256214,"rn":11397,"rk":324194,"en":7639},"36":{"ce":13753,"ck":258938,"rn":11430,"rk":331379,"en":8021},"35":{"ce":14137,"ck":266137,"rn":11715,"rk":338876,"en":8227},"34":{"ce":14147,"ck":266317,"rn":11625,"rk":334248,"en":8831},"33":{"ce":14136,"ck":266108,"rn":11600,"rk":332348,"en":9376},"32":{"ce":14166,"ck":266677,"rn":11658,"rk":333186,"en":9636},"31":{"ce":15040,"ck":283133,"rn":12652,"rk":365939,"en":10625},"30":{"ce":16975,"ck":319528,"rn":14134,"rk":404281,"en":10477},"29":{"ce":15550,"ck":292712,"rn":12279,"rk":363329,"en":10172},"28":{"ce":14421,"ck":271428,"rn":11366,"rk":342534,"en":10943},"27":{"ce":10747,"ck":202295,"rn":9124,"rk":269521,"en":11105},"26":{"ce":9830,"ck":185048,"rn":7914,"rk":233737,"en":12261},"25":{"ce":9426,"ck":177448,"rn":7787,"rk":223187,"en":11236},"24":{"ce":9297,"ck":175005,"rn":7757,"rk":220279,"en":12005},"23":{"ce":9456,"ck":178010,"rn":7898,"rk":222406,"en":11718},"22":{"ce":11619,"ck":218706,"rn":9738,"rk":283756,"en":12997},"21":{"ce":11707,"ck":220359,"rn":9388,"rk":276825,"en":12309},"20":{"ce":10365,"ck":195121,"rn":8190,"rk":247147,"en":12616},"19":{"ce":10112,"ck":190344,"rn":8019,"rk":244579,"en":13900},"18":{"ce":11968,"ck":225295,"rn":9637,"rk":286858,"en":11699},"17":{"ce":13465,"ck":253494,"rn":10665,"rk":326373,"en":10957},"16":{"ce":13687,"ck":257629,"rn":10696,"rk":336499,"en":10331},"15":{"ce":16476,"ck":310141,"rn":12946,"rk":421311,"en":10495},"14":{"ce":16816,"ck":316535,"rn":12601,"rk":417566,"en":9971},"13":{"ce":14759,"ck":277872,"rn":10971,"rk":369759,"en":9674},"12":{"ce":20996,"ck":395243,"rn":15081,"rk":516344,"en":10312},"11":{"ce":14393,"ck":270945,"rn":10810,"rk":365512,"en":9573},"10":{"ce":14632,"ck":275427,"rn":11001,"rk":357727,"en":9055},"9":{"ce":17874,"ck":336480,"rn":13668,"rk":449528,"en":10509},"8":{"ce":18602,"ck":350160,"rn":14418,"rk":472959,"en":9532},"7":{"ce":17196,"ck":323640,"rn":13448,"rk":444853,"en":10763},"6":{"ce":16014,"ck":301463,"rn":12365,"rk":401926,"en":10878},"5":{"ce":14056,"ck":264600,"rn":10757,"rk":349198,"en":11409},"4":{"ce":13470,"ck":253554,"rn":10244,"rk":322946,"en":12399},"3":{"ce":10553,"ck":198668,"rn":8167,"rk":250352,"en":12664},"2":{"ce":10351,"ck":194854,"rn":8311,"rk":249454,"en":11413},"1":{"ce":10530,"ck":198197,"rn":8596,"rk":249766,"en":12298}},"2025":{"52":{"ce":13802,"ck":259813,"rn":8714,"rk":310108,"en":10837},"51":{"ce":13210,"ck":248650,"rn":8748,"rk":307493,"en":10525},"50":{"ce":12263,"ck":230845,"rn":8379,"rk":282184,"en":9374},"49":{"ce":14652,"ck":275813,"rn":10158,"rk":343440,"en":10792},"48":{"ce":14171,"ck":266795,"rn":9932,"rk":329457,"en":9746},"47":{"ce":13052,"ck":245683,"rn":9155,"rk":302995,"en":10263},"46":{"ce":13137,"ck":247308,"rn":9376,"rk":307817,"en":9482},"45":{"ce":11833,"ck":222771,"rn":8345,"rk":277372,"en":9756},"44":{"ce":10739,"ck":202168,"rn":7665,"rk":249749,"en":9619},"43":{"ce":13220,"ck":248892,"rn":9803,"rk":309594,"en":9100},"42":{"ce":12124,"ck":228243,"rn":8920,"rk":284901,"en":10061},"41":{"ce":12137,"ck":228504,"rn":9254,"rk":283037,"en":8859},"40":{"ce":11937,"ck":224742,"rn":9708,"rk":300955,"en":9353},"39":{"ce":13546,"ck":254967,"rn":10338,"rk":316733,"en":9542},"38":{"ce":12763,"ck":240259,"rn":10028,"rk":303215,"en":9320},"37":{"ce":13644,"ck":256811,"rn":10681,"rk":327851,"en":9042},"36":{"ce":12791,"ck":240765,"rn":9713,"rk":301939,"en":9723},"35":{"ce":10796,"ck":203216,"rn":8506,"rk":249319,"en":8722},"34":{"ce":8776,"ck":165214,"rn":7277,"rk":212962,"en":8283},"33":{"ce":10028,"ck":188772,"rn":8294,"rk":240673,"en":8768},"32":{"ce":12760,"ck":240161,"rn":10483,"rk":301684,"en":8242},"31":{"ce":11106,"ck":209042,"rn":8964,"rk":262261,"en":8581},"30":{"ce":9564,"ck":180020,"rn":7564,"rk":221531,"en":9122},"29":{"ce":10710,"ck":201603,"rn":8539,"rk":252553,"en":8642},"28":{"ce":12005,"ck":226003,"rn":9308,"rk":277238,"en":9689},"27":{"ce":13159,"ck":247716,"rn":9734,"rk":299841,"en":9922},"26":{"ce":9565,"ck":180046,"rn":6912,"rk":214858,"en":8846},"25":{"ce":9790,"ck":184270,"rn":7170,"rk":221689,"en":9320},"24":{"ce":9439,"ck":177646,"rn":7279,"rk":223022,"en":8635},"23":{"ce":10521,"ck":198074,"rn":8097,"rk":253642,"en":9192},"22":{"ce":12683,"ck":238748,"rn":9371,"rk":302569,"en":9389},"21":{"ce":13781,"ck":259372,"rn":10085,"rk":335108,"en":9553},"20":{"ce":10597,"ck":199430,"rn":7519,"rk":255569,"en":9868},"19":{"ce":12365,"ck":232742,"rn":8553,"rk":295535,"en":9900},"18":{"ce":12326,"ck":231986,"rn":8606,"rk":295419,"en":8918},"17":{"ce":13215,"ck":248724,"rn":8871,"rk":311245,"en":9274},"16":{"ce":14470,"ck":272359,"rn":9540,"rk":337939,"en":8768},"15":{"ce":17163,"ck":323070,"rn":11083,"rk":399374,"en":9509},"14":{"ce":18572,"ck":349575,"rn":11928,"rk":433180,"en":9529},"13":{"ce":15271,"ck":287448,"rn":9709,"rk":355663,"en":10478},"12":{"ce":14410,"ck":271267,"rn":9339,"rk":337088,"en":8807},"11":{"ce":16649,"ck":313394,"rn":10952,"rk":402635,"en":9115},"10":{"ce":17085,"ck":321619,"rn":10640,"rk":392208,"en":9784},"9":{"ce":20710,"ck":389855,"rn":13092,"rk":489793,"en":9558},"8":{"ce":16600,"ck":312484,"rn":10586,"rk":394296,"en":9598},"7":{"ce":15562,"ck":292956,"rn":10068,"rk":366869,"en":8669},"6":{"ce":15697,"ck":295477,"rn":9941,"rk":367046,"en":9821},"5":{"ce":14753,"ck":277668,"rn":9678,"rk":353596,"en":10472},"4":{"ce":17545,"ck":330271,"rn":11781,"rk":420824,"en":10808},"3":{"ce":15398,"ck":289840,"rn":10633,"rk":371542,"en":10688},"2":{"ce":13125,"ck":247081,"rn":9074,"rk":308900,"en":9506},"1":{"ce":12398,"ck":233391,"rn":8450,"rk":280465,"en":10380}},"2026":{"27":{"ce":10915,"ck":205453,"rn":8159,"rk":268366},"26":{"ce":14425,"ck":271526,"rn":10547,"rk":347804,"en":10968},"25":{"ce":13196,"ck":248382,"rn":9356,"rk":314862,"en":10303},"24":{"ce":12817,"ck":241296,"rn":9136,"rk":305302,"en":9730},"23":{"ce":16251,"ck":305950,"rn":11432,"rk":386469,"en":10084},"22":{"ce":14288,"ck":269019,"rn":9542,"rk":333728,"en":9944},"21":{"ce":14737,"ck":277407,"rn":9843,"rk":348367,"en":9141},"20":{"ce":12158,"ck":228888,"rn":8303,"rk":298649,"en":9496},"19":{"ce":13478,"ck":253695,"rn":9214,"rk":329640,"en":9328},"18":{"ce":14672,"ck":276182,"rn":9719,"rk":355724,"en":9170},"17":{"ce":14566,"ck":274170,"rn":9279,"rk":350362,"en":9879},"16":{"ce":14672,"ck":276183,"rn":9000,"rk":346178,"en":9962},"15":{"ce":14777,"ck":278112,"rn":9098,"rk":346356,"en":11015},"14":{"ce":14809,"ck":278722,"rn":9287,"rk":345381,"en":10267},"13":{"ce":17104,"ck":321945,"rn":10938,"rk":407972,"en":10970},"12":{"ce":15852,"ck":298402,"rn":10290,"rk":382245,"en":11107},"11":{"ce":19132,"ck":360128,"rn":12507,"rk":457869,"en":10111},"10":{"ce":18857,"ck":354957,"rn":12533,"rk":469253,"en":10514},"9":{"ce":23132,"ck":435456,"rn":14743,"rk":566927,"en":9903},"8":{"ce":11871,"ck":223459,"rn":7420,"rk":282666,"en":10433},"7":{"ce":17151,"ck":322815,"rn":10888,"rk":400407,"en":9600},"6":{"ce":16765,"ck":315559,"rn":10478,"rk":391247,"en":9046},"5":{"ce":13580,"ck":255592,"rn":8640,"rk":320298,"en":8760},"4":{"ce":13535,"ck":254744,"rn":8511,"rk":313512,"en":9955},"3":{"ce":14822,"ck":278976,"rn":9437,"rk":344471,"en":8879},"2":{"ce":19748,"ck":371710,"rn":12431,"rk":467496,"en":9772},"1":{"ce":11937,"ck":224702,"rn":7602,"rk":275758,"en":10282}}}};
+const D = {"finca":"Delia Francia","accent":"#0277BD","ha":213.92,"year":2026,"week":27,"years":[2024,2025,2026],"wk":{"2024":{"52":{"ce":11335,"ck":213378,"rn":8141,"rk":262521,"en":13239},"51":{"ce":13051,"ck":245689,"rn":9559,"rk":305715,"en":10571},"50":{"ce":11357,"ck":213783,"rn":8280,"rk":266170,"en":10039},"49":{"ce":10965,"ck":206393,"rn":8288,"rk":260623,"en":11112},"48":{"ce":11780,"ck":221739,"rn":8979,"rk":279528,"en":10205},"47":{"ce":10435,"ck":196460,"rn":8020,"rk":248827,"en":9615},"46":{"ce":11067,"ck":208337,"rn":8818,"rk":266432,"en":8580},"45":{"ce":10559,"ck":198777,"rn":8285,"rk":247796,"en":8384},"44":{"ce":13574,"ck":255518,"rn":10614,"rk":315891,"en":8572},"43":{"ce":14577,"ck":274417,"rn":11449,"rk":345408,"en":8917},"42":{"ce":14841,"ck":279374,"rn":11725,"rk":354154,"en":8167},"41":{"ce":11436,"ck":215292,"rn":8872,"rk":267134,"en":8372},"40":{"ce":14156,"ck":266457,"rn":11141,"rk":329125,"en":7900},"39":{"ce":10866,"ck":204544,"rn":9065,"rk":257651,"en":7242},"38":{"ce":13794,"ck":259700,"rn":11691,"rk":320541,"en":8038},"37":{"ce":13610,"ck":256214,"rn":11397,"rk":324194,"en":7639},"36":{"ce":13753,"ck":258938,"rn":11430,"rk":331379,"en":8021},"35":{"ce":14137,"ck":266137,"rn":11715,"rk":338876,"en":8227},"34":{"ce":14147,"ck":266317,"rn":11625,"rk":334248,"en":8831},"33":{"ce":14136,"ck":266108,"rn":11600,"rk":332348,"en":9376},"32":{"ce":14166,"ck":266677,"rn":11658,"rk":333186,"en":9636},"31":{"ce":15040,"ck":283133,"rn":12652,"rk":365939,"en":10625},"30":{"ce":16975,"ck":319528,"rn":14134,"rk":404281,"en":10477},"29":{"ce":15550,"ck":292712,"rn":12279,"rk":363329,"en":10172},"28":{"ce":14421,"ck":271428,"rn":11366,"rk":342534,"en":10943},"27":{"ce":10747,"ck":202295,"rn":9124,"rk":269521,"en":11105},"26":{"ce":9830,"ck":185048,"rn":7914,"rk":233737,"en":12261},"25":{"ce":9426,"ck":177448,"rn":7787,"rk":223187,"en":11236},"24":{"ce":9297,"ck":175005,"rn":7757,"rk":220279,"en":12005},"23":{"ce":9456,"ck":178010,"rn":7898,"rk":222406,"en":11718},"22":{"ce":11619,"ck":218706,"rn":9738,"rk":283756,"en":12997},"21":{"ce":11707,"ck":220359,"rn":9388,"rk":276825,"en":12309},"20":{"ce":10365,"ck":195121,"rn":8190,"rk":247147,"en":12616},"19":{"ce":10112,"ck":190344,"rn":8019,"rk":244579,"en":13900},"18":{"ce":11968,"ck":225295,"rn":9637,"rk":286858,"en":11699},"17":{"ce":13465,"ck":253494,"rn":10665,"rk":326373,"en":10957},"16":{"ce":13687,"ck":257629,"rn":10696,"rk":336499,"en":10331},"15":{"ce":16476,"ck":310141,"rn":12946,"rk":421311,"en":10495},"14":{"ce":16816,"ck":316535,"rn":12601,"rk":417566,"en":9971},"13":{"ce":14759,"ck":277872,"rn":10971,"rk":369759,"en":9674},"12":{"ce":20996,"ck":395243,"rn":15081,"rk":516344,"en":10312},"11":{"ce":14393,"ck":270945,"rn":10810,"rk":365512,"en":9573},"10":{"ce":14632,"ck":275427,"rn":11001,"rk":357727,"en":9055},"9":{"ce":17874,"ck":336480,"rn":13668,"rk":449528,"en":10509},"8":{"ce":18602,"ck":350160,"rn":14418,"rk":472959,"en":9532},"7":{"ce":17196,"ck":323640,"rn":13448,"rk":444853,"en":10763},"6":{"ce":16014,"ck":301463,"rn":12365,"rk":401926,"en":10878},"5":{"ce":14056,"ck":264600,"rn":10757,"rk":349198,"en":11409},"4":{"ce":13470,"ck":253554,"rn":10244,"rk":322946,"en":12399},"3":{"ce":10553,"ck":198668,"rn":8167,"rk":250352,"en":12664},"2":{"ce":10351,"ck":194854,"rn":8311,"rk":249454,"en":11413},"1":{"ce":10530,"ck":198197,"rn":8596,"rk":249766,"en":12298}},"2025":{"52":{"ce":13351,"ck":251312,"rn":8714,"rk":310108,"en":10837},"51":{"ce":13133,"ck":247205,"rn":8748,"rk":307493,"en":10525},"50":{"ce":12163,"ck":228971,"rn":8379,"rk":282184,"en":9374},"49":{"ce":14549,"ck":273843,"rn":10158,"rk":343440,"en":10792},"48":{"ce":14066,"ck":264787,"rn":9932,"rk":329457,"en":9746},"47":{"ce":12955,"ck":243903,"rn":9155,"rk":302995,"en":10263},"46":{"ce":13080,"ck":246253,"rn":9376,"rk":307817,"en":9482},"45":{"ce":11758,"ck":221364,"rn":8345,"rk":277372,"en":9756},"44":{"ce":10687,"ck":201207,"rn":7665,"rk":249749,"en":9619},"43":{"ce":13144,"ck":247462,"rn":9803,"rk":309594,"en":9100},"42":{"ce":12018,"ck":226249,"rn":8920,"rk":284901,"en":10061},"41":{"ce":12070,"ck":227234,"rn":9254,"rk":283037,"en":8859},"40":{"ce":11846,"ck":223012,"rn":9708,"rk":300955,"en":9353},"39":{"ce":13449,"ck":253184,"rn":10338,"rk":316733,"en":9542},"38":{"ce":12676,"ck":238625,"rn":10028,"rk":303215,"en":9320},"37":{"ce":13587,"ck":255756,"rn":10681,"rk":327851,"en":9042},"36":{"ce":12583,"ck":236869,"rn":9713,"rk":301939,"en":9723},"35":{"ce":10519,"ck":198028,"rn":8506,"rk":249319,"en":8722},"34":{"ce":8690,"ck":163600,"rn":7277,"rk":212962,"en":8283},"33":{"ce":9884,"ck":186087,"rn":8294,"rk":240673,"en":8768},"32":{"ce":12623,"ck":237654,"rn":10483,"rk":301684,"en":8242},"31":{"ce":11040,"ck":207829,"rn":8964,"rk":262261,"en":8581},"30":{"ce":9505,"ck":178919,"rn":7564,"rk":221531,"en":9122},"29":{"ce":10627,"ck":200046,"rn":8539,"rk":252553,"en":8642},"28":{"ce":11801,"ck":222144,"rn":9308,"rk":277238,"en":9689},"27":{"ce":12724,"ck":239518,"rn":9734,"rk":299841,"en":9922},"26":{"ce":9020,"ck":169776,"rn":6912,"rk":214858,"en":8846},"25":{"ce":9299,"ck":175026,"rn":7170,"rk":221689,"en":9320},"24":{"ce":9246,"ck":174062,"rn":7279,"rk":223022,"en":8635},"23":{"ce":10476,"ck":197204,"rn":8097,"rk":253642,"en":9192},"22":{"ce":12630,"ck":237756,"rn":9371,"rk":302569,"en":9389},"21":{"ce":13718,"ck":258267,"rn":10085,"rk":335108,"en":9553},"20":{"ce":10528,"ck":198204,"rn":7519,"rk":255569,"en":9868},"19":{"ce":12300,"ck":231528,"rn":8553,"rk":295535,"en":9900},"18":{"ce":12276,"ck":231057,"rn":8606,"rk":295419,"en":8918},"17":{"ce":13165,"ck":247769,"rn":8871,"rk":311245,"en":9274},"16":{"ce":14412,"ck":271275,"rn":9540,"rk":337939,"en":8768},"15":{"ce":17084,"ck":321559,"rn":11083,"rk":399374,"en":9509},"14":{"ce":18489,"ck":348010,"rn":11928,"rk":433180,"en":9529},"13":{"ce":15207,"ck":286213,"rn":9709,"rk":355663,"en":10478},"12":{"ce":14330,"ck":269738,"rn":9339,"rk":337088,"en":8807},"11":{"ce":16581,"ck":312095,"rn":10952,"rk":402635,"en":9115},"10":{"ce":16626,"ck":312966,"rn":10640,"rk":392208,"en":9784},"9":{"ce":20627,"ck":388263,"rn":13092,"rk":489793,"en":9558},"8":{"ce":16791,"ck":316048,"rn":10586,"rk":394296,"en":9598},"7":{"ce":15477,"ck":291306,"rn":10068,"rk":366869,"en":8669},"6":{"ce":15657,"ck":294696,"rn":9941,"rk":367046,"en":9821},"5":{"ce":14783,"ck":278252,"rn":9678,"rk":353596,"en":10472},"4":{"ce":17407,"ck":327619,"rn":11781,"rk":420824,"en":10808},"3":{"ce":15328,"ck":288504,"rn":10633,"rk":371542,"en":10688},"2":{"ce":12833,"ck":241559,"rn":9074,"rk":308900,"en":9506},"1":{"ce":11840,"ck":222878,"rn":8450,"rk":280465,"en":10380}},"2026":{"27":{"ce":10915,"ck":205453,"rn":8159,"rk":268366},"26":{"ce":14425,"ck":271526,"rn":10547,"rk":347804,"en":10968},"25":{"ce":13196,"ck":248382,"rn":9356,"rk":314862,"en":10303},"24":{"ce":12817,"ck":241296,"rn":9136,"rk":305302,"en":9730},"23":{"ce":16251,"ck":305950,"rn":11432,"rk":386469,"en":10084},"22":{"ce":14288,"ck":269019,"rn":9542,"rk":333728,"en":9944},"21":{"ce":14737,"ck":277407,"rn":9843,"rk":348367,"en":9141},"20":{"ce":12158,"ck":228888,"rn":8303,"rk":298649,"en":9496},"19":{"ce":13478,"ck":253695,"rn":9214,"rk":329640,"en":9328},"18":{"ce":14672,"ck":276182,"rn":9719,"rk":355724,"en":9170},"17":{"ce":14566,"ck":274170,"rn":9279,"rk":350362,"en":9879},"16":{"ce":14672,"ck":276183,"rn":9000,"rk":346178,"en":9962},"15":{"ce":14777,"ck":278112,"rn":9098,"rk":346356,"en":11015},"14":{"ce":14809,"ck":278722,"rn":9287,"rk":345381,"en":10267},"13":{"ce":17104,"ck":321945,"rn":10938,"rk":407972,"en":10970},"12":{"ce":15852,"ck":298402,"rn":10290,"rk":382245,"en":11107},"11":{"ce":19132,"ck":360128,"rn":12507,"rk":457869,"en":10111},"10":{"ce":18857,"ck":354957,"rn":12533,"rk":469253,"en":10514},"9":{"ce":23132,"ck":435456,"rn":14743,"rk":566927,"en":9903},"8":{"ce":11871,"ck":223459,"rn":7420,"rk":282666,"en":10433},"7":{"ce":17151,"ck":322815,"rn":10888,"rk":400407,"en":9600},"6":{"ce":16765,"ck":315559,"rn":10478,"rk":391247,"en":9046},"5":{"ce":13580,"ck":255592,"rn":8640,"rk":320298,"en":8760},"4":{"ce":13535,"ck":254744,"rn":8511,"rk":313512,"en":9955},"3":{"ce":14822,"ck":278976,"rn":9437,"rk":344471,"en":8879},"2":{"ce":19748,"ck":371710,"rn":12431,"rk":467496,"en":9772},"1":{"ce":11923,"ck":224443,"rn":7602,"rk":275758,"en":10282}}}};
 const CY = D.year, MAXW = D.week, HA = D.ha, YEARS = D.years;   // YEARS asc [N-2,N-1,N]
 const YCOL = {}; YCOL[CY]='#E53935'; YCOL[CY-1]='#1E88E5'; YCOL[CY-2]='#2E7D32';
 let selW = MAXW;
@@ -109,10 +119,13 @@ const fKc = v => v>=1000?(Math.round(v/1000)+'k'):(''+Math.round(v));
 // ---- datos por semana ----
 function raw(y,w){ const o=(D.wk[y]||{})[w]; return o||null; }
 function pv(y,w,m){ const v=raw(y,w); if(!v) return null;
-  if(m==='cajas') return (v.ce!=null)?v.ce:null;
+  if(m==='cajas'||m==='caisses') return (v.ce!=null)?v.ce:null;
   if(m==='enfundes') return (v.en!=null)?v.en:null;
+  if(m==='racimos') return (v.rn!=null)?v.rn:null;
+  if(m==='cajasha') return (v.ce!=null)?v.ce/HA:null;
   if(m==='poids') return v.rn?v.rk/v.rn:null;
   if(m==='ratio') return v.rn?v.ce/v.rn:null;
+  if(m==='merma'){ const rx=(v.rk||0)*0.88; return rx?(rx-(v.ck||0))/rx:null; }
   return null; }
 function deriv(ce,ck,rn,rk,en){ const rx=rk*0.88;
   return {caisses:ce, cajasha:ce/HA, racimos:rn, poids:rn?rk/rn:null, ratio:rn?ce/rn:null, merma:rx?(rx-ck)/rx:null, enfundes:en}; }
@@ -179,33 +192,85 @@ function chart(metric,fy){
   let lg='',lx=pl; YEARS.forEach(y=>{ lg+='<line x1="'+lx+'" y1="15" x2="'+(lx+18)+'" y2="15" stroke="'+YCOL[y]+'" stroke-width="3"/><text x="'+(lx+22)+'" y="19" font-size="13" fill="#555">'+y+'</text>'; lx+=76; });
   return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+g+pol+lg+'</svg>';
 }
-function dataTable(){
-  let h='<div class="scont"><table class="dt"><thead><tr><th>Sem</th><th>Cajas</th><th>Racimos</th><th>Peso</th><th>Ratio</th><th>Merma</th><th>Enf.</th></tr></thead><tbody>';
-  for(let w=1;w<=MAXW;w++){ const a=agg(CY,w,w); if(!a.caisses && !a.enfundes) continue;
-    h+='<tr'+(w===selW?' class="cur"':'')+'><td>'+w+'</td><td>'+nf(a.caisses)+'</td><td>'+nf(a.racimos)+'</td><td>'+(a.poids?a.poids.toFixed(1).replace('.',','):'—')+'</td><td>'+fR(a.ratio)+'</td><td>'+fP(a.merma)+'</td><td>'+nf(a.enfundes)+'</td></tr>'; }
-  h+='</tbody></table></div>'; return h;
+// ---- páginas de tabla (una por indicador) ----
+const f1=v=>v==null?'—':v.toFixed(1).replace('.',',');
+function pcell(a,b,inv){ if(a==null||b==null||!b) return '<td class="pc">—</td>';
+  const p=(a-b)/b*100, good=inv?(p<0):(p>=0);
+  return '<td class="pc '+(good?'up':'dn')+'">'+(p>=0?'+':'')+p.toFixed(1).replace('.',',')+'%</td>'; }
+const MSPEC=[
+  {l:'Cajas (equiv.)',pk:'cajas',ak:'caisses',ff:nf,inv:false},
+  {l:'Racimos',pk:'racimos',ak:'racimos',ff:nf,inv:false},
+  {l:'Peso medio / racimo (kg)',pk:'poids',ak:'poids',ff:f1,inv:false},
+  {l:'Ratio cajas / racimo',pk:'ratio',ak:'ratio',ff:fR,inv:false},
+  {l:'Merma',pk:'merma',ak:'merma',ff:fP,inv:true},
+  {l:'Enfundes',pk:'enfundes',ak:'enfundes',ff:nf,inv:false},
+];
+function fmtDiff(d,sp){ if(d==null||isNaN(d)) return '—'; const s=d>=0?'+':'−', a=Math.abs(d);
+  if(sp.pk==='ratio') return s+a.toFixed(2).replace('.',',');
+  if(sp.pk==='poids') return s+a.toFixed(1).replace('.',',');
+  if(sp.pk==='merma') return s+(a*100).toFixed(1).replace('.',',')+' pp';
+  return s+Math.round(a).toLocaleString('es-ES').replace(/[,\u00A0]/g,' '); }
+function dcell(d,sp){ if(d==null||isNaN(d)) return '<td class="pc">—</td>';
+  const good=sp.inv?(d<0):(d>=0); return '<td class="pc '+(good?'up':'dn')+'">'+fmtDiff(d,sp)+'</td>'; }
+function pageTable(sp){
+  const cum={}; YEARS.forEach(y=>cum[y]={ce:0,ck:0,rn:0,rk:0,en:0});
+  const cv=y=>{ const c=cum[y], rx=c.rk*0.88;
+    const o={caisses:c.ce,racimos:c.rn,poids:c.rn?c.rk/c.rn:null,ratio:c.rn?c.ce/c.rn:null,merma:rx?(rx-c.ck)/rx:null,enfundes:c.en};
+    return o[sp.ak]; };
+  let body='';
+  for(let w=1;w<=52;w++){
+    YEARS.forEach(y=>{ const v=raw(y,w); if(v){ cum[y].ce+=v.ce||0;cum[y].ck+=v.ck||0;cum[y].rn+=v.rn||0;cum[y].rk+=v.rk||0;cum[y].en+=v.en||0; } });
+    const wv=YEARS.map(y=>pv(y,w,sp.pk));
+    if(wv.every(x=>x==null)) continue;
+    let cD='<td class="pc">—</td>', cP1=cD, cP2=cD;
+    if(w<=MAXW){ const c2=cv(YEARS[2]), c1=cv(YEARS[1]), c0=cv(YEARS[0]);
+      cD=dcell(c2-c1,sp); cP1=pcell(c2,c1,sp.inv); cP2=pcell(c2,c0,sp.inv); }
+    body+='<tr'+(w===selW?' class="cur"':'')+'><td>'+w+'</td>'
+      +wv.map((x,i)=>'<td class="y'+i+'">'+sp.ff(x)+'</td>').join('')+cD+cP1+cP2+'</tr>';
+  }
+  const T=YEARS.map(y=>agg(y,1,MAXW)[sp.ak]);
+  const head='<tr><th>Sem</th><th class="y0">'+YEARS[0]+'</th><th class="y1">'+YEARS[1]+'</th><th class="y2">'+YEARS[2]+'</th>'
+    +'<th>Δac<br>'+YEARS[2]+'-'+YEARS[1]+'</th><th>%ac<br>'+YEARS[2]+'/'+YEARS[1]+'</th><th>%ac<br>'+YEARS[2]+'/'+YEARS[0]+'</th></tr>';
+  const foot='<tr class="tot"><td>Tot<br><span>S1-'+MAXW+'</span></td>'+T.map((x,i)=>'<td class="y'+i+'">'+sp.ff(x)+'</td>').join('')
+    +dcell(T[2]-T[1],sp)+pcell(T[2],T[1],sp.inv)+pcell(T[2],T[0],sp.inv)+'</tr>';
+  return '<div class="ptw"><table class="pt"><thead>'+head+'</thead><tbody>'+body+'</tbody><tfoot>'+foot+'</tfoot></table></div>';
 }
-const SLIDES=[
+
+// ---- carrusel en bucle (gráficos / tablas) ----
+const GRAPHS=[
   {t:'Cajas equiv. por semana', f:()=>chart('cajas',fKc)},
   {t:'Peso medio / racimo (kg)', f:()=>chart('poids',v=>Math.round(v))},
   {t:'Ratio cajas / racimo', f:()=>chart('ratio',v=>v.toFixed(1).replace('.',','))},
   {t:'Enfundes por semana', f:()=>chart('enfundes',fKc)},
-  {t:'Datos por semana (año en curso)', f:dataTable},
 ];
-function openC(idx){
+let carItems=[], carIdx=0;
+function openCar(kind){
   const tr=document.getElementById('track'); tr.innerHTML='';
-  SLIDES.forEach(s=>{ const d=document.createElement('div'); d.className='slide';
-    d.innerHTML='<div class="stl">'+s.t+'</div>'+ (s.f===dataTable? s.f() : '<div class="scont">'+s.f()+'</div>'); tr.appendChild(d); });
-  const dz=document.getElementById('dots'); dz.innerHTML=SLIDES.map((_,i)=>'<div class="dot'+(i===idx?' on':'')+'"></div>').join('');
-  document.getElementById('cw').textContent='Semana S'+selW+(selW===MAXW?' (en curso)':'');
+  if(kind==='g'){ carItems=GRAPHS.map(g=>({t:g.t, html:'<div class="scont">'+g.f()+'</div>'})); }
+  else { carItems=MSPEC.map(sp=>({t:sp.l, html:pageTable(sp)})); }
+  carItems.forEach(it=>{ const d=document.createElement('div'); d.className='slide';
+    d.innerHTML='<div class="stl">'+it.t+'</div>'+it.html; tr.appendChild(d); });
+  document.getElementById('dots').innerHTML=carItems.map(()=>'<span class="dot"></span>').join('');
+  goTo(0,false);
   document.getElementById('carousel').classList.add('open'); document.body.style.overflow='hidden';
-  requestAnimationFrame(()=>{ tr.scrollLeft=idx*tr.clientWidth; });
 }
+function goTo(i,anim){
+  const n=carItems.length; carIdx=((i%n)+n)%n;
+  const tr=document.getElementById('track');
+  tr.style.transition=anim?'transform .28s ease':'none';
+  tr.style.transform='translateX('+(-carIdx*100)+'%)';
+  document.querySelectorAll('#dots .dot').forEach((d,j)=>d.classList.toggle('on',j===carIdx));
+  document.getElementById('cw').textContent=carItems[carIdx].t;
+}
+function nextS(){ goTo(carIdx+1,true); }
+function prevS(){ goTo(carIdx-1,true); }
 function closeC(){ document.getElementById('carousel').classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('track').addEventListener('scroll',function(){
-  const tr=this, i=Math.round(tr.scrollLeft/tr.clientWidth);
-  document.querySelectorAll('#dots .dot').forEach((d,j)=>d.classList.toggle('on',j===i));
-},{passive:true});
+(function(){ const vp=document.getElementById('vp'); let x0=0,y0=0,on=false;
+  vp.addEventListener('touchstart',e=>{ x0=e.touches[0].clientX; y0=e.touches[0].clientY; on=true; },{passive:true});
+  vp.addEventListener('touchend',e=>{ if(!on)return; on=false;
+    const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ dx<0?nextS():prevS(); } },{passive:true});
+})();
 
 renderTable();
 </script></body></html>
