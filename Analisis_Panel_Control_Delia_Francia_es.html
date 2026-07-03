@@ -5,61 +5,207 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7f5;color:#1a1a1a;min-height:100vh}
 #wrap{max-width:520px;margin:0 auto;padding:14px 12px 36px;position:relative}
-#header{text-align:left;padding:6px 0 10px}
+#header{text-align:left;padding:6px 0 8px}
 #header h1{font-size:18px;font-weight:700;margin:0 0 2px;color:#E65100;letter-spacing:.3px}
 #header .finca{font-size:15px;font-weight:700;margin:0;color:#0277BD}
 #header .updated{font-size:11px;color:#999;margin-top:5px}
 #header .updated strong{color:#E65100;font-weight:600}
-.tablewrap{border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);background:#fff;overflow:hidden}
-table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:12px}
-.grid th,.grid td{padding:7px 2px;text-align:center;border-bottom:1px solid #eef0ee}
-.grid thead th{background:#E3F2FD;font-weight:600;color:#555}
-.grid col.lab{width:84px}
-.grid-b th,.grid-b td{padding:7px 1px;font-size:11px}
-.grid-b col.lab{width:80px}
-.grid .rowlab{text-align:left;font-weight:600;color:#444;font-size:10.5px;line-height:1.15;background:#fafbfa;padding-left:8px}
-.grid td.num{font-variant-numeric:tabular-nums;color:#222}
-.grid td.strong{font-weight:700;font-size:13px;color:#111}
-.grid td.small{font-size:11px}
-.grid-b .yh{font-size:11px;font-weight:700;line-height:1.1} .grid-b .yh span{font-weight:500;color:#999;font-size:8.5px}
-.grid-b .yh.cur{color:#0277BD} .grid-b .yh.r52h{color:#777} .grid-b .yh.wkh{color:#555}
-.grid-b td.wk{font-weight:600;color:#333;background:#fff}
-.grid-b td.r52{color:#666;background:#fafbfa}
-.grid-b td.up{color:#2B8A3E;font-weight:600} .grid-b td.dn{color:#C62828;font-weight:600}
-.subrow th,.subrow td{background:#fbfcfb !important;font-size:10px;color:#777;padding-top:3px;padding-bottom:3px}
-.subrow .rowlab{font-weight:500;color:#999}
-.empty{text-align:center;color:#999;padding:30px 10px;font-size:13px}
-.legend{margin-top:14px;font-size:11.5px;color:#8a8a8a;line-height:1.5;background:#fff;border-radius:12px;padding:11px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.legend b{color:#555}
 .gtop{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:8}
 .gt{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);border-radius:9px;padding:5px 5px 4px;font-size:8px;font-weight:600;color:#777;cursor:pointer;line-height:1}
 .gt span{font-size:14px}
 .gt:active{background:#eef0ee}
-.hbtn{display:block;width:100%;margin:10px 0 0;border:1px dashed #cdd3cd;background:transparent;border-radius:11px;padding:10px;font-size:12.5px;font-weight:600;color:#777;cursor:pointer}
-.modal{display:none;position:fixed;inset:0;background:#fff;z-index:60}
-.modal.open{display:block}
-.land{position:absolute;top:50%;left:50%;width:100vh;height:100vw;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center;display:flex;flex-direction:column;padding:12px 16px;background:#fff}
-.ltl{font-size:15px;font-weight:700;color:#333;text-align:center;margin:2px 0 6px}
-.lbody{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:auto}
-.lbody svg{width:100%;height:100%}
-.lclose{position:absolute;top:10px;right:14px;border:0;background:#f0f2f0;border-radius:50%;width:34px;height:34px;font-size:16px;color:#555;cursor:pointer;z-index:2}
-.land .grid{font-size:14px} .land .grid th,.land .grid td{padding:9px 4px} .land .grid col.lab{width:150px}
-@media(orientation:landscape){.land{width:100vw;height:100vh;transform:translate(-50%,-50%) rotate(0deg)}}
+.wnav{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 12px}
+.wnav button{border:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);border-radius:50%;width:38px;height:38px;font-size:17px;color:#0277BD;cursor:pointer;font-weight:700}
+.wnav button:disabled{opacity:.3}
+.wnav .wlab{font-size:15px;font-weight:700;color:#333;min-width:150px;text-align:center}
+.wnav .wlab small{display:block;font-size:10.5px;font-weight:500;color:#999}
+.tablewrap{border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);background:#fff;overflow:hidden}
+table.grid{border-collapse:collapse;width:100%;table-layout:fixed;font-size:11px}
+.grid th,.grid td{padding:7px 1px;text-align:center;border-bottom:1px solid #eef0ee}
+.grid thead th{background:#E3F2FD;font-weight:700;color:#555;font-size:10.5px;line-height:1.1}
+.grid thead th span{font-weight:500;color:#999;font-size:8.5px}
+.grid col.lab{width:82px}
+.grid .rowlab{text-align:left;font-weight:600;color:#444;font-size:10.5px;line-height:1.15;background:#fafbfa;padding-left:8px}
+.grid td.num{font-variant-numeric:tabular-nums;color:#222}
+.grid td.strong{font-weight:700;font-size:12.5px;color:#111}
+.grid td.small{font-size:10.5px}
+.grid td.wk{font-weight:600;color:#333}
+.grid td.r52{color:#666;background:#fafbfa}
+.grid th.cur{color:#0277BD}
+.grid td.up{color:#2B8A3E;font-weight:600}.grid td.dn{color:#C62828;font-weight:600}
+.subrow th,.subrow td{background:#fbfcfb !important;font-size:9.5px;color:#777;padding:3px 1px}
+.subrow .rowlab{font-weight:500;color:#999}
+.legend{margin-top:14px;font-size:11.5px;color:#8a8a8a;line-height:1.5;background:#fff;border-radius:12px;padding:11px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.legend b{color:#555}
 .back{display:block;text-align:center;margin-top:18px;color:#E65100;font-size:13px;font-weight:600;text-decoration:none}
+/* Carrusel pantalla completa (bloqueado horizontal) */
+#carousel{display:none;position:fixed;inset:0;background:#fff;z-index:60}
+#carousel.open{display:block}
+.land{position:absolute;top:50%;left:50%;width:100vh;height:100vw;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center center;display:flex;flex-direction:column;background:#fff}
+@media(orientation:landscape){.land{width:100vw;height:100vh;transform:translate(-50%,-50%) rotate(0deg)}}
+.ctop{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px}
+.ctop .cw{font-size:12px;font-weight:600;color:#888}
+.cclose{border:0;background:#f0f2f0;border-radius:50%;width:32px;height:32px;font-size:15px;color:#555;cursor:pointer}
+#track{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;min-height:0;scrollbar-width:none}
+#track::-webkit-scrollbar{display:none}
+.slide{min-width:100%;scroll-snap-align:start;display:flex;flex-direction:column;padding:2px 14px 6px;min-height:0}
+.slide .stl{font-size:15px;font-weight:700;color:#333;text-align:center;margin:2px 0 4px}
+.scont{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+.scont svg{width:100%;height:100%}
+.dots{display:flex;justify-content:center;gap:7px;padding:6px 0 8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#d0d4d0;transition:.2s}
+.dot.on{background:#0277BD;width:20px;border-radius:4px}
+.nodata{padding:40px;text-align:center;color:#999}
+.dt{border-collapse:collapse;width:100%;font-size:12px}
+.dt th,.dt td{padding:5px 3px;text-align:center;border-bottom:1px solid #eee;font-variant-numeric:tabular-nums}
+.dt thead th{position:sticky;top:0;background:#E3F2FD;color:#555;font-weight:700}
+.dt tr.cur td{background:#FFF6EE;font-weight:700}
+.dt td:first-child,.dt th:first-child{font-weight:700;color:#666}
 </style></head><body><div id="wrap">
   <div id="header"><h1>Panel de Control</h1><p class="finca">Delia Francia</p>
     <p class="updated">Semana <strong>2026 · S27</strong> · datos al <strong>02/07/2026</strong></p></div>
-  <div class="gtop"><button class="gt" onclick="openM('m_cajas')"><span>📦</span>Cajas</button><button class="gt" onclick="openM('m_peso')"><span>⚖️</span>Peso</button><button class="gt" onclick="openM('m_ratio')"><span>📈</span>Ratio</button><button class="gt" onclick="openM('m_enf')"><span>🌸</span>Enfundes</button></div>
-  <div class="tablewrap"><table class="grid grid-b"><colgroup><col class="lab"><col><col><col><col><col></colgroup><thead><tr><th class="rowlab">Indicador</th><th class="yh wkh">Semana<br><span>S27 (curso)</span></th><th class="yh cur">Acum.<br><span>S1–S27</span></th><th class="yh">Año ant.<br><span>S1–S27</span></th><th class="yh">Δ %</th><th class="yh r52h">52 sem.</th></tr></thead><tbody><tr><th class="rowlab">Cajas (equiv.)</th><td class="num wk">10 915</td><td class="num strong">409 247</td><td class="num">382 849</td><td class="num small up">+6,9%</td><td class="num r52">714 013</td></tr><tr class="subrow"><th class="rowlab">↳ Cajas/ha</th><td class="num wk">51</td><td class="num strong">1 913</td><td class="num">1 790</td><td class="num small up">+6,9%</td><td class="num r52">3 338</td></tr><tr><th class="rowlab">Racimos</th><td class="num wk">8 159</td><td class="num strong">268 333</td><td class="num">258 691</td><td class="num small up">+3,7%</td><td class="num r52">496 185</td></tr><tr><th class="rowlab">Peso medio/racimo</th><td class="num wk">32,9 kg</td><td class="num strong">36,4 kg</td><td class="num">34,9 kg</td><td class="num small up">+4,3%</td><td class="num r52">34,1 kg</td></tr><tr><th class="rowlab">Ratio caja/racimo</th><td class="num wk">1,34</td><td class="num strong">1,53</td><td class="num">1,48</td><td class="num small up">+3,1%</td><td class="num r52">1,44</td></tr><tr><th class="rowlab">Merma</th><td class="num wk">13,0 %</td><td class="num strong">10,3 %</td><td class="num">9,2 %</td><td class="num small dn">+11,7%</td><td class="num r52">9,7 %</td></tr><tr><th class="rowlab">Enfundes</th><td class="num wk">0</td><td class="num strong">258 619</td><td class="num">258 307</td><td class="num small up">+0,1%</td><td class="num r52">494 062</td></tr></tbody></table></div>
-  <button class="hbtn" onclick="openM('m_tabla')">⤢ Ver tabla en horizontal</button>
-  <div class="legend"><b>Comparación :</b> semana en curso, acumulado del año vs año anterior sobre el
-   mismo período (S1–S27), y total <b>52 semanas móviles</b>. Cajas = equiv. (Conv. Grande) ·
-   Cajas/ha sobre 214 ha · Peso medio = kg/racimo · Ratio = cajas/racimo · Merma = (Racimos×88% − Cajas)/(Racimos×88%) · Enfundes.</div>
-
+  <div class="gtop">
+    <button class="gt" onclick="openC(0)"><span>📦</span>Cajas</button>
+    <button class="gt" onclick="openC(1)"><span>⚖️</span>Peso</button>
+    <button class="gt" onclick="openC(2)"><span>📈</span>Ratio</button>
+    <button class="gt" onclick="openC(3)"><span>🌸</span>Enfundes</button>
+    <button class="gt" onclick="openC(4)"><span>📋</span>Datos</button>
+  </div>
+  <div class="wnav">
+    <button id="wprev" onclick="stepW(-1)">◀</button>
+    <div class="wlab" id="wlab"></div>
+    <button id="wnext" onclick="stepW(1)">▶</button>
+  </div>
+  <div id="tbl"></div>
+  <div class="legend"><b>Comparación :</b> semana seleccionada, acumulado del año vs año anterior sobre el
+   mismo período, y total <b>52 semanas móviles</b>. Cajas = equiv. (Conv. Grande) · Cajas/ha sobre 214 ha ·
+   Peso medio = kg/racimo · Ratio = cajas/racimo · Merma = (Racimos×88% − Cajas)/(Racimos×88%) · Enfundes.
+   Usa ◀ ▶ para ver semanas anteriores; los botones abren los gráficos (desliza para cambiar).</div>
   <a class="back" href="menu.html">← Volver al menú</a>
 </div>
-<div class="modal" id="m_cajas"><div class="land"><button class="lclose" onclick="closeM('m_cajas')">✕</button><div class="ltl">Cajas equiv. por semana</div><div class="lbody"><svg viewBox="0 0 860 400" width="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><line x1="46" y1="374.0" x2="848" y2="374.0" stroke="#dde2dd"/><text x="41" y="377.0" text-anchor="end" font-size="9" fill="#aaa">7k</text><line x1="46" y1="331.0" x2="848" y2="331.0" stroke="#f1f3f1"/><line x1="46" y1="288.0" x2="848" y2="288.0" stroke="#dde2dd"/><text x="41" y="291.0" text-anchor="end" font-size="9" fill="#aaa">12k</text><line x1="46" y1="245.0" x2="848" y2="245.0" stroke="#f1f3f1"/><line x1="46" y1="202.0" x2="848" y2="202.0" stroke="#dde2dd"/><text x="41" y="205.0" text-anchor="end" font-size="9" fill="#aaa">16k</text><line x1="46" y1="159.0" x2="848" y2="159.0" stroke="#f1f3f1"/><line x1="46" y1="116.0" x2="848" y2="116.0" stroke="#dde2dd"/><text x="41" y="119.0" text-anchor="end" font-size="9" fill="#aaa">20k</text><line x1="46" y1="73.0" x2="848" y2="73.0" stroke="#f1f3f1"/><line x1="46" y1="30.0" x2="848" y2="30.0" stroke="#dde2dd"/><text x="41" y="33.0" text-anchor="end" font-size="9" fill="#aaa">25k</text><line x1="108.9" y1="30" x2="108.9" y2="374" stroke="#f6f7f6"/><line x1="250.4" y1="30" x2="250.4" y2="374" stroke="#f6f7f6"/><line x1="392.0" y1="30" x2="392.0" y2="374" stroke="#f6f7f6"/><line x1="533.5" y1="30" x2="533.5" y2="374" stroke="#f6f7f6"/><line x1="675.0" y1="30" x2="675.0" y2="374" stroke="#f6f7f6"/><line x1="816.5" y1="30" x2="816.5" y2="374" stroke="#f6f7f6"/><line x1="46.0" y1="30" x2="46.0" y2="374" stroke="#eaeeea"/><text x="46.0" y="388" text-anchor="middle" font-size="9" fill="#aaa">1</text><line x1="187.5" y1="30" x2="187.5" y2="374" stroke="#eaeeea"/><text x="187.5" y="388" text-anchor="middle" font-size="9" fill="#aaa">10</text><line x1="329.1" y1="30" x2="329.1" y2="374" stroke="#eaeeea"/><text x="329.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">19</text><line x1="470.6" y1="30" x2="470.6" y2="374" stroke="#eaeeea"/><text x="470.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">28</text><line x1="612.1" y1="30" x2="612.1" y2="374" stroke="#eaeeea"/><text x="612.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">37</text><line x1="753.6" y1="30" x2="753.6" y2="374" stroke="#eaeeea"/><text x="753.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">46</text><text x="447" y="396" text-anchor="middle" font-size="9.5" fill="#999">Semana</text><polyline points="46.0,310.3 61.7,313.9 77.5,309.8 93.2,251.6 108.9,239.9 124.6,200.8 140.4,177.2 156.1,149.1 171.8,163.7 187.5,228.4 203.3,233.2 219.0,101.3 234.7,225.9 250.4,184.8 266.2,191.6 281.9,247.3 297.6,251.7 313.3,281.6 329.1,318.7 344.8,313.6 360.5,286.8 376.2,288.6 392.0,331.8 407.7,334.9 423.4,332.4 439.1,324.3 454.9,306.0 470.6,232.6 486.3,210.1 502.0,181.6 517.8,220.3 533.5,237.7 549.2,238.3 564.9,238.1 580.7,238.3 596.4,246.0 612.1,248.8 627.8,245.1 643.6,303.6 659.3,237.9 675.0,292.2 690.7,224.2 706.5,229.5 722.2,249.5 737.9,309.7 753.6,299.6 769.4,312.2 785.1,285.3 800.8,301.6 816.5,293.8 832.3,260.0 848.0,294.2" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,273.0 61.7,258.5 77.5,213.1 93.2,170.2 108.9,226.0 124.6,207.1 140.4,209.8 156.1,189.1 171.8,107.0 187.5,179.4 203.3,188.1 219.0,232.8 234.7,215.6 250.4,149.7 266.2,177.9 281.9,231.6 297.6,256.7 313.3,274.4 329.1,273.7 344.8,309.0 360.5,245.4 376.2,267.3 392.0,310.5 407.7,332.1 423.4,325.1 439.1,329.6 454.9,257.8 470.6,280.9 486.3,306.7 502.0,329.6 517.8,298.8 533.5,265.8 549.2,320.3 564.9,345.3 580.7,305.0 596.4,265.2 612.1,248.1 627.8,265.7 643.6,250.1 659.3,282.2 675.0,278.2 690.7,278.5 706.5,256.6 722.2,306.1 737.9,284.3 753.6,258.3 769.4,259.9 785.1,237.6 800.8,228.0 816.5,275.7 832.3,256.8 848.0,245.0" fill="none" stroke="#1E88E5" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,282.2 61.7,126.2 77.5,224.6 93.2,250.3 108.9,249.4 124.6,185.8 140.4,178.1 156.1,283.5 171.8,58.7 187.5,144.0 203.3,138.5 219.0,204.0 234.7,179.0 250.4,224.9 266.2,225.5 281.9,227.6 297.6,229.7 313.3,227.6 329.1,251.4 344.8,277.8 360.5,226.3 376.2,235.3 392.0,196.1 407.7,264.6 423.4,257.1 439.1,232.5 454.9,302.6" fill="none" stroke="#E53935" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="46" y1="11" x2="62" y2="11" stroke="#2E7D32" stroke-width="3"/><text x="66" y="14" font-size="10" fill="#666">2024</text><line x1="110" y1="11" x2="126" y2="11" stroke="#1E88E5" stroke-width="3"/><text x="130" y="14" font-size="10" fill="#666">2025</text><line x1="174" y1="11" x2="190" y2="11" stroke="#E53935" stroke-width="3"/><text x="194" y="14" font-size="10" fill="#666">2026</text></svg></div></div></div><div class="modal" id="m_peso"><div class="land"><button class="lclose" onclick="closeM('m_peso')">✕</button><div class="ltl">Peso medio / racimo (kg)</div><div class="lbody"><svg viewBox="0 0 860 400" width="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><line x1="46" y1="374.0" x2="848" y2="374.0" stroke="#dde2dd"/><text x="41" y="377.0" text-anchor="end" font-size="9" fill="#aaa">26</text><line x1="46" y1="331.0" x2="848" y2="331.0" stroke="#f1f3f1"/><line x1="46" y1="288.0" x2="848" y2="288.0" stroke="#dde2dd"/><text x="41" y="291.0" text-anchor="end" font-size="9" fill="#aaa">30</text><line x1="46" y1="245.0" x2="848" y2="245.0" stroke="#f1f3f1"/><line x1="46" y1="202.0" x2="848" y2="202.0" stroke="#dde2dd"/><text x="41" y="205.0" text-anchor="end" font-size="9" fill="#aaa">33</text><line x1="46" y1="159.0" x2="848" y2="159.0" stroke="#f1f3f1"/><line x1="46" y1="116.0" x2="848" y2="116.0" stroke="#dde2dd"/><text x="41" y="119.0" text-anchor="end" font-size="9" fill="#aaa">36</text><line x1="46" y1="73.0" x2="848" y2="73.0" stroke="#f1f3f1"/><line x1="46" y1="30.0" x2="848" y2="30.0" stroke="#dde2dd"/><text x="41" y="33.0" text-anchor="end" font-size="9" fill="#aaa">40</text><line x1="108.9" y1="30" x2="108.9" y2="374" stroke="#f6f7f6"/><line x1="250.4" y1="30" x2="250.4" y2="374" stroke="#f6f7f6"/><line x1="392.0" y1="30" x2="392.0" y2="374" stroke="#f6f7f6"/><line x1="533.5" y1="30" x2="533.5" y2="374" stroke="#f6f7f6"/><line x1="675.0" y1="30" x2="675.0" y2="374" stroke="#f6f7f6"/><line x1="816.5" y1="30" x2="816.5" y2="374" stroke="#f6f7f6"/><line x1="46.0" y1="30" x2="46.0" y2="374" stroke="#eaeeea"/><text x="46.0" y="388" text-anchor="middle" font-size="9" fill="#aaa">1</text><line x1="187.5" y1="30" x2="187.5" y2="374" stroke="#eaeeea"/><text x="187.5" y="388" text-anchor="middle" font-size="9" fill="#aaa">10</text><line x1="329.1" y1="30" x2="329.1" y2="374" stroke="#eaeeea"/><text x="329.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">19</text><line x1="470.6" y1="30" x2="470.6" y2="374" stroke="#eaeeea"/><text x="470.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">28</text><line x1="612.1" y1="30" x2="612.1" y2="374" stroke="#eaeeea"/><text x="612.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">37</text><line x1="753.6" y1="30" x2="753.6" y2="374" stroke="#eaeeea"/><text x="753.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">46</text><text x="447" y="396" text-anchor="middle" font-size="9.5" fill="#999">Semana</text><polyline points="46.0,302.8 61.7,277.9 77.5,261.3 93.2,238.7 108.9,214.4 124.6,213.3 140.4,198.4 156.1,205.6 171.8,203.3 187.5,213.0 203.3,179.4 219.0,168.3 234.7,182.2 250.4,196.9 266.2,212.3 281.9,240.4 297.6,262.7 313.3,284.4 329.1,265.3 344.8,273.7 360.5,291.6 376.2,300.7 392.0,326.1 407.7,319.9 423.4,313.1 439.1,290.4 454.9,290.3 470.6,274.8 486.3,289.0 502.0,314.6 517.8,306.3 533.5,315.2 549.2,313.3 564.9,310.7 580.7,306.2 596.4,304.5 612.1,318.7 627.8,345.3 643.6,319.3 659.3,290.2 675.0,275.5 690.7,273.0 706.5,273.9 722.2,284.5 737.9,280.7 753.6,272.8 769.4,251.7 785.1,249.0 800.8,240.8 816.5,222.6 832.3,226.9 848.0,220.0" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,195.5 61.7,173.4 77.5,150.1 93.2,129.9 108.9,108.7 124.6,98.7 140.4,111.2 156.1,90.3 171.8,86.0 187.5,100.3 203.3,102.8 219.0,120.2 234.7,106.2 250.4,114.4 266.2,121.7 281.9,137.6 297.6,146.3 313.3,166.0 329.1,160.2 344.8,174.8 360.5,194.5 376.2,219.0 392.0,243.9 407.7,261.7 423.4,254.5 439.1,250.2 454.9,257.5 470.6,283.9 486.3,289.3 502.0,296.8 517.8,297.6 533.5,310.0 549.2,303.8 564.9,297.4 580.7,296.2 596.4,250.1 612.1,260.3 627.8,272.2 643.6,261.8 659.3,252.4 675.0,263.1 690.7,228.0 706.5,237.3 722.2,211.3 737.9,194.3 753.6,204.9 769.4,198.0 785.1,196.0 800.8,179.5 816.5,182.9 832.3,144.7 848.0,133.3" fill="none" stroke="#1E88E5" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,115.5 61.7,80.9 77.5,109.6 93.2,100.9 108.9,94.8 124.6,87.8 140.4,102.5 156.1,68.2 171.8,58.9 187.5,85.2 203.3,106.8 219.0,92.8 234.7,88.9 250.4,91.7 266.2,68.9 281.9,58.7 297.6,77.0 313.3,107.0 329.1,128.4 344.8,123.4 360.5,138.4 376.2,149.2 392.0,179.6 407.7,189.6 423.4,183.5 439.1,201.1 454.9,203.3" fill="none" stroke="#E53935" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="46" y1="11" x2="62" y2="11" stroke="#2E7D32" stroke-width="3"/><text x="66" y="14" font-size="10" fill="#666">2024</text><line x1="110" y1="11" x2="126" y2="11" stroke="#1E88E5" stroke-width="3"/><text x="130" y="14" font-size="10" fill="#666">2025</text><line x1="174" y1="11" x2="190" y2="11" stroke="#E53935" stroke-width="3"/><text x="194" y="14" font-size="10" fill="#666">2026</text></svg></div></div></div><div class="modal" id="m_ratio"><div class="land"><button class="lclose" onclick="closeM('m_ratio')">✕</button><div class="ltl">Ratio cajas / racimo</div><div class="lbody"><svg viewBox="0 0 860 400" width="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><line x1="46" y1="374.0" x2="848" y2="374.0" stroke="#dde2dd"/><text x="41" y="377.0" text-anchor="end" font-size="9" fill="#aaa">1,1</text><line x1="46" y1="331.0" x2="848" y2="331.0" stroke="#f1f3f1"/><line x1="46" y1="288.0" x2="848" y2="288.0" stroke="#dde2dd"/><text x="41" y="291.0" text-anchor="end" font-size="9" fill="#aaa">1,3</text><line x1="46" y1="245.0" x2="848" y2="245.0" stroke="#f1f3f1"/><line x1="46" y1="202.0" x2="848" y2="202.0" stroke="#dde2dd"/><text x="41" y="205.0" text-anchor="end" font-size="9" fill="#aaa">1,4</text><line x1="46" y1="159.0" x2="848" y2="159.0" stroke="#f1f3f1"/><line x1="46" y1="116.0" x2="848" y2="116.0" stroke="#dde2dd"/><text x="41" y="119.0" text-anchor="end" font-size="9" fill="#aaa">1,5</text><line x1="46" y1="73.0" x2="848" y2="73.0" stroke="#f1f3f1"/><line x1="46" y1="30.0" x2="848" y2="30.0" stroke="#dde2dd"/><text x="41" y="33.0" text-anchor="end" font-size="9" fill="#aaa">1,7</text><line x1="108.9" y1="30" x2="108.9" y2="374" stroke="#f6f7f6"/><line x1="250.4" y1="30" x2="250.4" y2="374" stroke="#f6f7f6"/><line x1="392.0" y1="30" x2="392.0" y2="374" stroke="#f6f7f6"/><line x1="533.5" y1="30" x2="533.5" y2="374" stroke="#f6f7f6"/><line x1="675.0" y1="30" x2="675.0" y2="374" stroke="#f6f7f6"/><line x1="816.5" y1="30" x2="816.5" y2="374" stroke="#f6f7f6"/><line x1="46.0" y1="30" x2="46.0" y2="374" stroke="#eaeeea"/><text x="46.0" y="388" text-anchor="middle" font-size="9" fill="#aaa">1</text><line x1="187.5" y1="30" x2="187.5" y2="374" stroke="#eaeeea"/><text x="187.5" y="388" text-anchor="middle" font-size="9" fill="#aaa">10</text><line x1="329.1" y1="30" x2="329.1" y2="374" stroke="#eaeeea"/><text x="329.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">19</text><line x1="470.6" y1="30" x2="470.6" y2="374" stroke="#eaeeea"/><text x="470.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">28</text><line x1="612.1" y1="30" x2="612.1" y2="374" stroke="#eaeeea"/><text x="612.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">37</text><line x1="753.6" y1="30" x2="753.6" y2="374" stroke="#eaeeea"/><text x="753.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">46</text><text x="447" y="396" text-anchor="middle" font-size="9.5" fill="#999">Semana</text><polyline points="46.0,315.5 61.7,302.5 77.5,272.9 93.2,258.5 108.9,263.7 124.6,271.0 140.4,281.4 156.1,274.2 171.8,263.0 187.5,248.9 203.3,248.0 219.0,209.5 234.7,239.3 250.4,246.1 266.2,285.3 281.9,280.8 297.6,291.7 313.3,304.8 329.1,292.7 344.8,289.8 360.5,301.5 376.2,335.7 392.0,333.0 407.7,332.2 423.4,324.7 439.1,304.6 454.9,345.3 470.6,287.7 486.3,289.2 502.0,330.7 517.8,338.4 533.5,321.7 549.2,319.5 564.9,320.6 580.7,327.0 596.4,329.3 612.1,335.0 627.8,344.1 643.6,332.2 659.3,286.6 675.0,274.9 690.7,289.6 706.5,284.9 722.2,281.3 737.9,284.1 753.6,296.4 769.4,267.2 785.1,260.4 800.8,253.4 816.5,222.6 832.3,226.6 848.0,209.4" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,162.0 61.7,175.1 77.5,174.1 93.2,148.0 108.9,125.7 124.6,91.1 140.4,112.2 156.1,98.0 171.8,89.3 187.5,74.2 203.3,128.4 219.0,113.9 234.7,95.0 250.4,105.1 266.2,110.4 281.9,130.6 297.6,147.7 313.3,184.1 329.1,175.6 344.8,198.6 360.5,225.8 376.2,234.1 392.0,268.3 407.7,270.0 423.4,226.5 439.1,214.8 454.9,235.1 470.6,274.4 486.3,296.9 502.0,290.5 517.8,306.6 533.5,320.4 549.2,325.6 564.9,327.5 580.7,287.4 596.4,257.2 612.1,282.3 627.8,285.2 643.6,261.4 659.3,312.6 675.0,260.6 690.7,230.4 706.5,237.2 722.2,203.9 737.9,193.2 753.6,203.9 769.4,188.3 785.1,187.6 800.8,177.7 816.5,164.3 832.3,134.8 848.0,88.0" fill="none" stroke="#1E88E5" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,96.7 61.7,85.0 77.5,96.4 93.2,84.0 108.9,95.7 124.6,77.8 140.4,93.5 156.1,77.9 171.8,97.5 187.5,138.3 203.3,122.4 219.0,115.5 234.7,100.8 250.4,81.2 266.2,62.5 281.9,58.7 297.6,97.0 313.3,135.1 329.1,164.8 344.8,163.8 360.5,143.0 376.2,142.9 392.0,190.9 407.7,202.7 423.4,198.0 439.1,225.0 454.9,244.0" fill="none" stroke="#E53935" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="46" y1="11" x2="62" y2="11" stroke="#2E7D32" stroke-width="3"/><text x="66" y="14" font-size="10" fill="#666">2024</text><line x1="110" y1="11" x2="126" y2="11" stroke="#1E88E5" stroke-width="3"/><text x="130" y="14" font-size="10" fill="#666">2025</text><line x1="174" y1="11" x2="190" y2="11" stroke="#E53935" stroke-width="3"/><text x="194" y="14" font-size="10" fill="#666">2026</text></svg></div></div></div><div class="modal" id="m_enf"><div class="land"><button class="lclose" onclick="closeM('m_enf')">✕</button><div class="ltl">Enfundes por semana</div><div class="lbody"><svg viewBox="0 0 860 400" width="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><line x1="46" y1="374.0" x2="848" y2="374.0" stroke="#dde2dd"/><text x="41" y="377.0" text-anchor="end" font-size="9" fill="#aaa">7k</text><line x1="46" y1="331.0" x2="848" y2="331.0" stroke="#f1f3f1"/><line x1="46" y1="288.0" x2="848" y2="288.0" stroke="#dde2dd"/><text x="41" y="291.0" text-anchor="end" font-size="9" fill="#aaa">9k</text><line x1="46" y1="245.0" x2="848" y2="245.0" stroke="#f1f3f1"/><line x1="46" y1="202.0" x2="848" y2="202.0" stroke="#dde2dd"/><text x="41" y="205.0" text-anchor="end" font-size="9" fill="#aaa">11k</text><line x1="46" y1="159.0" x2="848" y2="159.0" stroke="#f1f3f1"/><line x1="46" y1="116.0" x2="848" y2="116.0" stroke="#dde2dd"/><text x="41" y="119.0" text-anchor="end" font-size="9" fill="#aaa">13k</text><line x1="46" y1="73.0" x2="848" y2="73.0" stroke="#f1f3f1"/><line x1="46" y1="30.0" x2="848" y2="30.0" stroke="#dde2dd"/><text x="41" y="33.0" text-anchor="end" font-size="9" fill="#aaa">15k</text><line x1="108.9" y1="30" x2="108.9" y2="374" stroke="#f6f7f6"/><line x1="250.4" y1="30" x2="250.4" y2="374" stroke="#f6f7f6"/><line x1="392.0" y1="30" x2="392.0" y2="374" stroke="#f6f7f6"/><line x1="533.5" y1="30" x2="533.5" y2="374" stroke="#f6f7f6"/><line x1="675.0" y1="30" x2="675.0" y2="374" stroke="#f6f7f6"/><line x1="816.5" y1="30" x2="816.5" y2="374" stroke="#f6f7f6"/><line x1="46.0" y1="30" x2="46.0" y2="374" stroke="#eaeeea"/><text x="46.0" y="388" text-anchor="middle" font-size="9" fill="#aaa">1</text><line x1="187.5" y1="30" x2="187.5" y2="374" stroke="#eaeeea"/><text x="187.5" y="388" text-anchor="middle" font-size="9" fill="#aaa">10</text><line x1="329.1" y1="30" x2="329.1" y2="374" stroke="#eaeeea"/><text x="329.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">19</text><line x1="470.6" y1="30" x2="470.6" y2="374" stroke="#eaeeea"/><text x="470.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">28</text><line x1="612.1" y1="30" x2="612.1" y2="374" stroke="#eaeeea"/><text x="612.1" y="388" text-anchor="middle" font-size="9" fill="#aaa">37</text><line x1="753.6" y1="30" x2="753.6" y2="374" stroke="#eaeeea"/><text x="753.6" y="388" text-anchor="middle" font-size="9" fill="#aaa">46</text><text x="447" y="396" text-anchor="middle" font-size="9.5" fill="#999">Semana</text><polyline points="46.0,127.6 61.7,165.7 77.5,111.9 93.2,123.3 108.9,165.9 124.6,188.8 140.4,193.7 156.1,246.7 171.8,204.7 187.5,267.3 203.3,245.0 219.0,213.2 234.7,240.6 250.4,227.8 266.2,205.3 281.9,212.3 297.6,185.4 313.3,153.4 329.1,58.7 344.8,114.0 360.5,127.2 376.2,97.5 392.0,152.6 407.7,140.3 423.4,173.4 439.1,129.2 454.9,179.0 470.6,186.0 486.3,219.2 502.0,206.0 517.8,199.7 533.5,242.3 549.2,253.5 564.9,276.9 580.7,302.9 596.4,311.8 612.1,328.2 627.8,311.1 643.6,345.3 659.3,317.0 675.0,296.7 690.7,305.5 706.5,273.2 722.2,288.1 737.9,296.2 753.6,287.7 769.4,243.2 785.1,217.8 800.8,178.7 816.5,224.9 832.3,202.0 848.0,87.1" fill="none" stroke="#2E7D32" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,210.2 61.7,247.9 77.5,197.0 93.2,191.8 108.9,206.3 124.6,234.3 140.4,283.9 156.1,243.9 171.8,245.6 187.5,235.9 203.3,264.7 219.0,278.0 234.7,206.0 250.4,246.9 266.2,247.7 281.9,279.6 297.6,257.8 313.3,273.2 329.1,230.9 344.8,232.3 360.5,245.8 376.2,252.9 392.0,261.4 407.7,285.4 423.4,255.9 439.1,276.3 454.9,229.9 470.6,240.0 486.3,285.1 502.0,264.4 517.8,287.7 533.5,302.3 549.2,279.6 564.9,300.5 580.7,281.6 596.4,238.5 612.1,267.8 627.8,255.9 643.6,246.3 659.3,254.4 675.0,275.7 690.7,224.0 706.5,265.3 722.2,243.0 737.9,237.1 753.6,248.9 769.4,215.3 785.1,237.5 800.8,192.5 816.5,253.5 832.3,204.0 848.0,190.5" fill="none" stroke="#1E88E5" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><polyline points="46.0,214.4 61.7,236.4 77.5,274.9 93.2,228.5 108.9,280.0 124.6,267.7 140.4,243.8 156.1,207.9 171.8,230.8 187.5,204.5 203.3,221.8 219.0,178.9 234.7,184.8 250.4,215.1 266.2,182.9 281.9,228.2 297.6,231.8 313.3,262.3 329.1,255.5 344.8,248.3 360.5,263.6 376.2,229.0 392.0,223.0 407.7,238.2 423.4,213.5 439.1,184.9" fill="none" stroke="#E53935" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><line x1="46" y1="11" x2="62" y2="11" stroke="#2E7D32" stroke-width="3"/><text x="66" y="14" font-size="10" fill="#666">2024</text><line x1="110" y1="11" x2="126" y2="11" stroke="#1E88E5" stroke-width="3"/><text x="130" y="14" font-size="10" fill="#666">2025</text><line x1="174" y1="11" x2="190" y2="11" stroke="#E53935" stroke-width="3"/><text x="194" y="14" font-size="10" fill="#666">2026</text></svg></div></div></div><div class="modal" id="m_tabla"><div class="land"><button class="lclose" onclick="closeM('m_tabla')">✕</button><div class="ltl">Comparación · S27</div><div class="lbody"><div class="tablewrap"><table class="grid grid-b"><colgroup><col class="lab"><col><col><col><col><col></colgroup><thead><tr><th class="rowlab">Indicador</th><th class="yh wkh">Semana<br><span>S27 (curso)</span></th><th class="yh cur">Acum.<br><span>S1–S27</span></th><th class="yh">Año ant.<br><span>S1–S27</span></th><th class="yh">Δ %</th><th class="yh r52h">52 sem.</th></tr></thead><tbody><tr><th class="rowlab">Cajas (equiv.)</th><td class="num wk">10 915</td><td class="num strong">409 247</td><td class="num">382 849</td><td class="num small up">+6,9%</td><td class="num r52">714 013</td></tr><tr class="subrow"><th class="rowlab">↳ Cajas/ha</th><td class="num wk">51</td><td class="num strong">1 913</td><td class="num">1 790</td><td class="num small up">+6,9%</td><td class="num r52">3 338</td></tr><tr><th class="rowlab">Racimos</th><td class="num wk">8 159</td><td class="num strong">268 333</td><td class="num">258 691</td><td class="num small up">+3,7%</td><td class="num r52">496 185</td></tr><tr><th class="rowlab">Peso medio/racimo</th><td class="num wk">32,9 kg</td><td class="num strong">36,4 kg</td><td class="num">34,9 kg</td><td class="num small up">+4,3%</td><td class="num r52">34,1 kg</td></tr><tr><th class="rowlab">Ratio caja/racimo</th><td class="num wk">1,34</td><td class="num strong">1,53</td><td class="num">1,48</td><td class="num small up">+3,1%</td><td class="num r52">1,44</td></tr><tr><th class="rowlab">Merma</th><td class="num wk">13,0 %</td><td class="num strong">10,3 %</td><td class="num">9,2 %</td><td class="num small dn">+11,7%</td><td class="num r52">9,7 %</td></tr><tr><th class="rowlab">Enfundes</th><td class="num wk">0</td><td class="num strong">258 619</td><td class="num">258 307</td><td class="num small up">+0,1%</td><td class="num r52">494 062</td></tr></tbody></table></div></div></div></div>
+
+<div id="carousel">
+  <div class="land">
+    <div class="ctop"><span class="cw" id="cw"></span><button class="cclose" onclick="closeC()">✕</button></div>
+    <div id="track"></div>
+    <div class="dots" id="dots"></div>
+  </div>
+</div>
+
 <script>
-function openM(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
-function closeM(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+const D = {"finca":"Delia Francia","accent":"#0277BD","ha":213.92,"year":2026,"week":27,"years":[2024,2025,2026],"wk":{"2024":{"52":{"ce":11335,"ck":213378,"rn":8141,"rk":262521,"en":13239},"51":{"ce":13051,"ck":245689,"rn":9559,"rk":305715,"en":10571},"50":{"ce":11357,"ck":213783,"rn":8280,"rk":266170,"en":10039},"49":{"ce":10965,"ck":206393,"rn":8288,"rk":260623,"en":11112},"48":{"ce":11780,"ck":221739,"rn":8979,"rk":279528,"en":10205},"47":{"ce":10435,"ck":196460,"rn":8020,"rk":248827,"en":9615},"46":{"ce":11067,"ck":208337,"rn":8818,"rk":266432,"en":8580},"45":{"ce":10559,"ck":198777,"rn":8285,"rk":247796,"en":8384},"44":{"ce":13574,"ck":255518,"rn":10614,"rk":315891,"en":8572},"43":{"ce":14577,"ck":274417,"rn":11449,"rk":345408,"en":8917},"42":{"ce":14841,"ck":279374,"rn":11725,"rk":354154,"en":8167},"41":{"ce":11436,"ck":215292,"rn":8872,"rk":267134,"en":8372},"40":{"ce":14156,"ck":266457,"rn":11141,"rk":329125,"en":7900},"39":{"ce":10866,"ck":204544,"rn":9065,"rk":257651,"en":7242},"38":{"ce":13794,"ck":259700,"rn":11691,"rk":320541,"en":8038},"37":{"ce":13610,"ck":256214,"rn":11397,"rk":324194,"en":7639},"36":{"ce":13753,"ck":258938,"rn":11430,"rk":331379,"en":8021},"35":{"ce":14137,"ck":266137,"rn":11715,"rk":338876,"en":8227},"34":{"ce":14147,"ck":266317,"rn":11625,"rk":334248,"en":8831},"33":{"ce":14136,"ck":266108,"rn":11600,"rk":332348,"en":9376},"32":{"ce":14166,"ck":266677,"rn":11658,"rk":333186,"en":9636},"31":{"ce":15040,"ck":283133,"rn":12652,"rk":365939,"en":10625},"30":{"ce":16975,"ck":319528,"rn":14134,"rk":404281,"en":10477},"29":{"ce":15550,"ck":292712,"rn":12279,"rk":363329,"en":10172},"28":{"ce":14421,"ck":271428,"rn":11366,"rk":342534,"en":10943},"27":{"ce":10747,"ck":202295,"rn":9124,"rk":269521,"en":11105},"26":{"ce":9830,"ck":185048,"rn":7914,"rk":233737,"en":12261},"25":{"ce":9426,"ck":177448,"rn":7787,"rk":223187,"en":11236},"24":{"ce":9297,"ck":175005,"rn":7757,"rk":220279,"en":12005},"23":{"ce":9456,"ck":178010,"rn":7898,"rk":222406,"en":11718},"22":{"ce":11619,"ck":218706,"rn":9738,"rk":283756,"en":12997},"21":{"ce":11707,"ck":220359,"rn":9388,"rk":276825,"en":12309},"20":{"ce":10365,"ck":195121,"rn":8190,"rk":247147,"en":12616},"19":{"ce":10112,"ck":190344,"rn":8019,"rk":244579,"en":13900},"18":{"ce":11968,"ck":225295,"rn":9637,"rk":286858,"en":11699},"17":{"ce":13465,"ck":253494,"rn":10665,"rk":326373,"en":10957},"16":{"ce":13687,"ck":257629,"rn":10696,"rk":336499,"en":10331},"15":{"ce":16476,"ck":310141,"rn":12946,"rk":421311,"en":10495},"14":{"ce":16816,"ck":316535,"rn":12601,"rk":417566,"en":9971},"13":{"ce":14759,"ck":277872,"rn":10971,"rk":369759,"en":9674},"12":{"ce":20996,"ck":395243,"rn":15081,"rk":516344,"en":10312},"11":{"ce":14393,"ck":270945,"rn":10810,"rk":365512,"en":9573},"10":{"ce":14632,"ck":275427,"rn":11001,"rk":357727,"en":9055},"9":{"ce":17874,"ck":336480,"rn":13668,"rk":449528,"en":10509},"8":{"ce":18602,"ck":350160,"rn":14418,"rk":472959,"en":9532},"7":{"ce":17196,"ck":323640,"rn":13448,"rk":444853,"en":10763},"6":{"ce":16014,"ck":301463,"rn":12365,"rk":401926,"en":10878},"5":{"ce":14056,"ck":264600,"rn":10757,"rk":349198,"en":11409},"4":{"ce":13470,"ck":253554,"rn":10244,"rk":322946,"en":12399},"3":{"ce":10553,"ck":198668,"rn":8167,"rk":250352,"en":12664},"2":{"ce":10351,"ck":194854,"rn":8311,"rk":249454,"en":11413},"1":{"ce":10530,"ck":198197,"rn":8596,"rk":249766,"en":12298}},"2025":{"52":{"ce":13802,"ck":259813,"rn":8714,"rk":310108,"en":10837},"51":{"ce":13210,"ck":248650,"rn":8748,"rk":307493,"en":10525},"50":{"ce":12263,"ck":230845,"rn":8379,"rk":282184,"en":9374},"49":{"ce":14652,"ck":275813,"rn":10158,"rk":343440,"en":10792},"48":{"ce":14171,"ck":266795,"rn":9932,"rk":329457,"en":9746},"47":{"ce":13052,"ck":245683,"rn":9155,"rk":302995,"en":10263},"46":{"ce":13137,"ck":247308,"rn":9376,"rk":307817,"en":9482},"45":{"ce":11833,"ck":222771,"rn":8345,"rk":277372,"en":9756},"44":{"ce":10739,"ck":202168,"rn":7665,"rk":249749,"en":9619},"43":{"ce":13220,"ck":248892,"rn":9803,"rk":309594,"en":9100},"42":{"ce":12124,"ck":228243,"rn":8920,"rk":284901,"en":10061},"41":{"ce":12137,"ck":228504,"rn":9254,"rk":283037,"en":8859},"40":{"ce":11937,"ck":224742,"rn":9708,"rk":300955,"en":9353},"39":{"ce":13546,"ck":254967,"rn":10338,"rk":316733,"en":9542},"38":{"ce":12763,"ck":240259,"rn":10028,"rk":303215,"en":9320},"37":{"ce":13644,"ck":256811,"rn":10681,"rk":327851,"en":9042},"36":{"ce":12791,"ck":240765,"rn":9713,"rk":301939,"en":9723},"35":{"ce":10796,"ck":203216,"rn":8506,"rk":249319,"en":8722},"34":{"ce":8776,"ck":165214,"rn":7277,"rk":212962,"en":8283},"33":{"ce":10028,"ck":188772,"rn":8294,"rk":240673,"en":8768},"32":{"ce":12760,"ck":240161,"rn":10483,"rk":301684,"en":8242},"31":{"ce":11106,"ck":209042,"rn":8964,"rk":262261,"en":8581},"30":{"ce":9564,"ck":180020,"rn":7564,"rk":221531,"en":9122},"29":{"ce":10710,"ck":201603,"rn":8539,"rk":252553,"en":8642},"28":{"ce":12005,"ck":226003,"rn":9308,"rk":277238,"en":9689},"27":{"ce":13159,"ck":247716,"rn":9734,"rk":299841,"en":9922},"26":{"ce":9565,"ck":180046,"rn":6912,"rk":214858,"en":8846},"25":{"ce":9790,"ck":184270,"rn":7170,"rk":221689,"en":9320},"24":{"ce":9439,"ck":177646,"rn":7279,"rk":223022,"en":8635},"23":{"ce":10521,"ck":198074,"rn":8097,"rk":253642,"en":9192},"22":{"ce":12683,"ck":238748,"rn":9371,"rk":302569,"en":9389},"21":{"ce":13781,"ck":259372,"rn":10085,"rk":335108,"en":9553},"20":{"ce":10597,"ck":199430,"rn":7519,"rk":255569,"en":9868},"19":{"ce":12365,"ck":232742,"rn":8553,"rk":295535,"en":9900},"18":{"ce":12326,"ck":231986,"rn":8606,"rk":295419,"en":8918},"17":{"ce":13215,"ck":248724,"rn":8871,"rk":311245,"en":9274},"16":{"ce":14470,"ck":272359,"rn":9540,"rk":337939,"en":8768},"15":{"ce":17163,"ck":323070,"rn":11083,"rk":399374,"en":9509},"14":{"ce":18572,"ck":349575,"rn":11928,"rk":433180,"en":9529},"13":{"ce":15271,"ck":287448,"rn":9709,"rk":355663,"en":10478},"12":{"ce":14410,"ck":271267,"rn":9339,"rk":337088,"en":8807},"11":{"ce":16649,"ck":313394,"rn":10952,"rk":402635,"en":9115},"10":{"ce":17085,"ck":321619,"rn":10640,"rk":392208,"en":9784},"9":{"ce":20710,"ck":389855,"rn":13092,"rk":489793,"en":9558},"8":{"ce":16600,"ck":312484,"rn":10586,"rk":394296,"en":9598},"7":{"ce":15562,"ck":292956,"rn":10068,"rk":366869,"en":8669},"6":{"ce":15697,"ck":295477,"rn":9941,"rk":367046,"en":9821},"5":{"ce":14753,"ck":277668,"rn":9678,"rk":353596,"en":10472},"4":{"ce":17545,"ck":330271,"rn":11781,"rk":420824,"en":10808},"3":{"ce":15398,"ck":289840,"rn":10633,"rk":371542,"en":10688},"2":{"ce":13125,"ck":247081,"rn":9074,"rk":308900,"en":9506},"1":{"ce":12398,"ck":233391,"rn":8450,"rk":280465,"en":10380}},"2026":{"27":{"ce":10915,"ck":205453,"rn":8159,"rk":268366},"26":{"ce":14425,"ck":271526,"rn":10547,"rk":347804,"en":10968},"25":{"ce":13196,"ck":248382,"rn":9356,"rk":314862,"en":10303},"24":{"ce":12817,"ck":241296,"rn":9136,"rk":305302,"en":9730},"23":{"ce":16251,"ck":305950,"rn":11432,"rk":386469,"en":10084},"22":{"ce":14288,"ck":269019,"rn":9542,"rk":333728,"en":9944},"21":{"ce":14737,"ck":277407,"rn":9843,"rk":348367,"en":9141},"20":{"ce":12158,"ck":228888,"rn":8303,"rk":298649,"en":9496},"19":{"ce":13478,"ck":253695,"rn":9214,"rk":329640,"en":9328},"18":{"ce":14672,"ck":276182,"rn":9719,"rk":355724,"en":9170},"17":{"ce":14566,"ck":274170,"rn":9279,"rk":350362,"en":9879},"16":{"ce":14672,"ck":276183,"rn":9000,"rk":346178,"en":9962},"15":{"ce":14777,"ck":278112,"rn":9098,"rk":346356,"en":11015},"14":{"ce":14809,"ck":278722,"rn":9287,"rk":345381,"en":10267},"13":{"ce":17104,"ck":321945,"rn":10938,"rk":407972,"en":10970},"12":{"ce":15852,"ck":298402,"rn":10290,"rk":382245,"en":11107},"11":{"ce":19132,"ck":360128,"rn":12507,"rk":457869,"en":10111},"10":{"ce":18857,"ck":354957,"rn":12533,"rk":469253,"en":10514},"9":{"ce":23132,"ck":435456,"rn":14743,"rk":566927,"en":9903},"8":{"ce":11871,"ck":223459,"rn":7420,"rk":282666,"en":10433},"7":{"ce":17151,"ck":322815,"rn":10888,"rk":400407,"en":9600},"6":{"ce":16765,"ck":315559,"rn":10478,"rk":391247,"en":9046},"5":{"ce":13580,"ck":255592,"rn":8640,"rk":320298,"en":8760},"4":{"ce":13535,"ck":254744,"rn":8511,"rk":313512,"en":9955},"3":{"ce":14822,"ck":278976,"rn":9437,"rk":344471,"en":8879},"2":{"ce":19748,"ck":371710,"rn":12431,"rk":467496,"en":9772},"1":{"ce":11937,"ck":224702,"rn":7602,"rk":275758,"en":10282}}}};
+const CY = D.year, MAXW = D.week, HA = D.ha, YEARS = D.years;   // YEARS asc [N-2,N-1,N]
+const YCOL = {}; YCOL[CY]='#E53935'; YCOL[CY-1]='#1E88E5'; YCOL[CY-2]='#2E7D32';
+let selW = MAXW;
+let minW = 1; { let ws=Object.keys(D.wk[CY]||{}).map(Number).filter(n=>n>=1); if(ws.length) minW=Math.min(...ws); }
+
+// ---- helpers formato ----
+const nf = n => (n==null||isNaN(n))?'—':Math.round(n).toLocaleString('es-ES').replace(/,/g,' ').replace(/\u00A0/g,' ');
+const fKg = v => v==null?'—':(v.toFixed(1).replace('.',',')+' kg');
+const fR  = v => v==null?'—':v.toFixed(2).replace('.',',');
+const fP  = v => v==null?'—':((v*100).toFixed(1).replace('.',',')+' %');
+const fKc = v => v>=1000?(Math.round(v/1000)+'k'):(''+Math.round(v));
+
+// ---- datos por semana ----
+function raw(y,w){ const o=(D.wk[y]||{})[w]; return o||null; }
+function pv(y,w,m){ const v=raw(y,w); if(!v) return null;
+  if(m==='cajas') return (v.ce!=null)?v.ce:null;
+  if(m==='enfundes') return (v.en!=null)?v.en:null;
+  if(m==='poids') return v.rn?v.rk/v.rn:null;
+  if(m==='ratio') return v.rn?v.ce/v.rn:null;
+  return null; }
+function deriv(ce,ck,rn,rk,en){ const rx=rk*0.88;
+  return {caisses:ce, cajasha:ce/HA, racimos:rn, poids:rn?rk/rn:null, ratio:rn?ce/rn:null, merma:rx?(rx-ck)/rx:null, enfundes:en}; }
+function agg(y,a,b){ let ce=0,ck=0,rn=0,rk=0,en=0; for(let w=a;w<=b;w++){ const v=raw(y,w); if(v){ce+=v.ce||0;ck+=v.ck||0;rn+=v.rn||0;rk+=v.rk||0;en+=v.en||0;} } return deriv(ce,ck,rn,rk,en); }
+function agg52(ey,ew){ let ce=0,ck=0,rn=0,rk=0,en=0,y=ey,w=ew; for(let i=0;i<52;i++){ const v=raw(y,w); if(v){ce+=v.ce||0;ck+=v.ck||0;rn+=v.rn||0;rk+=v.rk||0;en+=v.en||0;} w--; if(w<1){w=52;y--;} } return deriv(ce,ck,rn,rk,en); }
+
+function dpct(a,b,inv){ if(!b) return '<td class="num small">—</td>';
+  const p=(a-b)/b*100, good=inv?(p<0):(p>=0), s=p>=0?'+':'';
+  return '<td class="num small '+(good?'up':'dn')+'">'+s+p.toFixed(1).replace('.',',')+'%</td>'; }
+
+// ---- tabla ----
+const ROWS=[['Cajas (equiv.)','caisses',nf,false,''],
+  ['↳ Cajas/ha','cajasha',nf,false,'subrow'],
+  ['Racimos','racimos',nf,false,''],
+  ['Peso medio/racimo','poids',fKg,false,''],
+  ['Ratio caja/racimo','ratio',fR,false,''],
+  ['Merma','merma',fP,true,''],
+  ['Enfundes','enfundes',nf,false,'']];
+function renderTable(){
+  const W=selW, wk=agg(CY,W,W), ac=agg(CY,1,W), pr=agg(CY-1,1,W), r5=agg52(CY,W);
+  let b='';
+  for(const [lab,k,ff,inv,cls] of ROWS){
+    b+='<tr'+(cls?' class="'+cls+'"':'')+'><th class="rowlab">'+lab+'</th>'
+      +'<td class="num wk">'+ff(wk[k])+'</td><td class="num strong">'+ff(ac[k])+'</td>'
+      +'<td class="num">'+ff(pr[k])+'</td>'+dpct(ac[k]||0,pr[k]||0,inv)
+      +'<td class="num r52">'+ff(r5[k])+'</td></tr>';
+  }
+  const head='<tr><th class="rowlab">Indicador</th>'
+    +'<th class="cur">Semana<br><span>S'+W+'</span></th>'
+    +'<th class="cur">Acum.<br><span>S1–S'+W+'</span></th>'
+    +'<th>Año ant.<br><span>S1–S'+W+'</span></th><th>Δ %</th><th>52 sem.</th></tr>';
+  document.getElementById('tbl').innerHTML='<div class="tablewrap"><table class="grid grid-b">'
+    +'<colgroup><col class="lab"><col><col><col><col><col></colgroup><thead>'+head+'</thead><tbody>'+b+'</tbody></table></div>';
+  document.getElementById('wlab').innerHTML='Semana S'+W+'<small>'+(W===MAXW?'(en curso)':'(anterior)')+'</small>';
+  document.getElementById('wprev').disabled=(W<=minW);
+  document.getElementById('wnext').disabled=(W>=MAXW);
+}
+function stepW(d){ const n=selW+d; if(n<minW||n>MAXW) return; selW=n; renderTable(); }
+
+// ---- gráfico SVG ----
+function chart(metric,fy){
+  const W=880,H=440,pl=54,pr=16,pt=32,pb=44,pw=W-pl-pr,ph=H-pt-pb;
+  let vals=[]; YEARS.forEach(y=>{ for(let w=1;w<=52;w++){ const v=pv(y,w,metric); if(v!=null) vals.push(v); } });
+  if(!vals.length) return '<div class="nodata">Sin datos</div>';
+  let lo=Math.min(...vals), hi=Math.max(...vals), sp=hi-lo;
+  if(sp<=0){ lo=lo*0.95; hi=hi*1.05||1; } else { lo-=sp*0.08; hi+=sp*0.08; }
+  const X=w=>pl+(w-1)/51*pw, Y=v=>pt+(1-(v-lo)/(hi-lo))*ph;
+  let g='';
+  const NY=6;
+  for(let i=0;i<NY;i++){ const gy=Y(lo+(hi-lo)*(i+0.5)/NY); g+='<line x1="'+pl+'" y1="'+gy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gy.toFixed(1)+'" stroke="#f0f2f0"/>'; }
+  for(let i=0;i<=NY;i++){ const gv=lo+(hi-lo)*i/NY, gy=Y(gv);
+    g+='<line x1="'+pl+'" y1="'+gy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gy.toFixed(1)+'" stroke="#dfe3df"/>';
+    g+='<text x="'+(pl-6)+'" y="'+(gy+4).toFixed(1)+'" text-anchor="end" font-size="12" fill="#888">'+fy(gv)+'</text>'; }
+  for(let w=1;w<=52;w+=2){ const xx=X(w); g+='<line x1="'+xx.toFixed(1)+'" y1="'+pt+'" x2="'+xx.toFixed(1)+'" y2="'+(H-pb)+'" stroke="#f4f6f4"/>'; }
+  for(let w=1;w<=52;w+=4){ const xx=X(w); g+='<line x1="'+xx.toFixed(1)+'" y1="'+pt+'" x2="'+xx.toFixed(1)+'" y2="'+(H-pb)+'" stroke="#e6eae6"/>';
+    g+='<text x="'+xx.toFixed(1)+'" y="'+(H-pb+17)+'" text-anchor="middle" font-size="12" fill="#888">'+w+'</text>'; }
+  g+='<text x="'+(pl+pw/2).toFixed(0)+'" y="'+(H-6)+'" text-anchor="middle" font-size="12" fill="#999">Semana</text>';
+  const mx=X(selW);
+  g+='<line x1="'+mx.toFixed(1)+'" y1="'+pt+'" x2="'+mx.toFixed(1)+'" y2="'+(H-pb)+'" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  g+='<text x="'+mx.toFixed(1)+'" y="'+(pt-7)+'" text-anchor="middle" font-size="12" fill="#E65100" font-weight="700">S'+selW+'</text>';
+  let pol='';
+  YEARS.forEach(y=>{ let pts=[]; for(let w=1;w<=52;w++){ const v=pv(y,w,metric); if(v!=null) pts.push(X(w).toFixed(1)+','+Y(v).toFixed(1)); }
+    if(pts.length>1) pol+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+YCOL[y]+'" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'; });
+  let lg='',lx=pl; YEARS.forEach(y=>{ lg+='<line x1="'+lx+'" y1="15" x2="'+(lx+18)+'" y2="15" stroke="'+YCOL[y]+'" stroke-width="3"/><text x="'+(lx+22)+'" y="19" font-size="13" fill="#555">'+y+'</text>'; lx+=76; });
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+g+pol+lg+'</svg>';
+}
+function dataTable(){
+  let h='<div class="scont"><table class="dt"><thead><tr><th>Sem</th><th>Cajas</th><th>Racimos</th><th>Peso</th><th>Ratio</th><th>Merma</th><th>Enf.</th></tr></thead><tbody>';
+  for(let w=1;w<=MAXW;w++){ const a=agg(CY,w,w); if(!a.caisses && !a.enfundes) continue;
+    h+='<tr'+(w===selW?' class="cur"':'')+'><td>'+w+'</td><td>'+nf(a.caisses)+'</td><td>'+nf(a.racimos)+'</td><td>'+(a.poids?a.poids.toFixed(1).replace('.',','):'—')+'</td><td>'+fR(a.ratio)+'</td><td>'+fP(a.merma)+'</td><td>'+nf(a.enfundes)+'</td></tr>'; }
+  h+='</tbody></table></div>'; return h;
+}
+const SLIDES=[
+  {t:'Cajas equiv. por semana', f:()=>chart('cajas',fKc)},
+  {t:'Peso medio / racimo (kg)', f:()=>chart('poids',v=>Math.round(v))},
+  {t:'Ratio cajas / racimo', f:()=>chart('ratio',v=>v.toFixed(1).replace('.',','))},
+  {t:'Enfundes por semana', f:()=>chart('enfundes',fKc)},
+  {t:'Datos por semana (año en curso)', f:dataTable},
+];
+function openC(idx){
+  const tr=document.getElementById('track'); tr.innerHTML='';
+  SLIDES.forEach(s=>{ const d=document.createElement('div'); d.className='slide';
+    d.innerHTML='<div class="stl">'+s.t+'</div>'+ (s.f===dataTable? s.f() : '<div class="scont">'+s.f()+'</div>'); tr.appendChild(d); });
+  const dz=document.getElementById('dots'); dz.innerHTML=SLIDES.map((_,i)=>'<div class="dot'+(i===idx?' on':'')+'"></div>').join('');
+  document.getElementById('cw').textContent='Semana S'+selW+(selW===MAXW?' (en curso)':'');
+  document.getElementById('carousel').classList.add('open'); document.body.style.overflow='hidden';
+  requestAnimationFrame(()=>{ tr.scrollLeft=idx*tr.clientWidth; });
+}
+function closeC(){ document.getElementById('carousel').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('track').addEventListener('scroll',function(){
+  const tr=this, i=Math.round(tr.scrollLeft/tr.clientWidth);
+  document.querySelectorAll('#dots .dot').forEach((d,j)=>d.classList.toggle('on',j===i));
+},{passive:true});
+
+renderTable();
 </script></body></html>
