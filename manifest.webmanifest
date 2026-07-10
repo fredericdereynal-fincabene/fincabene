@@ -2,7 +2,7 @@
   "name": "Fincabene",
   "short_name": "Fincabene",
   "description": "Delia Francia · La Fiera · Ecuador",
-  "start_url": "menu.html",
+  "start_url": "menu-fb.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
