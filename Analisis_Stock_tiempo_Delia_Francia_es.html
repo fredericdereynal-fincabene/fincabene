@@ -212,9 +212,83 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden;
   #stock-table th, #stock-table td { padding:8px 5px; }
   .table-head .th-title { font-size:13px; }
 }
+
+/* ===== 3 vues (Tabla / Negativos / Mapa) + swipe ===== */
+#negwrap {
+  position:absolute; inset:0; background:#fff; overflow-y:auto;
+  -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  display:none; z-index:700; --bannerH:78px;
+}
+#tablewrap, #negwrap { animation:fadeView .18s ease; }
+@keyframes fadeView { from{opacity:.35} to{opacity:1} }
+.view-btn { border-radius:0; }
+.view-btn:first-child { border-radius:6px 0 0 6px; }
+.view-btn:last-child  { border-radius:0 6px 6px 0; }
+.view-btn:not(:first-child) { border-left-width:1px; }
+
+/* Pied de page (cumul) toujours visible au scroll */
+#stock-table tr.total-row td {
+  position:sticky; bottom:0; z-index:4; background:#eef0f2;
+  box-shadow:0 -2px 5px rgba(0,0,0,0.10);
+}
+#stock-table tr.total-row td.lote-col { left:0; bottom:0; z-index:6; background:#eef0f2; }
+#tablewrap .table-scroll, #negwrap .table-scroll { padding-bottom:64px; }
+#stock-table td.neg { color:#C0392B; font-weight:700; }
+
+/* Points de pagination (indique la page + swipe) */
+#pagedots {
+  position:fixed; top:8px; left:50%; transform:translateX(-50%);
+  display:flex; gap:7px; z-index:1200; align-items:center;
+  background:rgba(255,255,255,0.85); padding:5px 10px; border-radius:20px;
+  box-shadow:0 1px 6px rgba(0,0,0,0.16); backdrop-filter:blur(3px);
+}
+#pagedots .pagedot {
+  width:8px; height:8px; border-radius:50%; background:#c7c7c7; cursor:pointer;
+  transition:background .2s, width .2s; border:none; padding:0;
+}
+#pagedots .pagedot.active { width:20px; border-radius:4px; background:#333; }
+#pagedots .pd-lab { font-size:10px; font-weight:800; color:#555; margin-left:3px;
+  text-transform:uppercase; letter-spacing:.5px; min-width:64px; text-align:left; }
+
+/* ===== Page Negativos ===== */
+.neg-summary { display:flex; gap:8px; flex-wrap:wrap; padding:10px 12px 4px; }
+.neg-chip { flex:1; min-width:92px; background:#f8f9fa; border-radius:7px; padding:8px 10px;
+  border-left:3px solid #bbb; }
+.neg-chip .l { font-size:9.5px; font-weight:700; text-transform:uppercase; color:#888; letter-spacing:.4px; }
+.neg-chip .v { font-size:17px; font-weight:800; font-variant-numeric:tabular-nums; margin-top:1px; }
+.neg-chip.pos { border-left-color:#2e7d32; }
+.neg-chip.adj { border-left-color:#C0392B; } .neg-chip.adj .v { color:#C0392B; }
+.neg-chip.net { border-left-color:#1565c0; } .neg-chip.net .v { color:#1565c0; }
+
+#neg-table { border-collapse:separate; border-spacing:0; width:100%; font-size:13px; }
+#neg-table th, #neg-table td { border-bottom:1px solid #ececec; padding:8px 8px; text-align:right;
+  font-variant-numeric:tabular-nums; }
+#neg-table thead th { position:sticky; top:var(--bannerH); z-index:3; background:#f4f4f4; font-size:10px;
+  text-transform:uppercase; letter-spacing:.3px; color:#555; box-shadow:0 2px 3px rgba(0,0,0,.08); }
+#neg-table th:first-child, #neg-table td:first-child { text-align:left; }
+#neg-table td.lot { font-weight:700; }
+#neg-table td.ec { color:#C0392B; font-weight:800; }
+#neg-table tr.neg-group td { background:#fff; padding:11px 8px 5px; border-bottom:1px solid #e6e6e6;
+  font-weight:800; font-size:12.5px; text-align:left; }
+#neg-table tr.neg-group .chip { display:inline-block; width:12px; height:12px; border-radius:2px;
+  border:1px solid #999; margin-right:6px; vertical-align:-1px; }
+#neg-table tr.neg-group .adj { color:#C0392B; }
+#neg-table tr.neg-group .rec { color:#888; font-weight:600; }
+#neg-table tbody tr.lotrow:nth-child(even) td { background:#fafafa; }
+#neg-table tbody tr.lotrow:hover td { background:#fff7ec; }
+#neg-table tr.neg-total td { position:sticky; bottom:0; z-index:5; background:#eef0f2; font-weight:800;
+  border-top:2px solid #bbb; box-shadow:0 -2px 5px rgba(0,0,0,.10); }
+.neg-empty { padding:48px 24px; text-align:center; color:#7a7a7a; font-size:15px; line-height:1.6; }
+
 </style>
 </head>
 <body>
+<div id="pagedots">
+  <button class="pagedot active" data-view="table" title="Tabla"></button>
+  <button class="pagedot" data-view="neg" title="Negativos"></button>
+  <button class="pagedot" data-view="map" title="Mapa"></button>
+  <span class="pd-lab">Tabla</span>
+</div>
 <div id="app">
   <div id="mapwrap">
     <canvas id="canvas"></canvas>
@@ -236,8 +310,9 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden;
         <div id="weekval">—</div>
       </div>
       <div id="view-toggle" class="view-toggle">
-        <button class="view-btn active" data-view="map">🗺️ Mapa</button>
-        <button class="view-btn" data-view="table">📋 Tabla</button>
+        <button class="view-btn active" data-view="table">📋 Tabla</button>
+        <button class="view-btn" data-view="neg">⚠️ Neg.</button>
+        <button class="view-btn" data-view="map">🗺️ Mapa</button>
       </div>
     </div>
 
@@ -245,17 +320,18 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden;
 
     <div id="legend">
       <h4>Cintas</h4>
-      <div class="row"><span class="dot" style="background:#009900"></span>Verde</div>
-      <div class="row"><span class="dot" style="background:#FFFF00"></span>Amar</div>
-      <div class="row"><span class="dot" style="background:#6C2826"></span>Cafe</div>
-      <div class="row"><span class="dot" style="background:#FF0000"></span>Roja</div>
-      <div class="row"><span class="dot" style="background:#7030A0"></span>Lila</div>
-      <div class="row"><span class="dot" style="background:#1F1F1F"></span>Negra</div>
-      <div class="row"><span class="dot" style="background:#0202C6"></span>Azul</div>
       <div class="row"><span class="dot" style="background:#F2F2F2"></span>Blanca</div>
+      <div class="row"><span class="dot" style="background:#0202C6"></span>Azul</div>
+      <div class="row"><span class="dot" style="background:#1F1F1F"></span>Negra</div>
+      <div class="row"><span class="dot" style="background:#7030A0"></span>Lila</div>
+      <div class="row"><span class="dot" style="background:#FF0000"></span>Roja</div>
+      <div class="row"><span class="dot" style="background:#6C2826"></span>Cafe</div>
+      <div class="row"><span class="dot" style="background:#FFFF00"></span>Amar</div>
+      <div class="row"><span class="dot" style="background:#009900"></span>Verde</div>
     </div>
 
     <div id="tablewrap"></div>
+    <div id="negwrap"></div>
   </div>
 
   <div id="backdrop"></div>
@@ -722,49 +798,47 @@ function updatePanel() {
   const totalsT1 = weekData.totals_par_couleur_T1 || {};
   const ajustes = weekData.ajustes_negativos || {};
   
-  // Cohortes Fiera = totaux globaux par couleur T1 (= Temps 1 de l'algo)
-  // Une ligne par couleur T1, ordonnees du +jeune (age_min petit) au +vieux
-  // Si une couleur a des negatifs, on ajoute 2 sous-lignes : ajustement et net
-  const cohortes_fiera = couleursT1
-    .map(col => ({
-      color: col,
-      age_min: totalsT1[col].age_min,
-      saldo_total: totalsT1[col].saldo,
-      pct: totalsT1[col].pct,
-      neg_total: totalsT1[col].neg_total || 0,
-      net: totalsT1[col].net,
-    }))
-    .sort((a, b) => a.age_min - b.age_min);
+  // ==== Barre laterale recalculee NET & COMPLETE depuis all_cohortes ====
+  // Coherent avec la Tabla et la page Negativos : inclut TOUTES les cohortes
+  // (+9 a +14), pas seulement les couleurs de recolte T1, et compense les ajustes.
+  const _byc = {};
+  Object.keys(stockSem).forEach(ln => (stockSem[ln].all_cohortes || []).forEach(c => {
+    const k = c.color;
+    if (!_byc[k]) _byc[k] = { color: k, age_min: c.age, pos: 0, net: 0, neg_lots: [] };
+    const raw = (c.saldo_raw != null ? c.saldo_raw : c.saldo);
+    _byc[k].pos += Math.max(0, raw);
+    _byc[k].net += raw;
+    if (raw < 0) _byc[k].neg_lots.push([ln, raw]);
+  }));
+  const cohortesAll = Object.values(_byc).sort((a, b) => a.age_min - b.age_min);
+  const _colReadable = col => ({ 'Amar': '#B8860B', 'Blanca': '#666666', 'Gris': '#444444' }[col] || (CINTA_COLORS[col] || '#888'));
 
-  document.getElementById('cohortes-fiera').innerHTML = cohortes_fiera.map(c => {
-    const colorReadable = {
-      'Amar':   '#B8860B',
-      'Blanca': '#666666',
-      'Gris':   '#444444',
-    }[c.color] || (CINTA_COLORS[c.color] || '#888');
-    // Ligne principale : on affiche le NET (= chiffre Excel reel) en couleur de la cohorte
-    let html = `<div class="cohorte-row" style="color:${colorReadable}">
+  document.getElementById('cohortes-fiera').innerHTML = cohortesAll.map(c => {
+    const negTot = c.neg_lots.reduce((s, x) => s + x[1], 0);
+    let html = `<div class="cohorte-row" style="color:${_colReadable(c.color)}">
       <span class="label">+${c.age_min} sem · ${c.color}</span>
       <span class="pct">${c.net.toLocaleString('es-ES')}</span>
     </div>`;
-    // Sous-ligne : explication du calcul si ajustement negatif
-    if (c.neg_total < 0) {
-      html += `<div class="cohorte-calc">${c.saldo_total.toLocaleString('es-ES')} + (${c.neg_total.toLocaleString('es-ES')})</div>`;
+    if (negTot < 0) {
+      html += `<div class="cohorte-calc">${c.pos.toLocaleString('es-ES')} + (${negTot.toLocaleString('es-ES')})</div>`;
     }
     return html;
   }).join('');
-  
-  // Total régimes = somme des nets T1 (= chiffre Excel exact, avec compensation des ajustes)
+
+  // Total regimes = somme des NETS de TOUTES les cohortes (stock net reel complet)
   let totalRegimes = 0;
-  for (const col of couleursT1) {
-    totalRegimes += totalsT1[col].net || 0;
-  }
+  cohortesAll.forEach(c => { totalRegimes += c.net; });
   document.getElementById('total-regimes').textContent = totalRegimes.toLocaleString('es-ES');
-  
-  // Section Lotes con ajustes : liste les couleurs ayant des négatifs (T1 ou pas)
-  const ajustesArr = Object.keys(ajustes)
-    .map(col => ({ color: col, ...ajustes[col] }))
-    .sort((a, b) => a.age_min - b.age_min);
+
+  // Section Lotes con ajustes : TOUTES les couleurs ayant des negatifs (complet)
+  const ajustesArr = cohortesAll
+    .filter(c => c.neg_lots.length > 0)
+    .map(c => ({
+      color: c.color,
+      age_min: c.age_min,
+      neg_total: c.neg_lots.reduce((s, x) => s + x[1], 0),
+      neg_lots: c.neg_lots.slice().sort((a, b) => a[1] - b[1]),
+    }));
   
   const ajustesSection = document.getElementById('ajustes-section');
   const ajustesContainer = document.getElementById('lotes-ajustes');
@@ -910,7 +984,7 @@ backdrop.addEventListener('click', () => {
 });
 
 // ===== Bascule Mapa / Tabla =====
-let currentView = 'map';
+let currentView = 'table';
 
 function styleToggle() {
   document.querySelectorAll('.view-btn').forEach(b => {
@@ -951,8 +1025,9 @@ function buildTable() {
     <div class="th-row">
       <div class="th-info"><div class="th-title">${brand}</div><div class="th-week">Semana ${fmtSem(t.annee, t.semaine)}</div></div>
       <div class="view-toggle">
-        <button class="view-btn" data-view="map">🗺️ Mapa</button>
         <button class="view-btn active" data-view="table">📋 Tabla</button>
+        <button class="view-btn" data-view="neg">⚠️ Neg.</button>
+        <button class="view-btn" data-view="map">🗺️ Mapa</button>
       </div>
     </div>
     <div class="table-caption">Colores a recolectar (resaltados) + 1 cohorte vecina a cada lado · régimes en stock</div>
@@ -972,9 +1047,11 @@ function buildTable() {
     let rowTot = 0, cells = '';
     cols.forEach(a => {
       const c = coh.find(x => x.age === a);
-      const saldo = c ? c.saldo : 0;
+      // Chiffre NET (+ et - additionnes) : saldo_raw peut etre negatif (ajustes de saisie)
+      const saldo = c ? (c.saldo_raw != null ? c.saldo_raw : c.saldo) : 0;
       colTotals[a] += saldo; rowTot += saldo;
-      cells += `<td class="${saldo === 0 ? 'zero' : ''} ${isHarvest(a) ? 'c-harvest' : ''}">${saldo > 0 ? saldo.toLocaleString('es-ES') : '·'}</td>`;
+      const neg = saldo < 0 ? ' neg' : '';
+      cells += `<td class="${saldo === 0 ? 'zero' : ''}${neg} ${isHarvest(a) ? 'c-harvest' : ''}">${saldo !== 0 ? saldo.toLocaleString('es-ES') : '·'}</td>`;
     });
     grand += rowTot;
     h += `<tr><td class="lote-col">${displayLotName(ln)}</td>${cells}<td class="total-col">${rowTot.toLocaleString('es-ES')}</td></tr>`;
@@ -990,27 +1067,138 @@ function buildTable() {
   if (head) tw.style.setProperty('--bannerH', head.offsetHeight + 'px');
 }
 
+// ===== Page Negativos : regimes recoltes > enfundes, par couleur/lot =====
+function buildNeg() {
+  const t = TIMELINE[currentWeekIdx];
+  if (!t) return;
+  const semKey = `${t.annee}_${t.semaine}`;
+  const wk = STOCK[semKey] || {};
+  const lots = wk.lots || {};
+  const brand = (document.querySelector('#topbar h1') || {}).textContent || 'Stock';
+
+  const byc = {};
+  Object.keys(lots).forEach(ln => (lots[ln].all_cohortes || []).forEach(c => {
+    const k = c.color;
+    if (!byc[k]) byc[k] = { age: c.age, pos: 0, net: 0, neg: [] };
+    const raw = (c.saldo_raw != null ? c.saldo_raw : c.saldo);
+    byc[k].pos += Math.max(0, raw);
+    byc[k].net += raw;
+    if (raw < 0) byc[k].neg.push({ lot: ln, ec: raw, enf: c.enf, cos: (c.enf - raw) });
+  }));
+  const colors = Object.keys(byc).filter(k => byc[k].neg.length > 0).sort((a, b) => byc[a].age - byc[b].age);
+
+  let sumPos = 0, sumNet = 0, sumAdj = 0, nLots = 0;
+  colors.forEach(k => { sumPos += byc[k].pos; sumNet += byc[k].net; byc[k].neg.forEach(x => { sumAdj += x.ec; nLots++; }); });
+
+  let h = `<div class="table-head">
+    <div class="th-row">
+      <div class="th-info"><div class="th-title">${brand}</div><div class="th-week">Ajustes · Semana ${fmtSem(t.annee, t.semaine)}</div></div>
+      <div class="view-toggle">
+        <button class="view-btn" data-view="table">📋 Tabla</button>
+        <button class="view-btn active" data-view="neg">⚠️ Neg.</button>
+        <button class="view-btn" data-view="map">🗺️ Mapa</button>
+      </div>
+    </div>
+    <div class="table-caption">Régimes récoltés &gt; enfundés (saisies à corriger) · écart = enfundes − récoltés</div>
+  </div>`;
+
+  const tw = document.getElementById('negwrap');
+
+  if (colors.length === 0) {
+    h += `<div class="neg-empty">✅ Aucun ajustement cette semaine.<br>Toutes les cohortes ont un solde net égal au solde positif.</div>`;
+    tw.innerHTML = h;
+    const head0 = tw.querySelector('.table-head');
+    if (head0) tw.style.setProperty('--bannerH', head0.offsetHeight + 'px');
+    return;
+  }
+
+  h += `<div class="neg-summary">
+    <div class="neg-chip pos"><div class="l">Dibujado (+)</div><div class="v">${sumPos.toLocaleString('es-ES')}</div></div>
+    <div class="neg-chip adj"><div class="l">Ajuste (−)</div><div class="v">${sumAdj.toLocaleString('es-ES')}</div></div>
+    <div class="neg-chip net"><div class="l">Net réel</div><div class="v">${sumNet.toLocaleString('es-ES')}</div></div>
+  </div>`;
+
+  h += '<div class="table-scroll"><table id="neg-table"><thead><tr><th>Lote</th><th>Enfundes</th><th>Récoltés</th><th>Écart</th></tr></thead><tbody>';
+  colors.forEach(k => {
+    const e = byc[k];
+    const bg = CINTA_COLORS[k] || '#888';
+    const adj = e.neg.reduce((s, x) => s + x.ec, 0);
+    h += `<tr class="neg-group"><td colspan="4"><span class="chip" style="background:${bg}"></span>+${e.age} · ${k}&nbsp;&nbsp;<span class="adj">ajuste ${adj.toLocaleString('es-ES')}</span>&nbsp;&nbsp;<span class="rec">(${e.pos.toLocaleString('es-ES')} → ${e.net.toLocaleString('es-ES')})</span></td></tr>`;
+    e.neg.sort((a, b) => a.ec - b.ec).forEach(x => {
+      h += `<tr class="lotrow"><td class="lot">${displayLotName(x.lot)}</td><td>${x.enf.toLocaleString('es-ES')}</td><td>${x.cos.toLocaleString('es-ES')}</td><td class="ec">${x.ec.toLocaleString('es-ES')}</td></tr>`;
+    });
+  });
+  h += `</tbody><tfoot><tr class="neg-total"><td>TOTAL · ${nLots} lotes</td><td></td><td></td><td class="ec">${sumAdj.toLocaleString('es-ES')}</td></tr></tfoot></table></div>`;
+
+  tw.innerHTML = h;
+  const head = tw.querySelector('.table-head');
+  if (head) tw.style.setProperty('--bannerH', head.offsetHeight + 'px');
+}
+
+function updateDots(mode) {
+  document.querySelectorAll('#pagedots .pagedot').forEach(d => d.classList.toggle('active', d.dataset.view === mode));
+  const lab = { table: 'Tabla', neg: 'Negativos', map: 'Mapa' }[mode] || '';
+  const el = document.querySelector('#pagedots .pd-lab'); if (el) el.textContent = lab;
+}
+
 function setView(mode) {
   currentView = mode;
-  const mapMode = (mode === 'map');
-  document.getElementById('tablewrap').style.display = mapMode ? 'none' : 'block';
-  const zb = document.getElementById('zoom-buttons'); if (zb) zb.style.display = mapMode ? '' : 'none';
-  const lg = document.getElementById('legend'); if (lg) lg.style.display = mapMode ? '' : 'none';
-  const ib = document.getElementById('info-btn-mobile'); if (ib) ib.style.display = mapMode ? '' : 'none';
-  if (mapMode) resizeCanvas(); else buildTable();
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+  const isMap = (mode === 'map');
+  document.getElementById('tablewrap').style.display = (mode === 'table') ? 'block' : 'none';
+  const nw = document.getElementById('negwrap'); if (nw) nw.style.display = (mode === 'neg') ? 'block' : 'none';
+  const zb = document.getElementById('zoom-buttons'); if (zb) zb.style.display = isMap ? '' : 'none';
+  const lg = document.getElementById('legend'); if (lg) lg.style.display = isMap ? '' : 'none';
+  const ib = document.getElementById('info-btn-mobile'); if (ib) ib.style.display = isMap ? '' : 'none';
+  if (isMap) resizeCanvas();
+  else if (mode === 'neg') buildNeg();
+  else buildTable();
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+  updateDots(mode);
   styleToggle();
 }
 
 document.body.addEventListener('click', e => {
-  const b = e.target.closest('.view-btn');
+  const b = e.target.closest('[data-view]');
   if (b && b.dataset.view) setView(b.dataset.view);
 });
 
-window.addEventListener('resize', () => { if (currentView === 'map') resizeCanvas(); else buildTable(); });
+window.addEventListener('resize', () => {
+  if (currentView === 'map') resizeCanvas();
+  else if (currentView === 'neg') buildNeg();
+  else buildTable();
+});
 resizeCanvas();
 updatePanel();
-setView('map');
+
+// ===== Navigation par swipe entre les 3 vues : Tabla <-> Negativos <-> Mapa =====
+(function () {
+  const ORDER = ['table', 'neg', 'map'];
+  let sw = null;
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { sw = null; return; }
+    const t = e.touches[0];
+    sw = { x: t.clientX, y: t.clientY, t: Date.now() };
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (!sw) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sw.x, dy = t.clientY - sw.y, W = window.innerWidth || 400;
+    const ok = Math.abs(dx) > 55 && Math.abs(dx) > 1.7 * Math.abs(dy) && (Date.now() - sw.t) < 800;
+    if (ok) {
+      // Sur la carte : seul un swipe depuis le bord change de page (le centre = pan)
+      if (currentView === 'map') {
+        const edge = sw.x < 0.12 * W || sw.x > 0.88 * W;
+        if (!edge) { sw = null; return; }
+      }
+      const i = ORDER.indexOf(currentView);
+      if (dx < 0 && i < ORDER.length - 1) setView(ORDER[i + 1]);
+      else if (dx > 0 && i > 0) setView(ORDER[i - 1]);
+    }
+    sw = null;
+  }, { passive: true });
+})();
+
+setView('table');
 </script>
 </body>
 </html>
