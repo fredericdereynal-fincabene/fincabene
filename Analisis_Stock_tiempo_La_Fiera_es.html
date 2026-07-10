@@ -235,21 +235,6 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden;
 #tablewrap .table-scroll, #negwrap .table-scroll { padding-bottom:64px; }
 #stock-table td.neg { color:#C0392B; font-weight:700; }
 
-/* Points de pagination (indique la page + swipe) */
-#pagedots {
-  position:fixed; top:8px; left:50%; transform:translateX(-50%);
-  display:flex; gap:7px; z-index:1200; align-items:center;
-  background:rgba(255,255,255,0.85); padding:5px 10px; border-radius:20px;
-  box-shadow:0 1px 6px rgba(0,0,0,0.16); backdrop-filter:blur(3px);
-}
-#pagedots .pagedot {
-  width:8px; height:8px; border-radius:50%; background:#c7c7c7; cursor:pointer;
-  transition:background .2s, width .2s; border:none; padding:0;
-}
-#pagedots .pagedot.active { width:20px; border-radius:4px; background:#333; }
-#pagedots .pd-lab { font-size:10px; font-weight:800; color:#555; margin-left:3px;
-  text-transform:uppercase; letter-spacing:.5px; min-width:64px; text-align:left; }
-
 /* ===== Page Negativos ===== */
 .neg-summary { display:flex; gap:8px; flex-wrap:wrap; padding:10px 12px 4px; }
 .neg-chip { flex:1; min-width:92px; background:#f8f9fa; border-radius:7px; padding:8px 10px;
@@ -283,12 +268,6 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden;
 </style>
 </head>
 <body>
-<div id="pagedots">
-  <button class="pagedot active" data-view="table" title="Tabla"></button>
-  <button class="pagedot" data-view="neg" title="Negativos"></button>
-  <button class="pagedot" data-view="map" title="Mapa"></button>
-  <span class="pd-lab">Tabla</span>
-</div>
 <div id="app">
   <div id="mapwrap">
     <canvas id="canvas"></canvas>
@@ -1055,9 +1034,9 @@ function buildTable() {
     grand += rowTot;
     h += `<tr><td class="lote-col">${displayLotName(ln)}</td>${cells}<td class="total-col">${rowTot.toLocaleString('es-ES')}</td></tr>`;
   });
-  h += '<tr class="total-row"><td class="lote-col">Total</td>';
+  h += '</tbody><tfoot><tr class="total-row"><td class="lote-col">Total</td>';
   cols.forEach(a => { h += `<td class="${isHarvest(a) ? 'c-harvest' : ''}">${colTotals[a].toLocaleString('es-ES')}</td>`; });
-  h += `<td class="total-col">${grand.toLocaleString('es-ES')}</td></tr></tbody></table></div>`;
+  h += `<td class="total-col">${grand.toLocaleString('es-ES')}</td></tr></tfoot></table></div>`;
 
   const tw = document.getElementById('tablewrap');
   tw.innerHTML = h;
@@ -1134,12 +1113,6 @@ function buildNeg() {
   if (head) tw.style.setProperty('--bannerH', head.offsetHeight + 'px');
 }
 
-function updateDots(mode) {
-  document.querySelectorAll('#pagedots .pagedot').forEach(d => d.classList.toggle('active', d.dataset.view === mode));
-  const lab = { table: 'Tabla', neg: 'Negativos', map: 'Mapa' }[mode] || '';
-  const el = document.querySelector('#pagedots .pd-lab'); if (el) el.textContent = lab;
-}
-
 function setView(mode) {
   currentView = mode;
   const isMap = (mode === 'map');
@@ -1152,7 +1125,6 @@ function setView(mode) {
   else if (mode === 'neg') buildNeg();
   else buildTable();
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
-  updateDots(mode);
   styleToggle();
 }
 
@@ -1189,9 +1161,10 @@ updatePanel();
         const edge = sw.x < 0.12 * W || sw.x > 0.88 * W;
         if (!edge) { sw = null; return; }
       }
-      const i = ORDER.indexOf(currentView);
-      if (dx < 0 && i < ORDER.length - 1) setView(ORDER[i + 1]);
-      else if (dx > 0 && i > 0) setView(ORDER[i - 1]);
+      const n = ORDER.length, i = ORDER.indexOf(currentView);
+      // Boucle dans les deux sens : Tabla <-> Negativos <-> Mapa <-> Tabla ...
+      if (dx < 0) setView(ORDER[(i + 1) % n]);
+      else setView(ORDER[(i - 1 + n) % n]);
     }
     sw = null;
   }, { passive: true });
