@@ -186,11 +186,12 @@ function chart(metric,fy){
   const mx=X(selW);
   g+='<line x1="'+mx.toFixed(1)+'" y1="'+pt+'" x2="'+mx.toFixed(1)+'" y2="'+(H-pb)+'" stroke="#E65100" stroke-width="1.5" stroke-dasharray="4 3"/>';
   g+='<text x="'+mx.toFixed(1)+'" y="'+(pt-7)+'" text-anchor="middle" font-size="12" fill="#E65100" font-weight="700">S'+selW+'</text>';
+  let mkv=''; { var _v=pv(CY,selW,metric); if(_v!=null){ var _yy=Y(_v), _lf=selW>40, _ff=(metric==='poids')?f1:(metric==='ratio')?fR:nf; mkv+='<circle cx="'+mx.toFixed(1)+'" cy="'+_yy.toFixed(1)+'" r="4.4" fill="'+YCOL[CY]+'" stroke="#fff" stroke-width="1.6"/>'; mkv+='<text x="'+((_lf?mx-9:mx+9)).toFixed(1)+'" y="'+(_yy-7).toFixed(1)+'" text-anchor="'+(_lf?'end':'start')+'" font-size="14" font-weight="800" fill="'+YCOL[CY]+'" stroke="#fff" stroke-width="3.4" style="paint-order:stroke">'+_ff(_v)+'</text>'; } }
   let pol='';
   YEARS.forEach(y=>{ let pts=[]; for(let w=1;w<=52;w++){ const v=pv(y,w,metric); if(v!=null) pts.push(X(w).toFixed(1)+','+Y(v).toFixed(1)); }
     if(pts.length>1) pol+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+YCOL[y]+'" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'; });
   let lg='',lx=pl; YEARS.forEach(y=>{ lg+='<line x1="'+lx+'" y1="15" x2="'+(lx+18)+'" y2="15" stroke="'+YCOL[y]+'" stroke-width="3"/><text x="'+(lx+22)+'" y="19" font-size="13" fill="#555">'+y+'</text>'; lx+=76; });
-  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+g+pol+lg+'</svg>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+g+pol+mkv+lg+'</svg>';
 }
 // ---- páginas de tabla (una por indicador) ----
 const f1=v=>v==null?'—':v.toFixed(1).replace('.',',');
