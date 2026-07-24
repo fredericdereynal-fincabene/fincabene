@@ -141,10 +141,14 @@ const RD = {"cats": ["Pobre", "Alterado", "Mutante", "Sobregrado", "Pesonudo", "
 const short=l=>String(l).split("-").pop();
 function heat(v,mx){if(!v||!mx)return "";const a=(0.06+0.50*(v/mx)).toFixed(3);return "background:rgba(214,40,40,"+a+")";}
 function fmt(v){return v?String(v).replace(/\B(?=(\d{3})+(?!\d))/g," "):"·";}
-let scope='sem',curW=RD.weeks[RD.weeks.length-1],curD='all',rgA=RD.weeks[0],rgB=RD.weeks[RD.weeks.length-1],selYear='all';
+let scope='sem',curD='all';
 function ywYear(w){return w>=100?Math.floor(w/100):0;}
 function semYears(){return [...new Set(RD.weeks.map(ywYear).filter(y=>y>=1000))].sort((a,b)=>b-a);}
+// por defecto : AÑO EN CURSO (el más reciente) y su ÚLTIMA semana
+let selYear=(function(){const ys=semYears();return ys.length?ys[0]:'all';})();
 function weeksFor(){return selYear==='all'?RD.weeks:RD.weeks.filter(w=>ywYear(w)===selYear);}
+let _wf0=weeksFor(); if(!_wf0.length)_wf0=RD.weeks;
+let curW=_wf0[_wf0.length-1],rgA=_wf0[0],rgB=_wf0[_wf0.length-1];
 function filterRows(){
   let base;
   if(scope==='anio')base=RD.rows;
