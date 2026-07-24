@@ -224,7 +224,8 @@ renderYearFilt();renderScope();renderCtx();renderTable();
 // en SEMANA_JS, que se concatena ANTES en la página « Semana ».
 function wlab(w){w=+w; if(w>=100){return (w%100)+'.'+Math.floor(w/100);} return String(w);}
 // ── Comparación multi-año (curvas superpuestas) ───────────────────────────
-let SELYEARS=null, CMP_PCT=false;      // años seleccionados · modo % s/cosecha
+let SELYEARS=null, CMP_PCT=false, CMP_YTD=false;   // años sel · % s/cos · recortar a semana actual
+                                                    // (por defecto se muestra el AÑO COMPLETO S1..S52)
 function yearColor(rank){return ['#D62828','#1971C2','#2F9E44','#E8590C','#7048E8','#0CA678','#868E96'][Math.min(rank,6)];}
 function niceMax(v){if(v<=5)return 5;const p=Math.pow(10,Math.floor(Math.log10(v)));const m=v/p;const nm=m<=1?1:m<=2?2:m<=5?5:10;return nm*p;}
 function lineMulti(weeksNum,seriesByYear,years,isPct){
@@ -266,17 +267,24 @@ function initCmp(GR){
   const pb=document.createElement('button');pb.className='pill';pb.textContent='% s/cos';
   pb.onclick=()=>{CMP_PCT=!CMP_PCT;pb.className='pill'+(CMP_PCT?' on':'');};
   host.appendChild(pb);
+  const fb=document.createElement('button');fb.className='pill';fb.textContent='Hasta hoy';
+  fb.onclick=()=>{CMP_YTD=!CMP_YTD;fb.className='pill'+(CMP_YTD?' on':'');};
+  host.appendChild(fb);
 }
 function openCmp(GR){
   const tr=document.getElementById('track');tr.innerHTML='';
   const years=(GR.years||[]).filter(y=>!SELYEARS||SELYEARS.has(y)).sort((a,b)=>b-a);  // desc: n, n-1, n-2...
-  const wk=GR.weeksNum||[];
+  const wkFull=GR.weeksNum||[], cut=(GR.curMaxWk||Infinity);
+  // por defecto se muestra el AÑO COMPLETO ; « Hasta hoy » recorta a la última
+  // semana alcanzada por el año en curso (N-1 y N-2 siguen visibles todo el año).
+  const idx=wkFull.map((w,i)=>i).filter(i=>!CMP_YTD||wkFull[i]<=cut);
+  const wk=idx.map(i=>wkFull[i]);
   const mkSlide=(cause)=>{const seriesByYear={};
     years.forEach(y=>{const raw=cause?((GR.cmpByCause[cause]||{})[y]):(GR.cmpTotal[y]);
-      const base=raw||wk.map(()=>null);
-      seriesByYear[y]=base.map((v,i)=>{if(v==null)return null;
-        if(CMP_PCT){const c=(GR.cosNum[y]||{})[wk[i]];return c?(v/c*100):null;}return v;});});
-    const ttl='Comparar años · '+(cause||'Total')+(CMP_PCT?' (% s/cos)':' (nº)');
+      const base=raw||wkFull.map(()=>null);
+      seriesByYear[y]=idx.map(i=>{const v=base[i];if(v==null)return null;
+        if(CMP_PCT){const c=(GR.cosNum[y]||{})[wkFull[i]];return c?(v/c*100):null;}return v;});});
+    const ttl='Comparar años · '+(cause||'Total')+(CMP_PCT?' (% s/cos)':' (nº)')+(CMP_YTD?' · hasta S'+cut:'');
     return {t:ttl,html:'<div class="scont">'+lineMulti(wk,seriesByYear,years,CMP_PCT)+'</div>'};};
   carItems=years.length?[mkSlide(null),...(GR.causes||[]).map(c=>mkSlide(c))]
                         :[{t:'—',html:'<div class="nodata">Selecciona al menos un año</div>'}];
