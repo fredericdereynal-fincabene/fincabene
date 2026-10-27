@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drenaje Delia Francia</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7f5;color:#1a1a1a}
+#wrap{max-width:480px;margin:0 auto;padding:14px}
+#header{text-align:center;padding-bottom:10px;border-bottom:1px solid #e0e0e0;margin-bottom:12px}
+#header h1{font-size:18px;font-weight:600;margin:0;color:#0277BD}
+#header .sub{font-size:11px;color:#888;margin-top:4px}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tab{flex:1;text-align:center;padding:9px;border-radius:10px;border:2px solid #0277BD;color:#0277BD;font-weight:600;font-size:13px;background:#fff;cursor:pointer}
+.tab.on{background:#0277BD;color:#fff}
+.nav{display:flex;gap:6px;margin-bottom:12px}
+.arrow{background:#fff;border:2px solid #0277BD;color:#0277BD;border-radius:8px;padding:0 12px;font-size:18px;font-weight:bold;cursor:pointer}
+.arrow:disabled{opacity:.35}
+.big{flex:1;background:#fff;border:2px solid #0277BD;border-radius:8px;padding:4px 12px;text-align:center}
+.big .lab{font-size:10px;color:#888;text-transform:uppercase}.big .val{font-size:19px;font-weight:600;color:#0277BD}
+.kpis{background:#fff;border:1px solid #e5e8e5;border-radius:12px;padding:10px;margin-bottom:10px;display:grid;grid-template-columns:repeat(4,1fr)}
+.k{text-align:center}.k+.k{border-left:1px solid #eee}.kl{font-size:9px;color:#888;text-transform:uppercase}.kv{font-size:16px;font-weight:600;margin-top:2px}
+.card{background:#fff;border:1px solid #e5e8e5;border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.ct{font-size:13px;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between}.ct span{font-size:10px;color:#888;font-weight:400}
+.row{display:grid;grid-template-columns:66px 38px 1fr 44px 36px;gap:6px;align-items:center;padding:4px 0;font-size:12px;cursor:pointer}
+.bar{height:12px;background:#eef1ee;border-radius:6px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
+.mk{position:absolute;top:-2px;bottom:-2px;width:1px;background:#555}
+.v{text-align:right;font-weight:600}.d{text-align:right;font-size:10px}
+.up{color:#C62828}.dn{color:#2B8A3E}
+.leg{display:flex;flex-wrap:wrap;gap:4px;font-size:9px;margin-bottom:10px}.leg b{padding:2px 6px;border-radius:6px;font-weight:600}
+.tbl{width:100%;border-collapse:collapse;font-size:11px}.tbl th{font-size:9px;color:#666;font-weight:500;text-align:right;padding:3px 2px;border-bottom:1px solid #eee}
+.tbl td{text-align:right;padding:4px 2px;border-bottom:1px solid #f3f3f3}.tbl td:first-child,.tbl th:first-child{text-align:left}
+.warn{color:#BF360C;font-weight:600}.al{background:#FF0000;color:#fff;border-radius:4px;padding:0 4px;font-weight:600}
+.back{width:100%;background:#fff;color:#0277BD;border:2px solid #0277BD;border-radius:10px;padding:9px;font-weight:600;margin-bottom:10px}
+.empty{color:#999;font-style:italic;font-size:12px;padding:10px 0;text-align:center}
+.foot{text-align:center;font-size:10px;color:#aaa;margin:16px 0 8px}
+</style></head><body><div id="wrap">
+<div id="header"><h1>🌊 Drenaje — Delia Francia</h1><div class="sub">25 pozos · última lectura 26/10/2026</div></div>
+<div class="tabs"><div class="tab" id="t1" onclick="tab='pozos';vp=null;render()">🕳️ Pozos</div><div class="tab" id="t2" onclick="tab='bombeo';render()">⚙️ Bombeo</div></div>
+<div id="content"></div>
+<div class="foot">Generado 27/10/2026 15:29 · nivel = profundidad del agua en m (más grande = mejor)</div>
+</div>
+<script>
+const D={"lect": [{"f": "26/10/2026", "dow": "Lun", "sem": 44, "prom": 1.0, "min": 0.55, "nal": 4, "n": 25, "ll3": 70.0, "ll7": 218.8}, {"f": "23/10/2026", "dow": "Vie", "sem": 43, "prom": 1.25, "min": 1.1, "nal": 0, "n": 25, "ll3": 4.8, "ll7": 152.2}, {"f": "31/03/2026", "dow": "Mar", "sem": 14, "prom": 1.33, "min": 1.05, "nal": 0, "n": 25, "ll3": 0.0, "ll7": 0.2}, {"f": "27/03/2026", "dow": "Vie", "sem": 13, "prom": 1.26, "min": 1.0, "nal": 0, "n": 25, "ll3": 0.0, "ll7": 10.8}, {"f": "25/03/2026", "dow": "Mié", "sem": 13, "prom": 1.2, "min": 1.0, "nal": 0, "n": 25, "ll3": 0.0, "ll7": 41.2}, {"f": "24/03/2026", "dow": "Mar", "sem": 13, "prom": 1.16, "min": 0.9, "nal": 0, "n": 25, "ll3": 10.8, "ll7": 60.4}, {"f": "20/03/2026", "dow": "Vie", "sem": 12, "prom": 1.09, "min": 0.8, "nal": 0, "n": 25, "ll3": 49.6, "ll7": 50.4}, {"f": "16/03/2026", "dow": "Lun", "sem": 12, "prom": 1.17, "min": 0.85, "nal": 0, "n": 25, "ll3": 0.8, "ll7": 114.4}, {"f": "13/03/2026", "dow": "Vie", "sem": 11, "prom": 1.06, "min": 0.6, "nal": 1, "n": 25, "ll3": 111.0, "ll7": 217.8}, {"f": "11/03/2026", "dow": "Mié", "sem": 11, "prom": 1.15, "min": 0.75, "nal": 1, "n": 25, "ll3": 4.2, "ll7": 196.2}, {"f": "10/03/2026", "dow": "Mar", "sem": 11, "prom": 1.13, "min": 0.85, "nal": 0, "n": 25, "ll3": 30.2, "ll7": 240.0}, {"f": "06/03/2026", "dow": "Vie", "sem": 10, "prom": 1.13, "min": 0.8, "nal": 0, "n": 25, "ll3": 133.2, "ll7": 242.6}, {"f": "03/03/2026", "dow": "Mar", "sem": 10, "prom": 0.87, "min": 0.4, "nal": 13, "n": 25, "ll3": 107.8, "ll7": 123.0}], "pozos": [{"p": "Pozo #1", "lote": "6B", "sec": "1-David", "prof": 1.4, "v": [1.35, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.15]}, {"p": "Pozo #2", "lote": "6B", "sec": "1-David", "prof": 1.4, "v": [0.75, 1.1, 1.25, 1.1, 1.05, 1.0, 0.85, 0.95, 0.8, 1.0, 0.85, 0.8, 0.7]}, {"p": "Pozo #3", "lote": "7B", "sec": "1-David", "prof": 1.4, "v": [0.9, 1.2, 1.25, 1.2, 1.1, 1.05, 1.1, 1.1, 1.0, 1.15, 1.05, 1.05, 0.8]}, {"p": "Pozo #4", "lote": "7C", "sec": "2-Freddy", "prof": 1.4, "v": [1.15, 1.15, 1.1, 1.1, 1.1, 1.1, 1.05, 1.05, 0.85, 1.15, 1.05, 1.05, 0.4]}, {"p": "Pozo #5", "lote": "8B", "sec": "2-Freddy", "prof": 1.4, "v": [0.94, 1.15, 1.2, 1.2, 1.15, 1.1, 0.95, 1.15, 1.05, 1.1, 1.1, 1.1, 0.8]}, {"p": "Pozo #6", "lote": "8B", "sec": "2-Freddy", "prof": 1.4, "v": [0.95, 1.2, 1.3, 1.25, 1.2, 1.15, 1.05, 1.15, 1.1, 1.2, 1.15, 1.15, 0.85]}, {"p": "Pozo #7", "lote": "9B", "sec": "2-Freddy", "prof": 1.4, "v": [0.55, 1.25, 1.3, 1.1, 1.0, 0.9, 0.85, 1.0, 0.85, 0.9, 1.0, 0.9, 0.5]}, {"p": "Pozo #8", "lote": "9B", "sec": "2-Freddy", "prof": 1.4, "v": [0.85, 1.2, 1.1, 1.0, 1.0, 0.95, 0.9, 0.9, 0.9, 0.85, 0.95, 0.95, 0.65]}, {"p": "Pozo #9", "lote": "7C", "sec": "2-Freddy", "prof": 1.4, "v": [1.0, 1.2, 1.4, 1.3, 1.2, 1.1, 1.05, 1.1, 0.95, 1.1, 1.0, 1.0, 0.8]}, {"p": "Pozo #10", "lote": "10B", "sec": "2-Freddy", "prof": 1.4, "v": [0.8, 1.15, 1.4, 1.4, 1.0, 1.2, 1.05, 1.25, 1.05, 1.3, 1.15, 1.1, 0.75]}, {"p": "Pozo #11", "lote": "11B", "sec": "2-Freddy", "prof": 1.4, "v": [0.95, 1.3, 1.3, 1.15, 1.0, 1.05, 1.0, 1.05, 1.0, 1.1, 0.95, 1.05, 0.75]}, {"p": "Pozo #12", "lote": "11A", "sec": "2-Freddy", "prof": 1.4, "v": [0.85, 1.2, 1.4, 1.25, 1.2, 1.05, 0.9, 1.1, 0.9, 1.15, 1.0, 1.0, 0.75]}, {"p": "Pozo #13", "lote": "12B", "sec": "2-Freddy", "prof": 1.4, "v": [0.7, 1.25, 1.4, 1.2, 1.0, 0.9, 0.85, 1.0, 0.8, 0.85, 0.95, 0.95, 0.5]}, {"p": "Pozo #14", "lote": "12B", "sec": "2-Freddy", "prof": 1.4, "v": [1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4]}, {"p": "Pozo #15", "lote": "13B", "sec": "2-Freddy", "prof": 1.4, "v": [0.9, 1.15, 1.4, 1.4, 1.4, 1.4, 1.15, 1.4, 1.2, 1.4, 1.35, 1.3, 0.8]}, {"p": "Pozo #16", "lote": "13B", "sec": "2-Freddy", "prof": 1.4, "v": [1.25, 1.3, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.15]}, {"p": "Pozo #17", "lote": "10A", "sec": "2-Freddy", "prof": 1.4, "v": [0.85, 1.4, 1.05, 1.1, 1.05, 0.95, 0.9, 1.05, 0.95, 0.9, 0.95, 0.9, 0.7]}, {"p": "Pozo #18", "lote": "11A", "sec": "2-Freddy", "prof": 1.4, "v": [0.7, 1.2, 1.4, 1.4, 1.4, 1.35, 1.15, 1.4, 1.05, 1.4, 1.3, 1.2, 0.7]}, {"p": "Pozo #19", "lote": "12A", "sec": "2-Freddy", "prof": 1.4, "v": [1.1, 1.3, 1.4, 1.4, 1.4, 1.4, 1.35, 1.4, 1.3, 1.4, 1.4, 1.4, 0.75]}, {"p": "Pozo #20", "lote": "17B", "sec": "3-Carlos", "prof": 1.4, "v": [1.4, 1.3, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.3]}, {"p": "Pozo #21", "lote": "18B", "sec": "3-Carlos", "prof": 1.4, "v": [0.85, 1.25, 1.3, 1.1, 1.05, 0.95, 0.9, 1.0, 0.85, 0.85, 0.9, 0.85, 0.7]}, {"p": "Pozo #22", "lote": "19B", "sec": "4-Jame", "prof": 1.4, "v": [0.8, 1.2, 1.4, 1.25, 1.1, 1.0, 0.9, 1.0, 0.8, 0.85, 0.9, 0.9, 0.65]}, {"p": "Pozo #23", "lote": "20B", "sec": "4-Jame", "prof": 1.4, "v": [1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4]}, {"p": "Pozo #24", "lote": "21B", "sec": "4-Jame", "prof": 1.4, "v": [1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4]}, {"p": "Pozo #25", "lote": "22B", "sec": "4-Jame", "prof": 1.4, "v": [1.1, 1.3, 1.4, 1.2, 1.1, 1.0, 0.8, 0.85, 0.6, 0.75, 0.85, 1.25, 1.4]}], "est": {"Delia 1": [], "Delia 2": []}};
+const CL=[[0.70,'#7B1E1E','#fff'],[0.80,'#FF0000','#fff'],[0.90,'#FFC000','#000'],[1.00,'#E6D200','#000'],[99,'#4CAF50','#fff']];
+let tab='pozos',li=0,vp=null;
+function col(x,prof){if(x==null)return['#ccc','#000'];if(prof&&x>=prof-0.005)return['#A5D6A7','#1B5E20'];for(const c of CL)if(x<c[0])return[c[1],c[2]];}
+function f2(x){return x==null?'—':x.toFixed(2)}
+function legend(){return `<div class="leg"><b style="background:#7B1E1E;color:#fff">&lt;0.70</b><b style="background:#FF0000;color:#fff">0.70–0.79</b><b style="background:#FFC000">0.80–0.89</b><b style="background:#E6D200">0.90–0.99</b><b style="background:#4CAF50;color:#fff">≥1.00</b><b style="background:#A5D6A7">seco</b></div>`}
+function pozosView(){
+  if(!D.lect.length)return '<div class="card empty">Sin lecturas de pozos</div>';
+  if(vp!==null)return pozoHist(vp);
+  const L=D.lect[li];
+  let h=`<div class="nav"><button class="arrow" ${li>=D.lect.length-1?'disabled':''} onclick="li++;render()">‹</button>
+  <div class="big"><div class="lab">Lectura · S${L.sem??''}</div><div class="val">${L.dow} ${L.f}</div></div>
+  <button class="arrow" ${li<=0?'disabled':''} onclick="li--;render()">›</button></div>`;
+  const pc=col(L.prom), mc=col(L.min);
+  h+=`<div class="kpis"><div class="k"><div class="kl">Promedio</div><div class="kv" style="color:${pc[0]}">${f2(L.prom)}</div></div>
+  <div class="k"><div class="kl">Mínimo</div><div class="kv" style="color:${mc[0]}">${f2(L.min)}</div></div>
+  <div class="k"><div class="kl">&lt; 0.80 m</div><div class="kv ${L.nal?'up':''}">${L.nal??'—'}/${L.n??'—'}</div></div>
+  <div class="k"><div class="kl">Lluvia 3d</div><div class="kv">${L.ll3==null?'—':Math.round(L.ll3)}<span style="font-size:10px"> mm</span></div></div></div>`+legend();
+  const secs={};D.pozos.forEach((p,i)=>{(secs[p.sec]=secs[p.sec]||[]).push(i)});
+  for(const s of Object.keys(secs).sort()){
+    h+=`<div class="card"><div class="ct">${s}<span>toque un pozo → historial</span></div>`;
+    for(const i of secs[s]){const p=D.pozos[i],x=p.v[li],prev=p.v.slice(li+1).find(v=>v!=null);
+      const c=col(x,p.prof),w=x==null?0:Math.min(100,100*x/(p.prof||1.5));
+      const dd=(x!=null&&prev!=null)?x-prev:null;
+      h+=`<div class="row" onclick="vp=${i};render()"><span>${p.p.replace('Pozo ','')}</span><span style="color:#888">${p.lote||''}</span>
+      <div class="bar"><i style="width:${w}%;background:${c[0]}"></i><div class="mk" style="left:${100*0.8/(p.prof||1.5)}%"></div></div>
+      <span class="v">${f2(x)}</span><span class="d ${dd==null?'':(dd<-0.004?'up':(dd>0.004?'dn':''))}">${dd==null?'':(dd>0?'+':'')+dd.toFixed(2)}</span></div>`}
+    h+='</div>'}
+  return h;}
+function pozoHist(i){
+  const p=D.pozos[i];const pts=[];for(let k=D.lect.length-1;k>=0;k--)pts.push([D.lect[k].f.slice(0,5),p.v[k],D.lect[k].ll3]);
+  const W=440,H=200,pl=34,pr=8,pt=10,pb=26,mx=p.prof||1.5,n=pts.length;
+  const X=k=>pl+(n<2?0.5:k/(n-1))*(W-pl-pr),Y=v=>pt+(v/mx)*(H-pt-pb);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  [[0,0.7,'#7B1E1E'],[0.7,0.8,'#FF0000'],[0.8,0.9,'#FFC000'],[0.9,1.0,'#E6D200'],[1.0,mx,'#4CAF50']].forEach(b=>{s+=`<rect x="${pl}" y="${Y(b[0])}" width="${W-pl-pr}" height="${Math.max(0,Y(Math.min(b[1],mx))-Y(b[0]))}" fill="${b[2]}" opacity=".13"/>`});
+  [0,0.5,0.8,1.0,mx].forEach(v=>{s+=`<text x="${pl-4}" y="${Y(v)+3}" font-size="9" text-anchor="end" fill="#888">${v.toFixed(1)}</text><line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#ddd"/>`});
+  const llmax=Math.max(20,...pts.map(q=>q[2]||0));
+  pts.forEach((q,k)=>{if(q[2]){const hh=(q[2]/llmax)*(H-pt-pb)*0.5;s+=`<rect x="${X(k)-3}" y="${H-pb-hh}" width="6" height="${hh}" fill="#90CAF9"/>`}});
+  let d='';pts.forEach((q,k)=>{if(q[1]!=null)d+=(d?'L':'M')+X(k)+','+Y(q[1])});
+  s+=`<path d="${d}" fill="none" stroke="#1F4E79" stroke-width="2"/>`;
+  pts.forEach((q,k)=>{if(q[1]!=null){const c=col(q[1],p.prof);s+=`<circle cx="${X(k)}" cy="${Y(q[1])}" r="3.5" fill="${c[0]}" stroke="#fff"/>`}
+    if(n<=16||k%Math.ceil(n/8)==0)s+=`<text x="${X(k)}" y="${H-8}" font-size="8" text-anchor="middle" fill="#888">${q[0]}</text>`});
+  s+='</svg>';
+  const vals=p.v.filter(v=>v!=null);
+  let h=`<button class="back" onclick="vp=null;render()">← Volver a la lectura</button>
+  <div class="card"><div class="ct">${p.p} · Lote ${p.lote||'—'}<span>${p.sec} · fondo ${f2(p.prof)} m</span></div>${s}
+  <div style="font-size:10px;color:#888">Arriba = agua cerca de la superficie · barras azules = lluvia 3 días previos</div></div>
+  <div class="kpis"><div class="k"><div class="kl">Última</div><div class="kv">${f2(p.v.find(v=>v!=null))}</div></div>
+  <div class="k"><div class="kl">Mínimo</div><div class="kv">${vals.length?f2(Math.min(...vals)):'—'}</div></div>
+  <div class="k"><div class="kl">&lt; 0.80</div><div class="kv">${vals.filter(v=>v<0.8).length}/${vals.length}</div></div>
+  <div class="k"><div class="kl">Lecturas</div><div class="kv">${vals.length}</div></div></div>`;
+  return h;}
+function bombeoView(){
+  let h='';
+  for(const e of Object.keys(D.est)){const L=D.est[e];
+    if(!L.length){h+=`<div class="card"><div class="ct">${e}</div><div class="empty">Sin registros de bombeo</div></div>`;continue}
+    const w=L.slice(0,7),sum=(k)=>w.reduce((a,x)=>a+(x[k]||0),0);
+    h+=`<div class="kpis"><div class="k"><div class="kl">Lluvia 7d</div><div class="kv">${Math.round(sum('ll'))}</div></div>
+    <div class="k"><div class="kl">Bombeado 7d</div><div class="kv" style="color:#0277BD">${Math.round(sum('mm'))} mm</div></div>
+    <div class="k"><div class="kl">Arranques</div><div class="kv">${sum('arr')}</div></div>
+    <div class="k"><div class="kl">Fuera consigna</div><div class="kv ${sum('fuera')?'up':''}">${sum('fuera')}</div></div></div>`;
+    h+=`<div class="card"><div class="ct">${e}<span>día de hoja 7 h → 7 h</span></div><table class="tbl"><tr><th>Día</th><th>Lluvia</th><th>mm bomb.</th><th>h peq/gra</th><th>Arr.</th><th>Niv. máx</th><th>⚠</th></tr>`;
+    for(const x of L){h+=`<tr><td>${x.dow} ${x.f}</td><td>${x.ll==null?'—':Math.round(x.ll)}</td><td><b>${x.mm}</b></td><td>${x.hp}/${x.hg}</td>
+      <td class="${x.arr>=5?'warn':''}">${x.arr}</td><td>${x.nmax??'—'}</td><td>${x.al?`<span class="al">${x.al}‼</span> `:''}${x.fuera?`<span class="warn">${x.fuera}</span>`:''}</td></tr>`}
+    h+='</table></div>'}
+  return h||'<div class="card empty">Sin estaciones</div>';}
+function render(){document.getElementById('t1').className='tab'+(tab==='pozos'?' on':'');document.getElementById('t2').className='tab'+(tab==='bombeo'?' on':'');
+  document.getElementById('content').innerHTML=tab==='pozos'?pozosView():bombeoView();window.scrollTo(0,0)}
+render();
+</script></body></html>
