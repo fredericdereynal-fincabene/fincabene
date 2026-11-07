@@ -50,6 +50,8 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 .t th,.t td{padding:6px 4px;text-align:center;border-bottom:1px solid #eef0ee;font-variant-numeric:tabular-nums}
 .t thead th{position:sticky;top:0;background:var(--accbg);font-weight:700;color:#444;z-index:2}
 .t tfoot td{position:sticky;bottom:0;background:#eef1ee;font-weight:700;z-index:2}
+.t tfoot tr.avg td{background:#f4f6f4;font-weight:600;color:#555;border-bottom:0}
+.t tfoot tr.tot td{background:var(--accbg);font-weight:800;border-top:1.5px solid #d6dbd6}
 .t td:first-child{color:#999;font-weight:700}
 .t tr.cur td{background:#FFF6EE}
 .legend{font-size:11.5px;color:#8a8a8a;line-height:1.5;background:#fff;border-radius:12px;padding:11px 14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
@@ -67,7 +69,7 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
 #fchart svg{width:100%;height:100%}
 </style></head><body style="--acc:#0277BD;--accbg:#E3F2FD"><div id="wrap">
   <div id="header"><h1>Indicadores semanales</h1>
-    <p class="updated">Última semana con datos <strong>2026 · S45</strong> · generado el 07/11/2026 12:24</p></div>
+    <p class="updated">Última semana con datos <strong>2026 · S45</strong> · generado el 07/11/2026 12:57</p></div>
 
   <div class="card">
     <div class="seg" id="fincas"></div>
@@ -94,14 +96,18 @@ table.t{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
   <div class="legend">
     <b>Cómo leer</b> — una curva por año, por semana agrícola. La <b style="color:#455A64">línea gris punteada</b>
     es el promedio de todos los puntos mostrados (años y semanas seleccionados).<br>
+    En la tabla, <b>Prom.</b> = promedio de las semanas ; <b>Total</b> = suma del período para Enfunde y
+    Cajas, promedio ponderado para los demás (ej. Peso = kg totales / racimos totales).
+    Por defecto se muestra hasta la última semana registrada (cambiar « a » para ver más).<br>
     <b>xHa</b> = por hectárea neta de la finca (Delia 213,9 ha · Fiera 113,1 ha).
     <b>Enfunde total</b> = enfundes de la semana · <b>Edad</b> = edad media de cosecha (sem., +1, ponderada por racimos) ·
     <b>Manos / Calibre</b> = media de las muestras de calidad ·
-    <b>Cajas</b> = equiv. Conv. Grande · <b>RatioC</b> = cajas / racimo ·
+    <b>TT Cajas</b> = cajas equiv. de Cajas Reportadas (Conv. Grande), total de la semana o por ha ·
+    <b>RatioC</b> = cajas equiv. / racimo ·
     <b>Merma</b> = (kg racimos × 0,88 − kg exportados) / (kg racimos × 0,88).<br>
     Año/semana tomados del calendario Fecha_y_Color. Toca el gráfico para ver los valores de una semana.
   </div>
-  <a class="back" href="menu.html">← Volver al menú</a>
+  <a class="back" href="menu-fb.html">← Volver al menú</a>
 </div>
 
 <div id="full"><div class="land">
@@ -119,8 +125,8 @@ const IND = [
  {k:'peso',  l:'Peso', d:2, u:' kg'},
  {k:'manos', l:'Manos', d:2},
  {k:'cal',   l:'Calibre', d:2},
- {k:'kgha',  l:'Kg/Ha', d:0},
- {k:'cajha', l:'Cajas xHa', d:2},
+ {k:'cajha', l:'TT Cajas xHa', d:2},
+ {k:'caj',   l:'TT Cajas', d:0},
  {k:'ratio', l:'RatioC', d:2},
  {k:'merma', l:'Merma %', d:2, p:true, inv:true},
 ];
@@ -129,7 +135,7 @@ const YC = ['#E53935','#1E88E5','#2E7D32','#8E24AA','#9E9E9E'];
 const yc = y => YC[Math.min(CY - y, YC.length - 1)];
 
 const qs = new URLSearchParams(location.search);
-let st = { f: qs.get('f') || D.def, ind: qs.get('i') || 'enfha', years: [CY-2, CY-1, CY], w1: 1, w2: 52, lab: false };
+let st = { f: qs.get('f') || D.def, ind: qs.get('i') || 'enfha', years: [CY-2, CY-1, CY], w1: 1, w2: CW, lab: false };
 const allYears = Object.keys(Object.assign({}, D.fincas.D.wk, D.fincas.F.wk)).map(Number).sort();
 if (!allYears.includes(CY-2)) st.years = st.years.filter(y => allYears.includes(y));
 
@@ -142,8 +148,9 @@ function rawW(y, w) {
   return o;
 }
 function ha() { return st.f === 'A' ? D.fincas.D.ha + D.fincas.F.ha : D.fincas[st.f].ha; }
-function val(y, w, k) {
-  const v = rawW(y, w); if (!v) return null; const H = ha();
+function val(y, w, k) { return calc(rawW(y, w), k); }
+function calc(v, k) {
+  if (!v) return null; const H = ha();
   switch (k) {
     case 'enfha': return v.en ? v.en / H : null;
     case 'enf':   return v.en ? v.en : null;
@@ -151,8 +158,8 @@ function val(y, w, k) {
     case 'peso':  return v.rn ? v.kg / v.rn : null;
     case 'manos': return v.nmM ? v.mn / v.nmM : null;
     case 'cal':   return v.nmC ? v.cl / v.nmC : null;
-    case 'kgha':  return v.kg ? v.kg / H : null;
     case 'cajha': return v.ce ? v.ce / H : null;
+    case 'caj':   return v.ce ? v.ce : null;
     case 'ratio': return (v.rn && v.ce) ? v.ce / v.rn : null;
     case 'merma': { const nx = (v.kg || 0) * 0.88; return (nx && v.ce) ? (nx - (v.ck || 0)) / nx * 100 : null; }
   }
@@ -194,7 +201,7 @@ function toggleLab() { st.lab = !st.lab; render(); if (document.getElementById('
 // ---- gráfico SVG ----
 function chartSVG(W, H, big) {
   const s = spec(), a = st.w1, b = Math.min(st.w2, maxWeek());
-  const fs = big ? 13 : 11, pl = big ? 52 : 40, pr = big ? 46 : 38, pt = 24, pb = 30, pw = W - pl - pr, ph = H - pt - pb;
+  const fs = big ? 13 : 11, pr = big ? 46 : 38, pt = 24, pb = 30, ph = H - pt - pb; let pl = big ? 52 : 40, pw = W - pl - pr;
   const series = st.years.map(y => ({ y, pts: [] }));
   const all = [];
   series.forEach(se => { for (let w = a; w <= b; w++) { const v = val(se.y, w, s.k); if (v != null) { se.pts.push([w, v]); all.push(v); } } });
@@ -204,13 +211,17 @@ function chartSVG(W, H, big) {
   // escala "redonda"
   const raw = sp / 5, mag = Math.pow(10, Math.floor(Math.log10(raw))), st5 = [1,2,2.5,5,10].map(x => x*mag).find(x => x >= raw);
   lo = Math.floor((lo - sp*0.04) / st5) * st5; hi = Math.ceil((hi + sp*0.04) / st5) * st5;
+  // marge gauche selon la largeur des graduations (ex. « 25 000 »)
+  const tickD = (Math.abs(st5 - Math.round(st5)) > 1e-9) ? (Math.abs(st5*10 - Math.round(st5*10)) > 1e-9 ? 2 : 1) : 0;
+  const maxLab = Math.max(fmtS(lo, {d: tickD}).length, fmtS(hi, {d: tickD}).length);
+  pl = Math.max(pl, Math.ceil(maxLab * fs * 0.62) + 10); pw = W - pl - pr;
   const n = Math.max(1, b - a), X = w => pl + (w - a) / n * pw, Y = v => pt + (1 - (v - lo) / (hi - lo)) * ph;
   let g = '';
   for (let v = lo; v <= hi + st5/2; v += st5) { const yy = Y(v).toFixed(1);
     g += '<line x1="' + pl + '" y1="' + yy + '" x2="' + (W-pr) + '" y2="' + yy + '" stroke="#e6e9e6" stroke-dasharray="2 3"/>';
-    g += '<text x="' + (pl-6) + '" y="' + (+yy+4) + '" text-anchor="end" font-size="' + fs + '" fill="#888">' + fmtS(v, {d: (Math.abs(st5 - Math.round(st5)) > 1e-9) ? (Math.abs(st5*10 - Math.round(st5*10)) > 1e-9 ? 2 : 1) : 0}) + '</text>'; }
+    g += '<text x="' + (pl-6) + '" y="' + (+yy+4) + '" text-anchor="end" font-size="' + fs + '" fill="#888">' + fmtS(v, {d: tickD}) + '</text>'; }
   const step = n > 30 ? (big ? 2 : 4) : n > 12 ? 2 : 1;
-  for (let w = a; w <= b; w++) if ((w - a) % step === 0 || (w === b && (b - a) % step >= step / 2))
+  for (let w = a; w <= b; w++) if (((w - a) % step === 0 && (w === b || b - w >= step * 0.75)) || (w === b && (b - a) % step !== 0))
     g += '<text x="' + X(w).toFixed(1) + '" y="' + (H-pb+16) + '" text-anchor="middle" font-size="' + fs + '" fill="#888">' + w + '</text>';
   // semana actual
   if (st.years.includes(CY) && CW >= a && CW <= b) { const xx = X(CW).toFixed(1);
@@ -301,8 +312,25 @@ function renderTable() {
     h += '<tr' + (w === CW && ys.includes(CY) ? ' class="cur"' : '') + '><td>' + w + '</td>' + vs.map(v => '<td>' + fmtS(v, s) + '</td>').join('') + dc + '</tr>';
   }
   const ms = cols.map(avg);
-  h += '</tbody><tfoot><tr><td>Prom.</td>' + ms.map(m => '<td>' + fmtS(m, s) + '</td>').join('') + (yp ? '<td></td>' : '') + '</tr></tfoot></table>';
-  document.getElementById('tbl').innerHTML = h;
+  // Total : el indicador calculado sobre la suma del periodo
+  //   (suma para Enfunde / Cajas, promedio ponderado para Peso, Edad, Ratio, Merma...)
+  const tots = ys.map(y => { const acc = {};
+    for (let w = a; w <= b; w++) { if (val(y, w, s.k) == null) continue; const v = rawW(y, w);
+      for (const c in v) acc[c] = (acc[c] || 0) + v[c]; }
+    return Object.keys(acc).length ? calc(acc, s.k) : null; });
+  let td = '';
+  if (yp) { const x = tots[tots.length-1], z = tots[tots.length-2];
+    if (x == null || z == null) td = '<td>—</td>';
+    else { const d = x - z, good = s.inv ? d < 0 : d >= 0;
+      td = '<td class="' + (good ? 'up' : 'dn') + '">' + (d >= 0 ? '+' : '') + fmtS(d, s) + '</td>'; } }
+  h += '</tbody><tfoot><tr class="avg"><td>Prom.</td>' + ms.map(m => '<td>' + fmtS(m, s) + '</td>').join('') + (yp ? '<td></td>' : '') + '</tr>'
+     + '<tr class="tot"><td>Total</td>' + tots.map(m => '<td>' + fmtS(m, s) + '</td>').join('') + td + '</tr></tfoot></table>';
+  const tw = document.getElementById('tbl'); tw.innerHTML = h;
+  // las 2 filas de pie quedan fijas abajo : la fila Prom. encima de Total
+  const tr = tw.querySelector('tr.tot'); if (tr) tw.querySelectorAll('tr.avg td').forEach(c => c.style.bottom = tr.offsetHeight + 'px');
+  // abrir sobre la ultima semana registrada
+  const cur = tw.querySelector('tr.cur');
+  tw.scrollTop = cur ? Math.max(0, cur.offsetTop + cur.offsetHeight - tw.clientHeight + 2 * (tr ? tr.offsetHeight : 0)) : tw.scrollHeight;
 }
 
 function openFull() { document.getElementById('full').classList.add('open'); document.body.style.overflow = 'hidden'; drawFull(); }
